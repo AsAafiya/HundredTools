@@ -1,0 +1,247 @@
+.navbar {
+  width: 100%;
+  background: #ffffff;
+  padding: 8px 0;
+  border-bottom: 1px solid #e6e9f6;
+  box-shadow: 0 4px 16px rgba(31, 53, 104, 0.04);
+}
+
+.navbar .site-container {
+  max-width: 1280px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.navbar-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 64px;
+  gap: 22px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  justify-self: start;
+}
+
+.logo-link {
+  display: block;
+}
+
+.logo-image {
+  width: auto;
+  height: 68px;
+  display: block;
+}
+
+
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  justify-self: center;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #2d4274;
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-dropdown > a:hover {
+  color: #4d77e0;
+  background: #f3f6ff;
+}
+
+.nav-caret {
+  color: #8da0cc;
+  font-size: 13px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 240px;
+  background: #f4f4f7;
+  border-radius: 24px;
+  padding: 10px 0;
+  border: 1px solid #eceef7;
+  box-shadow: 0 12px 28px rgba(31, 53, 104, 0.08);
+  display: none;
+  z-index: 50;
+}
+
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown:focus-within .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  text-decoration: none;
+  color: #1f3568;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.15;
+  padding: 11px 24px;
+}
+
+.dropdown-item:hover {
+  color: #4d77e0;
+}
+
+.dropdown-view-all {
+  color: #4d77e0;
+  margin-top: 2px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  justify-self: end;
+  margin-right: -22px;
+}
+
+.nav-actions a {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #5b6e97;
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-actions a:hover {
+  color: #4d77e0;
+  background: #f3f6ff;
+}
+
+.active-action {
+  color: #355fcb !important;
+  background: #edf3ff;
+}
+
+.nav-text-btn {
+  background: transparent;
+  border: none;
+  color: #5b6e97;
+  font-size: 16px;
+  font-weight: 500;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-text-btn:hover {
+  color: #4d77e0;
+  background: #f3f6ff;
+}
+
+.primary-btn {
+  background: linear-gradient(to bottom, #6689f1, #5279e8);
+  color: white;
+  padding: 0 22px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: none;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(77, 119, 224, 0.2);
+}
+
+.active-link {
+  color: #355fcb !important;
+  font-weight: 600;
+  background: #edf3ff;
+}
+
+@media (max-width: 1024px) {
+  .navbar-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-image {
+    width: auto;
+    height: 60px;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+
+  .nav-links {
+    justify-content: center;
+  }
+
+  .dropdown-menu {
+    left: 0;
+    transform: none;
+    min-width: 230px;
+  }
+
+  .primary-btn {
+    padding: 0 18px;
+    height: 38px;
+    font-size: 16px;
+  }
+}
