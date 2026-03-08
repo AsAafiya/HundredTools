@@ -74,11 +74,19 @@ const Navbar = () => {
               </NavLink>
 
               <div className="dropdown-menu" role="menu" aria-label={menu.label}>
-                {menu.items.map((item) => (
-                  <Link key={item} to={menu.path} className="dropdown-item">
-                    {item}
-                  </Link>
-                ))}
+                {menu.items.map((item) => {
+                  let path = menu.path;
+
+                  if (item === "Merge PDF") path = "/tools/merge-pdf";
+                  if (item === "Split PDF") path = "/tools/split-pdf";
+                  if (item === "Compress PDF") path = "/tools/compress-pdf";
+
+                  return (
+                    <Link key={item} to={path} className="dropdown-item">
+                      {item}
+                    </Link>
+                  );
+                })}
 
                 <Link to={menu.path} className="dropdown-item dropdown-view-all">
                   {menu.viewAllLabel}

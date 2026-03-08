@@ -7,16 +7,19 @@ const Home = () => {
       title: "Merge PDF",
       description: "Combine multiple PDF files into a single document effortlessly",
       icon: "📄",
+      path: "/tools/merge-pdf"
     },
     {
       title: "Split PDF",
       description: "Extract specific pages or split PDF into multiple files",
       icon: "✂️",
+      path: "/tools/split-pdf"
     },
     {
       title: "Compress PDF",
       description: "Reduce PDF file size while maintaining quality",
       icon: "↗",
+      path: "/tools/compress-pdf"
     },
     {
       title: "PDF to JPG",

@@ -1,0 +1,41 @@
+.features{
+display:flex;
+justify-content:center;
+gap:25px;
+margin-top:50px;
+flex-wrap:wrap;
+}
+
+.feature-card{
+background:white;
+padding:22px;
+border-radius:14px;
+width:230px;
+border: 1px solid #d5dbf0;
+box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+.feature-card h3{
+font-size:18px;
+font-weight:600;
+color:#1e3a8a;
+margin-bottom:8px;
+}
+
+.feature-card p{
+font-size:14px;
+color:#6b7280;
+}
+
+.tool-page h1{
+font-size:42px;
+font-weight:700;
+color:#1e3a8a;
+margin-bottom:10px;
+}
+
+.subtitle{
+font-size:16px;
+color:#6b7280;
+margin-bottom:35px;
+}

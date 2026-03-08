@@ -6,14 +6,28 @@ import Signup from "../pages/Signup";
 import MyFiles from "../pages/MyFiles";
 import Profile from "../pages/Profile";
 
+import MergePdf from "../components/tools/MergePdf";
+import SplitPdf from "../components/tools/SplitPdf";
+import CompressPdf from "../components/tools/CompressPdf";
+import ScrollToTop from "../components/common/ScrollToTop";
+
 const AppRoutes = () => {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
+      
+
       <Route path="/" element={<MainLayout />}>
 
         <Route index element={<Home />} />
 
         <Route path="pdf-tools" element={<Home />} />
+
+        <Route path="tools/merge-pdf" element={<MergePdf />} />
+        <Route path="tools/split-pdf" element={<SplitPdf />} />
+        <Route path="tools/compress-pdf" element={<CompressPdf />} />
+
         <Route path="image-tools" element={<Home />} />
         <Route path="video-tools" element={<Home />} />
 
@@ -24,6 +38,7 @@ const AppRoutes = () => {
 
       </Route>
     </Routes>
+    </>
   );
 };
 

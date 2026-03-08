@@ -14,6 +14,7 @@ const ToolSection = ({ title, subtitle, tools, withDivider = false }) => {
               title={tool.title}
               description={tool.description}
               icon={tool.icon}
+              path={tool.path}
             />
           ))}
         </div>
