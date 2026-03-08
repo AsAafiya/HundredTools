@@ -1,0 +1,31 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.tool-page {
+  text-align: center;
+  padding: 5px;
+  padding-bottom: 5rem;
+  background: #eef2ff;
+}
+.back-btn {
+  padding-left: 200px;  
+  padding-top: 10px;
+  text-align: left;
+}
+
+.back-btn a {
+  text-decoration: none;
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 16px;
+}
+.tool-page h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+.subtitle {
+  color: #6b7280;
+  font-size: 20px;
+  margin-bottom: 20px;
+}

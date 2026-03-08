@@ -1,0 +1,37 @@
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  --container-width: 1160px;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: #edf0fc;
+  color: #1f3568;
+  line-height: 1.5;
+  font-size: 17px;
+}
+
+.site-container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 640px) {
+  .site-container {
+    padding: 0 16px;
+  }
+}
