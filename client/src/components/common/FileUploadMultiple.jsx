@@ -8,6 +8,7 @@ function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 }) {
 
   const [files, setFiles] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [dragActive, setDragActive] = useState(false);
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -60,12 +61,35 @@ function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 }) {
     setErrors([]);
   };
 
+  const handleDragOver = (e) => {
+  e.preventDefault();
+  setDragActive(true);
+};
+
+const handleDragLeave = (e) => {
+  e.preventDefault();
+  setDragActive(false);
+};
+
+const handleDrop = (e) => {
+  e.preventDefault();
+  setDragActive(false);
+
+  const droppedFiles = e.dataTransfer.files;
+  handleFiles(droppedFiles);
+};
+
   return (
     <div className="upload-container">
 
       <div className="upload-card">
 
-        <div className="upload-box">
+        <div
+          className={`upload-box ${dragActive ? "drag-active" : ""}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
 
           {/* Upload UI */}
           {files.length === 0 && (

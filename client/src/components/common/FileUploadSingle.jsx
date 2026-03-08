@@ -44,6 +44,23 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
 
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+
+    const droppedFiles = e.dataTransfer.files;
+
+    if (droppedFiles.length > 1) {
+      setErrors(["Only one file can be uploaded"]);
+      return;
+    }
+
+    handleFile(droppedFiles);
+  };
+
   const removeFile = () => {
     setFile(null);
     setErrors([]);
@@ -54,7 +71,11 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
 
       <div className="upload-card">
 
-        <div className="upload-box">
+        <div
+          className="upload-box"
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
 
           {/* Upload UI */}
           {!file && (
