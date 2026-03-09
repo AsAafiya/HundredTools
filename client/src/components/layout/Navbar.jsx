@@ -1,8 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
 import logo from "../../assets/logo.jpg";
+import { useState } from "react";
+
+import Login from "../../pages/Login";
+import Signup from "../../pages/Signup";
+import AuthModal from "../auth/authModel";
 
 const Navbar = () => {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
   const navMenus = [
     {
       key: "pdf",
@@ -66,14 +73,16 @@ const Navbar = () => {
             <div className="nav-dropdown" key={menu.key}>
               <NavLink
                 to={menu.path}
-                className={({ isActive }) =>
-                  isActive ? "active-link" : ""
-                }
+                className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 {menu.label} <span className="nav-caret">▾</span>
               </NavLink>
 
-              <div className="dropdown-menu" role="menu" aria-label={menu.label}>
+              <div
+                className="dropdown-menu"
+                role="menu"
+                aria-label={menu.label}
+              >
                 {menu.items.map((item) => {
                   let path = menu.path;
 
@@ -88,7 +97,10 @@ const Navbar = () => {
                   );
                 })}
 
-                <Link to={menu.path} className="dropdown-item dropdown-view-all">
+                <Link
+                  to={menu.path}
+                  className="dropdown-item dropdown-view-all"
+                >
                   {menu.viewAllLabel}
                 </Link>
               </div>
@@ -109,13 +121,37 @@ const Navbar = () => {
           >
             Profile
           </NavLink>
-          <button className="nav-text-btn" type="button">Logout</button>
+          <button className="nav-text-btn" onClick={() => setShowLogin(true)}>
+            Login
+          </button>
 
           <button className="primary-btn" type="button">
             Get Started
           </button>
         </div>
       </div>
+
+      {showLogin && (
+        <AuthModal onClose={() => setShowLogin(false)}>
+          <Login
+            switchToSignup={() => {
+              setShowLogin(false);
+              setShowSignup(true);
+            }}
+          />
+        </AuthModal>
+      )}
+
+      {showSignup && (
+        <AuthModal onClose={() => setShowSignup(false)}>
+          <Signup
+            switchToLogin={() => {
+              setShowSignup(false);
+              setShowLogin(true);
+            }}
+          />
+        </AuthModal>
+      )}
     </header>
   );
 };
