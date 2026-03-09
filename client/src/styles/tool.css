@@ -4,12 +4,13 @@
 }
 .tool-page {
   text-align: center;
-  padding: 40px;
+  padding: 5px;
+  padding-bottom: 5rem;
   background: #eef2ff;
 }
 .back-btn {
   padding-left: 200px;  
-  padding-top: 100px;
+  padding-top: 10px;
   text-align: left;
 }
 

@@ -1,6 +1,6 @@
 
 import { FaArrowLeft } from "react-icons/fa";
-import FileUpload from "../common/FileUpload";
+import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import "../../styles/tool.css";
 
@@ -19,7 +19,7 @@ function MergePdf() {
         Combine multiple PDF files into a single document
       </p>
 
-      <FileUpload />
+      <FileUploadMultiple />
       <Features />
     </div>
   );

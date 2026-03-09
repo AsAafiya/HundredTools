@@ -1,6 +1,6 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import FileUpload from "../common/FileUpload";
+import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import "../../styles/tool.css";
 
@@ -17,7 +17,7 @@ function CompressPdf() {
 
       <p className="subtitle">Reduce PDF file size while maintaining quality</p>
 
-      <FileUpload />
+      <FileUploadMultiple />
       <Features />
     </div>
   );

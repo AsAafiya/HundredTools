@@ -1,6 +1,6 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import FileUpload from "../common/FileUpload";
+import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
 import "../../styles/tool.css";
 
@@ -19,7 +19,7 @@ function SplitPdf() {
         Extract specific pages or split PDF into multiple files
       </p>
 
-      <FileUpload />
+      <FileUploadSingle />
       <Features />
     </div>
   );
