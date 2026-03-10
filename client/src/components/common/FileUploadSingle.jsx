@@ -66,7 +66,6 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
     setErrors([]);
   };
 
-
   return (
     <div className="upload-container">
 
