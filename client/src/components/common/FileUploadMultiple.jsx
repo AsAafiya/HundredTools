@@ -2,13 +2,14 @@ import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
 
-function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 }) {
+function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 , onFilesChange , onMerge,
+  downloadUrl , mergeComplete , mergedFileName}) {
 
   const inputRef = useRef(null);
 
   const [files, setFiles] = useState([]);
   const [errors, setErrors] = useState([]);
-  const [dragActive, setDragActive] = useState(false);
+  const [dragging, setDragging] = useState(false);
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -44,7 +45,13 @@ function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 }) {
     const validated = validateFiles(fileArray);
 
     if (validated.length > 0) {
-      setFiles(prev => [...prev, ...validated]);
+      const updatedFiles = [...files, ...validated];
+
+      setFiles(updatedFiles);
+
+      if (onFilesChange) {
+        onFilesChange(updatedFiles);
+      }
     }
 
   };
@@ -63,17 +70,17 @@ function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 }) {
 
   const handleDragOver = (e) => {
   e.preventDefault();
-  setDragActive(true);
+  setDragging(true);
 };
 
 const handleDragLeave = (e) => {
   e.preventDefault();
-  setDragActive(false);
+  setDragging(false);
 };
 
 const handleDrop = (e) => {
   e.preventDefault();
-  setDragActive(false);
+  setDragging(false);
 
   const droppedFiles = e.dataTransfer.files;
   handleFiles(droppedFiles);
@@ -85,14 +92,14 @@ const handleDrop = (e) => {
       <div className="upload-card">
 
         <div
-          className={`upload-box ${dragActive ? "drag-active" : ""}`}
+          className={`upload-box ${dragging ? "dragging" : ""}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
 
           {/* Upload UI */}
-          {files.length === 0 && (
+          {files.length === 0 && !mergeComplete && (
             <>
               <div className="upload-icon">
                 <TbUpload />
@@ -105,7 +112,7 @@ const handleDrop = (e) => {
           )}
 
           {/* File List */}
-          {files.length > 0 && (
+          {files.length > 0 && !mergeComplete && (
 
             <div className="upload-preview">
 
@@ -133,7 +140,13 @@ const handleDrop = (e) => {
 
           )}
 
-          
+          {mergeComplete && (
+            <div className="upload-preview">
+              <p className="merged-file-name">
+                {mergedFileName}
+              </p>
+            </div>
+          )}
 
         </div>
 
@@ -150,22 +163,52 @@ const handleDrop = (e) => {
             }}
           />
 
-          {/* Add Files Button */}
-          <button
-            className="upload-btn"
-            onClick={() => inputRef.current.click()}
-          >
-            Add Files
-          </button>
+          {/* Buttons */}
+          {!mergeComplete && (
+            <>
+              <button
+                className="upload-btn"
+                onClick={() => inputRef.current.click()}
+              >
+                Add Files
+              </button>
 
-          {/* Remove All Button */}
-          {files.length > 0 && (
-            <button
-              className="upload-btn"
-              onClick={removeAllFiles}
+              {files.length > 0 && (
+                <button
+                  className="upload-btn"
+                  onClick={removeAllFiles}
+                >
+                  Remove All
+                </button>
+              )}
+
+              {files.length > 1 && (
+                <button
+                  className="upload-btn merge-btn"
+                  onClick={onMerge}
+                >
+                  Merge PDF
+                </button>
+              )}
+            </>
+          )}
+
+          {/* Success Message*/}
+          {mergeComplete && (
+            <p className="success-text">
+              PDF merged successfully
+            </p>
+          )}
+
+          {/* Download Button */}
+          {mergeComplete && downloadUrl && (
+            <a
+              href={downloadUrl}
+              download="Nexora_merged.pdf"
+              className="upload-btn download-btn"
             >
-              Remove All
-            </button>
+              Download Merged PDF
+            </a>
           )}
 
           {/* Error Messages */}

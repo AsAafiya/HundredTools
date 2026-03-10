@@ -47,6 +47,7 @@
   display: inline-block;
   transition: transform 0.2s ease;
   margin: 15px;
+  border: none;
 }
 
 .upload-btn input {
@@ -91,4 +92,26 @@
 .upload-box.drag-active {
   border-color: #6c63ff;
   background: rgba(108, 99, 255, 0.1);
+}
+/* new */
+.upload-preview{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* centers horizontally */
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.upload-file-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* centers text inside each file item */
+}
+
+.merged-file-name {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
 }

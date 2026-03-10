@@ -125,7 +125,7 @@ const Navbar = () => {
             Login
           </button>
 
-          <button className="primary-btn" type="button">
+          <button className="primary-btn" type="button" onClick={() => setShowSignup(true)}>
             Get Started
           </button>
         </div>
