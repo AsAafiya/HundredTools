@@ -11,33 +11,41 @@ import SplitPdf from "../components/tools/SplitPdf";
 import CompressPdf from "../components/tools/CompressPdf";
 import ScrollToTop from "../components/common/ScrollToTop";
 
+import CompressImage from "../components/tools/images/CompressImage";
+import ResizeImage from "../components/tools/images/ResizeImage";
+import ConvertImage from "../components/tools/images/ConvertImage";
+import CropImage from "../components/tools/images/CropImage";
+
+
 const AppRoutes = () => {
   return (
     <>
-    <ScrollToTop />
-    <Routes>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+
+          <Route path="pdf-tools" element={<Home />} />
+
+          <Route path="tools/merge-pdf" element={<MergePdf />} />
+          <Route path="tools/split-pdf" element={<SplitPdf />} />
+          <Route path="tools/compress-pdf" element={<CompressPdf />} />
+
+          <Route path="image-tools" element={<Home />} />
+          <Route path="tools/image/compress-image"element={<CompressImage />}/>
+          <Route path="tools/image/resize-image" element={<ResizeImage />} />
+          <Route path="tools/image/convert-image" element={<ConvertImage />} />
+          <Route path="tools/image/crop-image" element={<CropImage />} />
       
 
-      <Route path="/" element={<MainLayout />}>
+          <Route path="video-tools" element={<Home />} />
 
-        <Route index element={<Home />} />
-
-        <Route path="pdf-tools" element={<Home />} />
-
-        <Route path="tools/merge-pdf" element={<MergePdf />} />
-        <Route path="tools/split-pdf" element={<SplitPdf />} />
-        <Route path="tools/compress-pdf" element={<CompressPdf />} />
-
-        <Route path="image-tools" element={<Home />} />
-        <Route path="video-tools" element={<Home />} />
-
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="my-files" element={<MyFiles />} />
-        <Route path="profile" element={<Profile />} />
-
-      </Route>
-    </Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="my-files" element={<MyFiles />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Routes>
     </>
   );
 };

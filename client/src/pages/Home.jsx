@@ -5,21 +5,22 @@ const Home = () => {
   const pdfTools = [
     {
       title: "Merge PDF",
-      description: "Combine multiple PDF files into a single document effortlessly",
+      description:
+        "Combine multiple PDF files into a single document effortlessly",
       icon: "📄",
-      path: "/tools/merge-pdf"
+      path: "/tools/merge-pdf",
     },
     {
       title: "Split PDF",
       description: "Extract specific pages or split PDF into multiple files",
       icon: "✂️",
-      path: "/tools/split-pdf"
+      path: "/tools/split-pdf",
     },
     {
       title: "Compress PDF",
       description: "Reduce PDF file size while maintaining quality",
       icon: "↗",
-      path: "/tools/compress-pdf"
+      path: "/tools/compress-pdf",
     },
     {
       title: "PDF to JPG",
@@ -33,21 +34,25 @@ const Home = () => {
       title: "Compress Image",
       description: "Reduce image file size without losing quality",
       icon: "↗",
+      path: "/tools/image/compress-image",
     },
     {
       title: "Resize Image",
       description: "Change image dimensions to your specifications",
       icon: "↙",
+      path: "/tools/image/resize-image",
     },
     {
-      title: "Convert JPG to PNG",
+      title: "Convert Image",
       description: "Convert JPG images to PNG format seamlessly",
       icon: "🔁",
+      path: "/tools/image/convert-image",
     },
     {
-      title: "Remove Background",
+      title: "Crop Background",
       description: "Automatically remove backgrounds from images",
       icon: "⌫",
+      path: "/tools/image/crop-image",
     },
   ];
 

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
+import { RxCross1 } from "react-icons/rx";
 
 function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
 
@@ -105,8 +106,8 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
 
                 <br/>
 
-                <button onClick={removeFile}>
-                  Remove
+                <button className="remove-btn" onClick={removeFile}>
+                   <RxCross1/>
                 </button>
 
               </div>
