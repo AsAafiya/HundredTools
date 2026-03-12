@@ -33,15 +33,7 @@ const Navbar = () => {
       label: "Image Tools",
       path: "/image-tools",
       viewAllLabel: "View All Image Tools",
-      items: [
-        "Compress Image",
-        "Resize Image",
-        "Convert JPG to PNG",
-        "Convert PNG to JPG",
-        "Crop Image",
-        "Rotate Image",
-        "Remove Background",
-      ],
+      items: ["Compress Image", "Resize Image", "Crop Image", "Convert Image"],
     },
     {
       key: "video",
@@ -89,6 +81,14 @@ const Navbar = () => {
                   if (item === "Merge PDF") path = "/tools/merge-pdf";
                   if (item === "Split PDF") path = "/tools/split-pdf";
                   if (item === "Compress PDF") path = "/tools/compress-pdf";
+
+                  if (item === "Compress Image")
+                    path = "/tools/image/compress-image";
+                  if (item === "Resize Image")
+                    path = "/tools/image/resize-image";
+                  if (item === "Convert Image")
+                    path = "/tools/image/convert-image";
+                  if (item === "Crop Image") path = "/tools/image/crop-image";
 
                   return (
                     <Link key={item} to={path} className="dropdown-item">
