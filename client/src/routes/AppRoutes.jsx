@@ -23,6 +23,9 @@ import ConvertImage from "../components/tools/images/ConvertImage";
 import CropImage from "../components/tools/images/CropImage";
 
 import ScrollToTop from "../components/common/ScrollToTop";
+import PdfToWord from "../components/tools/PdfToWord";
+import WordToPdf from "../components/tools/WordToPdf";
+import AddWatermark from "../components/tools/AddWatermark";
 
 const AppRoutes = () => {
   return (
@@ -49,6 +52,9 @@ const AppRoutes = () => {
 
           {/* Category page */}
 
+        <Route path="tools/pdf-to-word" element={<PdfToWord />} />
+        <Route path="tools/word-to-pdf" element={<WordToPdf />} />
+        <Route path="tools/add-watermark" element={<AddWatermark />} />
           <Route path="tools/:category" element={<ToolsPage />} />
 
           {/* Other pages */}

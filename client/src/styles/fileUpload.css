@@ -100,6 +100,7 @@
   position: relative;
   padding-top: 20px;
   text-align: center;
+  margin: 15px;
 }
 
 .remove-btn {
@@ -121,6 +122,95 @@
   transition: 0.2s;
 }
 
+.merged-file-name {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+
+
+/* newest */
+
+.upload-preview{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.upload-file-item{
+  width:100%;
+  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+
+.file-info{
+  text-align:center;
+}
+
+.file-name{
+  font-size:16px;
+  font-weight:600;
+  color:#333;
+}
+
+.file-size{
+  font-size:14px;
+  color:#777;
+}
+
+.remove-btn{
+  padding:6px 14px;
+  background:#ff4d4f;
+  border:none;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.remove-btn:hover{
+  background:#d9363e;
+}
+
+.watermark-input{
+  width:260px;
+  padding:8px 12px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:14px;
+  text-align:center;
+  margin-top: 20px;
+}
+
+.watermark-input:focus{
+  outline:none;
+  border-color:#5b6cff;
+}
+
+
+
+
+
+.upload-btn{
+  margin-top:20px;
+  padding:14px 28px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  background:#5b6cff;
+  color:white;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.upload-btn:hover{
+  background:#4a5ae0;
+}
 .upload-file-item:hover .remove-btn {
   opacity: 1;
 }
