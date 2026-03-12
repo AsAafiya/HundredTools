@@ -2,7 +2,13 @@ import logo from "../assets/logos/HundredTools.jpeg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
-function Login({ switchToSignup }) {
+function Login({ switchToSignup, onLoginSuccess }) {
+  const handleSignIn = () => {
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
+  };
+
   return (
     <>
       <div className="auth-card">
@@ -19,7 +25,7 @@ function Login({ switchToSignup }) {
         <label>Password</label>
         <input type="password" placeholder="Enter password" />
 
-        <button className="auth-btn">Sign In <FaLongArrowAltRight/></button>
+        <button className="auth-btn" onClick={handleSignIn}>Sign In <FaLongArrowAltRight/></button>
 
         <div className="divider">
           <span>or</span>

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
+import { RxCross1 } from "react-icons/rx";
 
 function FileUploadSingle({
   accept = ".pdf",
@@ -52,6 +53,9 @@ function FileUploadSingle({
 
     if (validated) {
       setFile(validated);
+      if (onFileChange) {
+        onFileChange(validated);
+      }
     }
 
   };
@@ -76,6 +80,9 @@ function FileUploadSingle({
   const removeFile = () => {
     setFile(null);
     setErrors([]);
+    if (onFileChange) {
+      onFileChange(null);
+    }
   };
 
   const uploadFile = async () => {
@@ -160,8 +167,8 @@ function FileUploadSingle({
 
                 <br />
 
-                <button onClick={removeFile}>
-                  Remove
+                <button className="remove-btn" onClick={removeFile}>
+                   <RxCross1/>
                 </button>
 
               </div>
