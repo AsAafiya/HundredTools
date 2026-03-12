@@ -89,6 +89,10 @@ const Navbar = () => {
                   if (item === "Merge PDF") path = "/tools/merge-pdf";
                   if (item === "Split PDF") path = "/tools/split-pdf";
                   if (item === "Compress PDF") path = "/tools/compress-pdf";
+                  if (item === "PDF to Word") path = "tools/pdf-to-word";
+                  if (item === "Word to PDF") path = "/tools/word-to-pdf";
+                  if (item === "Add Watermark") path = "/tools/add-watermark";
+
 
                   return (
                     <Link key={item} to={path} className="dropdown-item">
