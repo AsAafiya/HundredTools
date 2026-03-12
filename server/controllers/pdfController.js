@@ -1,4 +1,7 @@
 const fs = require("fs");
+const path = require("path");
+const archiver = require("archiver");
+const { fromPath } = require("pdf2pic");
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 
 
@@ -81,26 +84,156 @@ exports.addPageNumbers = async (req, res) => {
 
 /* ---------------- PDF TO JPG ---------------- */
 
-// exports.pdfToJpg = async (req, res) => {
-//   try {
+exports.pdfToJpg = async (req, res) => {
+  let inputPdfPath = "";
+  let zipPath = "";
+  let convertedImages = [];
 
-//     const pdfPath = req.file.path;
+  try {
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
 
-//     const convert = fromPath(pdfPath, {
-//       density: 100,
-//       saveFilename: "page",
-//       savePath: "./outputs",
-//       format: "jpg",
-//       width: 1000,
-//       height: 1400
-//     });
+    inputPdfPath = req.file.path;
 
-//     const page1 = await convert(1);
+    const outputDir = path.resolve(__dirname, "../outputs");
 
-//     res.download(page1.path);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
 
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send("Error converting PDF");
-//   }
-// };
+    const converter = fromPath(inputPdfPath, {
+      density: 140,
+      saveFilename: `page-${Date.now()}`,
+      savePath: outputDir,
+      format: "jpg",
+      width: 1200,
+      height: 1600
+    });
+
+    convertedImages = await converter.bulk(-1, { responseType: "image" });
+
+    zipPath = path.join(outputDir, `pdf-to-jpg-${Date.now()}.zip`);
+
+    await new Promise((resolve, reject) => {
+      const output = fs.createWriteStream(zipPath);
+      const archive = archiver("zip", { zlib: { level: 9 } });
+
+      output.on("close", resolve);
+      archive.on("error", reject);
+
+      archive.pipe(output);
+
+      convertedImages.forEach((img, index) => {
+        if (img.path && fs.existsSync(img.path)) {
+          archive.file(img.path, { name: `page-${index + 1}.jpg` });
+        }
+      });
+
+      archive.finalize();
+    });
+
+    return res.download(zipPath, "converted-images.zip", () => {
+      try {
+        if (inputPdfPath && fs.existsSync(inputPdfPath)) fs.unlinkSync(inputPdfPath);
+      } catch (_) {}
+
+      convertedImages.forEach((img) => {
+        try {
+          if (img.path && fs.existsSync(img.path)) fs.unlinkSync(img.path);
+        } catch (_) {}
+      });
+
+      try {
+        if (zipPath && fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+      } catch (_) {}
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    try {
+      if (inputPdfPath && fs.existsSync(inputPdfPath)) fs.unlinkSync(inputPdfPath);
+    } catch (_) {}
+
+    convertedImages.forEach((img) => {
+      try {
+        if (img.path && fs.existsSync(img.path)) fs.unlinkSync(img.path);
+      } catch (_) {}
+    });
+
+    try {
+      if (zipPath && fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+    } catch (_) {}
+
+    return res.status(500).send("Error converting PDF to JPG");
+  }
+};
+
+/* ---------------- JPG TO PDF ---------------- */
+
+exports.jpgToPdf = async (req, res) => {
+  const uploadedFiles = req.files || [];
+
+  try {
+    if (!uploadedFiles.length) {
+      return res.status(400).send("Please upload JPG files");
+    }
+
+    const pdfDoc = await PDFDocument.create();
+
+    for (const file of uploadedFiles) {
+      const imageBytes = fs.readFileSync(file.path);
+      const lowerName = (file.originalname || "").toLowerCase();
+
+      let image;
+
+      if (lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || file.mimetype === "image/jpeg") {
+        image = await pdfDoc.embedJpg(imageBytes);
+      } else {
+        continue;
+      }
+
+      const { width, height } = image.scale(1);
+      const page = pdfDoc.addPage([width, height]);
+
+      page.drawImage(image, {
+        x: 0,
+        y: 0,
+        width,
+        height
+      });
+    }
+
+    if (pdfDoc.getPageCount() === 0) {
+      return res.status(400).send("No valid JPG images found");
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    const outputPath = path.resolve(__dirname, `../outputs/jpg-to-pdf-${Date.now()}.pdf`);
+
+    fs.writeFileSync(outputPath, pdfBytes);
+
+    return res.download(outputPath, "converted.pdf", () => {
+      uploadedFiles.forEach((file) => {
+        try {
+          if (file.path && fs.existsSync(file.path)) fs.unlinkSync(file.path);
+        } catch (_) {}
+      });
+
+      try {
+        if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+      } catch (_) {}
+    });
+  } catch (error) {
+    console.log(error);
+
+    uploadedFiles.forEach((file) => {
+      try {
+        if (file.path && fs.existsSync(file.path)) fs.unlinkSync(file.path);
+      } catch (_) {}
+    });
+
+    return res.status(500).send("Error converting JPG to PDF");
+  }
+};

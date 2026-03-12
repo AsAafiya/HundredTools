@@ -91,3 +91,44 @@
 .download-btn {
   text-decoration: none;
 }
+
+body[data-theme="dark"] .tool-page {
+  background: #0d162a;
+}
+
+body[data-theme="dark"] .back-btn a,
+body[data-theme="dark"] .subtitle {
+  color: #a8bbdf;
+}
+
+body[data-theme="dark"] .tool-page h1 {
+  color: #e4ecff;
+}
+
+body[data-theme="dark"] .tool-error {
+  color: #ff8d8d;
+}
+
+body[data-theme="dark"] .pdf-result-card {
+  background: #121f39;
+  border: 1px solid #2a3d63;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+}
+
+body[data-theme="dark"] .pdf-result-card h2,
+body[data-theme="dark"] .preview-close-btn {
+  color: #dce6ff;
+}
+
+body[data-theme="dark"] .preview-close-btn {
+  background: #1d2f54;
+}
+
+body[data-theme="dark"] .preview-close-btn:hover {
+  background: #28406f;
+}
+
+body[data-theme="dark"] .pdf-preview-frame {
+  border: 1px solid #2a3d63;
+  background: #0f1a2e;
+}

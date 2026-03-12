@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
-import logo from "../../assets/logo.jpg";
+import logo from "../../assets/logos/logo.jpg";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
   const navRef = useRef(null);
 
@@ -37,6 +38,15 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleThemeToggle = () => {
+    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+  };
 
   const navMenus = [
     {
@@ -84,7 +94,13 @@ const Navbar = () => {
         <div className="navbar-left">
           <div className="logo">
             <Link to="/" className="logo-link" onClick={() => setOpenMenu(null)}>
-              <img src={logo} alt="HundredTools" className="logo-image" />
+              <span className="logo-mark">
+                <img src={logo} alt="HundredTools" className="logo-image" />
+              </span>
+              <span className="logo-copy">
+                <span className="logo-title">HundredTools</span>
+                <span className="logo-tag">Fast document toolkit</span>
+              </span>
             </Link>
           </div>
         </div>
@@ -156,10 +172,11 @@ const Navbar = () => {
             <button
               type="button"
               className="theme-toggle-btn"
-              aria-label="Theme toggle coming soon"
-              title="Theme toggle coming soon"
+              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              onClick={handleThemeToggle}
             >
-              Theme
+              {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
             </button>
           </div>
         </div>
