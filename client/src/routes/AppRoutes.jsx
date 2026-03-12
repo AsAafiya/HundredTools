@@ -27,9 +27,6 @@ const AppRoutes = () => {
 
         <Route path="pdf-tools" element={<Home />} />
 
-        <Route path="tools/merge-pdf" element={<MergePdf />} />
-        <Route path="tools/split-pdf" element={<SplitPdf />} />
-        <Route path="tools/compress-pdf" element={<CompressPdf />} />
         <Route path="tools/pdf-to-word" element={<PdfToWord />} />
         <Route path="tools/word-to-pdf" element={<WordToPdf />} />
         <Route path="tools/add-watermark" element={<AddWatermark />} />
