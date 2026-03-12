@@ -3,7 +3,7 @@ import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
 import { RxCross1 } from "react-icons/rx";
 
-function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
+function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50, onFileChange }) {
 
   const inputRef = useRef(null);
 
@@ -41,6 +41,9 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
 
     if (validated) {
       setFile(validated);
+      if (onFileChange) {
+        onFileChange(validated);
+      }
     }
 
   };
@@ -65,6 +68,9 @@ function FileUploadSingle({ accept = ".pdf", maxSizeMB = 50 }) {
   const removeFile = () => {
     setFile(null);
     setErrors([]);
+    if (onFileChange) {
+      onFileChange(null);
+    }
   };
 
   return (
