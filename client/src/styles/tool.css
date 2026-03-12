@@ -30,93 +30,105 @@
   margin-bottom: 20px;
 }
 
-
-/*height width input in resize image tool*/
-/* Resize Controls */
-.resize-controls{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-bottom:25px;
-  flex-wrap:wrap;
+.tool-status {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.resize-input{
-  display:flex;
-  flex-direction:column;
-  background:#ffffff;
-  padding:15px 20px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
-  min-width:150px;
-  border: 1px solid #d5dbf0;
-
+.tool-error {
+  color: #dc2626;
 }
 
-.resize-input label{
-  font-size:14px;
-  font-weight:600;
-  margin-bottom:6px;
-  color:#555;
-}
-
-.resize-input input{
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding:8px 10px;
-  font-size:14px;
-  outline:none;
-  transition:0.2s;
-}
-
-.resize-input input:focus{
-  border-color:#6c63ff;
-  box-shadow:0 0 5px rgba(108,99,255,0.3);
-}
-
-/*convert image css*/
-.format-selector {
-  text-align: center;
-  margin: 30px 0;
-}
-.format-selector h3{
-  padding-bottom: 20px;
-}
-
-.format-options {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.format-card {
+.pdf-result-card {
+  position: relative;
+  width: min(900px, calc(100% - 40px));
+  margin: 30px auto 0;
+  padding: 24px;
   background: #ffffff;
-  border: 2px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 18px 28px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  width: 140px;
+  border: 1px solid #d5dbf0;
+  border-radius: 24px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
 }
 
-.format-card span {
-  font-size: 20px;
-  font-weight: 600;
+.pdf-result-card h2 {
+  margin-bottom: 18px;
+  color: #1f2937;
 }
 
-.format-card p {
-  font-size: 12px;
-  color: #777;
-  margin-top: 6px;
-}
-
-.format-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-.format-card.active {
-  border-color: #4f46e5;
+.preview-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
   background: #eef2ff;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.preview-close-btn:hover {
+  background: #dbe4ff;
+  transform: scale(1.05);
+}
+
+.pdf-preview-frame {
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
+  border: 1px solid #d5dbf0;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.download-btn {
+  text-decoration: none;
+}
+
+body[data-theme="dark"] .tool-page {
+  background: #0d162a;
+}
+
+body[data-theme="dark"] .back-btn a,
+body[data-theme="dark"] .subtitle {
+  color: #a8bbdf;
+}
+
+body[data-theme="dark"] .tool-page h1 {
+  color: #e4ecff;
+}
+
+body[data-theme="dark"] .tool-error {
+  color: #ff8d8d;
+}
+
+body[data-theme="dark"] .pdf-result-card {
+  background: #121f39;
+  border: 1px solid #2a3d63;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.35);
+}
+
+body[data-theme="dark"] .pdf-result-card h2,
+body[data-theme="dark"] .preview-close-btn {
+  color: #dce6ff;
+}
+
+body[data-theme="dark"] .preview-close-btn {
+  background: #1d2f54;
+}
+
+body[data-theme="dark"] .preview-close-btn:hover {
+  background: #28406f;
+}
+
+body[data-theme="dark"] .pdf-preview-frame {
+  border: 1px solid #2a3d63;
+  background: #0f1a2e;
 }
