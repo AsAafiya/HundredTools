@@ -7,12 +7,13 @@ const upload = require("../middleware/uploadMiddleware");
 // router.post("/merge", upload.array("files"), mergePDF);
 
 const {
- mergePDF,
- pdfToWord,
- wordToPdf,
- addWatermark,
- pdfToJpg,
- jpgToPdf
+  mergePDF,
+  addPageNumbers,
+  pdfToJpg,
+  jpgToPdf,
+  pdfToWord,
+  wordToPdf,
+  addWatermark
 } = require("../controllers/pdfController");
 
 router.post("/merge", upload.array("files"), mergePDF);

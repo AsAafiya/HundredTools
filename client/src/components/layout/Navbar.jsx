@@ -72,8 +72,10 @@ const Navbar = () => {
       path: "/tools/image",
       viewAllLabel: "View All Tools",
       items: [
-        { name: "Compress Image", path: "/tools/compress-image" },
-        { name: "Resize Image", path: "/tools/resize-image" },
+        { name: "Compress Image", path: "/tools/image/compress-image" },
+        { name: "Resize Image", path: "/tools/image/resize-image" },
+        { name: "Convert Image", path: "/tools/image/convert-image" },
+        { name: "Crop Image", path: "/tools/image/crop-image" },
       ],
     },
     {

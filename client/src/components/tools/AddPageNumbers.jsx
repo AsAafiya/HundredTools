@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import FileUploadSingle from "../common/FileUploadSingle";
+import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
 import { addPageNumbers } from "../../services/pdfService";
 import "../../styles/tool.css";
@@ -49,7 +49,7 @@ function AddPageNumbers() {
       <h1>Add Page Numbers</h1>
       <p className="subtitle">Add page numbers to every page of your PDF</p>
 
-      <FileUploadSingle accept=".pdf" onFileChange={setSelectedFile} />
+      <FileUploadSingle2 accept=".pdf" onFileChange={setSelectedFile} />
 
       <button className="upload-btn" onClick={handleAddNumbers} disabled={loading}>
         {loading ? "Processing..." : "Add Page Numbers"}
