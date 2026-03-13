@@ -50,11 +50,11 @@ const AppRoutes = () => {
           <Route path="tools/image/convert-image" element={<ConvertImage />} />
           <Route path="tools/image/crop-image" element={<CropImage />} />
 
-          {/* Category page */}
-
         <Route path="tools/pdf-to-word" element={<PdfToWord />} />
         <Route path="tools/word-to-pdf" element={<WordToPdf />} />
         <Route path="tools/add-watermark" element={<AddWatermark />} />
+
+          {/* Category page */}
           <Route path="tools/:category" element={<ToolsPage />} />
 
           {/* Other pages */}

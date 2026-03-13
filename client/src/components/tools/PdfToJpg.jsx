@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import FileUploadSingle from "../common/FileUploadSingle";
+import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
 import { convertPdfToJpg } from "../../services/pdfService";
 import "../../styles/tool.css";
@@ -49,7 +49,7 @@ function PdfToJpg() {
       <h1>PDF to JPG</h1>
       <p className="subtitle">Convert PDF pages to high-quality JPG images</p>
 
-      <FileUploadSingle accept=".pdf" onFileChange={setSelectedFile} />
+      <FileUploadSingle2 accept=".pdf" onFileChange={setSelectedFile} />
 
       <button className="upload-btn" onClick={handleConvert} disabled={loading}>
         {loading ? "Converting..." : "Convert to JPG"}
