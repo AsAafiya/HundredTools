@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../middleware/uploadMiddleware");
-// const { mergePDF } = require("../controllers/pdfController.js");
-// const { splitPDF } = require("../controllers/splitController.js");
-// const { compressPDF } = require("../controllers/compressController.js");
-// const { mergePDF } = require("../controllers/pdfController");
 
 const {
   mergePDF,
