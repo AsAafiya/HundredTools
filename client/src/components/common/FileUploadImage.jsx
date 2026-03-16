@@ -16,6 +16,8 @@ function FileUploadImage({
   successMessage = "Processed successfully",
   maxSizeMB = 50,
   onReset,
+  processing = false,
+  showProcessButton = true, // <-- New prop
 }) {
   const inputRef = useRef(null);
   const [errors, setErrors] = useState([]);
@@ -93,7 +95,9 @@ function FileUploadImage({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          onClick={() => inputRef.current.click()}
+          onClick={() => {
+            if (!processing) inputRef.current.click();
+          }}
         >
           {files.length === 0 && !processComplete && (
             <>
@@ -156,17 +160,25 @@ function FileUploadImage({
             <button
               className="upload-btn"
               onClick={() => inputRef.current.click()}
+              disabled={processing}
             >
-              Add Files
+              {processing ? "Processing..." : "Add Files"}
             </button>
+
             {files.length > 0 && (
               <button className="upload-btn" onClick={removeAllFiles}>
                 Remove All
               </button>
             )}
-            {files.length > 0 && (
-              <button className="upload-btn merge-btn" onClick={onProcess}>
-                {processLabel}
+
+            {/* Show process button only if condition is true */}
+            {files.length > 0 && onProcess && showProcessButton && (
+              <button
+                className="upload-btn merge-btn"
+                onClick={onProcess}
+                disabled={processing}
+              >
+                {processing ? "Processing..." : processLabel}
               </button>
             )}
           </>

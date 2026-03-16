@@ -6,6 +6,7 @@ import { convertImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
 
 function ConvertImage() {
+  const [svgAllowed, setSvgAllowed] = useState(true);
   const [files, setFiles] = useState([]);
   const [format, setFormat] = useState("png");
   const [downloadUrl, setDownloadUrl] = useState(null);
@@ -44,6 +45,16 @@ function ConvertImage() {
     setFileName("");
   };
 
+  const handleFilesChange = (uploadedFiles) => {
+    setFiles(uploadedFiles);
+
+    const allSVG = uploadedFiles.every((file) =>
+      file.name.toLowerCase().endsWith(".svg"),
+    );
+
+    setSvgAllowed(allSVG);
+  };
+
   return (
     <div className="tool-page">
       <div className="back-btn">
@@ -53,7 +64,7 @@ function ConvertImage() {
       </div>
 
       <h1>Convert Image</h1>
-      <p className="subtitle">Convert images to JPG, PNG, or WEBP format</p>
+      <p className="subtitle">Convert images to JPG, PNG, SVG or WEBP format</p>
 
       {/* Format selector */}
 
@@ -84,14 +95,29 @@ function ConvertImage() {
             <span>WEBP</span>
             <p>Best for web performance</p>
           </button>
+
+          <button
+            disabled={!svgAllowed}
+            className={
+              format === "svg"
+                ? "format-card active"
+                : !svgAllowed
+                  ? "format-card disabled"
+                  : "format-card"
+            }
+            onClick={() => setFormat("svg")}
+          >
+            <span>SVG</span>
+            <p>Vector format</p>
+          </button>
         </div>
       </div>
 
       <FileUploadImage
-        accept="image/*"
+        accept="image/*,.svg"
         maxFiles={10}
         files={files}
-        setFiles={setFiles}
+        setFiles={handleFilesChange}
         onProcess={handleConvert}
         processComplete={processComplete}
         downloadUrl={downloadUrl}

@@ -91,6 +91,7 @@ function ResizeImage() {
         processLabel="Resize Images"
         successMessage="Resized successfully!!!"
         onReset={resetTool} 
+        showProcessButton={width && height}
       />
     </div>
   );

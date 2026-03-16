@@ -102,3 +102,18 @@ export const splitPDF = async (file) => {
 
   return response.data;
 };
+
+
+// Compress PDF
+export const compressPDF = async (file) => {
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post("/pdf/compress", formData, {
+    responseType: "blob"
+  });
+
+  return response.data;
+
+};

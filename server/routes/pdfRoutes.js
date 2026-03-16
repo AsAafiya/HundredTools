@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../middleware/uploadMiddleware");
-// const { mergePDF } = require("../controllers/pdfController");
 
 const {
   mergePDF,
@@ -12,7 +11,8 @@ const {
   jpgToPdf,
   pdfToWord,
   wordToPdf,
-  addWatermark
+  addWatermark,
+  compressPDF
 } = require("../controllers/pdfController");
 
 // router.post("/merge", upload.array("files"), mergePDF);
@@ -23,10 +23,14 @@ router.post("/compress", upload.single("file"),compressPDF);
 
 // router.post("/compress", upload.single("file"), compressPDF);
 
+router.post("/compress", upload.single("file"), compressPDF);
+
 router.post("/pdf-to-word", upload.single("file"), pdfToWord);
 
 router.post("/word-to-pdf", upload.single("file"), wordToPdf);
+
 router.post("/split", upload.single("file"), splitPDF);
+
 router.post("/add-watermark", upload.single("file"), addWatermark);
 
 router.post("/pdf-to-jpg", upload.single("file"), pdfToJpg);
