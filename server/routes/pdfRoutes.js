@@ -2,15 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../middleware/uploadMiddleware");
-// const { mergePDF } = require("../controllers/pdfController.js");
-const { splitPDF } = require("../controllers/splitController.js");
-// const { compressPDF } = require("../controllers/compressController.js");
-// const { mergePDF } = require("../controllers/pdfController");
-
-// router.post("/merge", upload.array("files"), mergePDF);
 
 const {
   mergePDF,
+  splitPDF,
   addPageNumbers,
   pdfToJpg,
   jpgToPdf,
@@ -19,15 +14,14 @@ const {
   addWatermark
 } = require("../controllers/pdfController");
 
-// router.post("/merge", upload.array("files"), mergePDF);
-router.post("/split", upload.single("file"), splitPDF);
+router.post("/merge", upload.array("files"), mergePDF);
+
 // router.post("/compress", upload.single("file"), compressPDF);
-// router.post("/create", upload.array("images"), createPDF);
 
 router.post("/pdf-to-word", upload.single("file"), pdfToWord);
 
 router.post("/word-to-pdf", upload.single("file"), wordToPdf);
-
+router.post("/split", upload.single("file"), splitPDF);
 router.post("/add-watermark", upload.single("file"), addWatermark);
 
 router.post("/pdf-to-jpg", upload.single("file"), pdfToJpg);
