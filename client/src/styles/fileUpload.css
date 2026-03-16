@@ -163,7 +163,7 @@
   color:#777;
 }
 
-.remove-btn{
+/* .remove-btn{
   padding:6px 14px;
   background:#ff4d4f;
   border:none;
@@ -171,11 +171,11 @@
   border-radius:6px;
   cursor:pointer;
   font-size:13px;
-}
+} */
 
-.remove-btn:hover{
+/* .remove-btn:hover{
   background:#d9363e;
-}
+} */
 
 .watermark-input{
   width:260px;

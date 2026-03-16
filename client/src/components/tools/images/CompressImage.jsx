@@ -6,10 +6,11 @@ import { compressImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
 
 function CompressImage() {
+  const [processing, setProcessing] = useState(false);
+  const [level, setLevel] = useState("medium");
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [compressComplete, setCompressComplete] = useState(false);
-  const [compressedFileName, setCompressedFileName] = useState("");
 
   const handleCompress = async () => {
     if (files.length === 0) {
@@ -18,22 +19,18 @@ function CompressImage() {
     }
 
     try {
-      // send all files
-      const compressedBlob = await compressImageAPI(files);
+      setProcessing(true);
+
+      const compressedBlob = await compressImageAPI(files, level);
       const url = window.URL.createObjectURL(compressedBlob);
 
       setDownloadUrl(url);
       setCompressComplete(true);
-
-      // if multiple files, use zip name
-      setCompressedFileName(
-        files.length > 1
-          ? "Nexora_compressImage.zip"
-          : "Nexora_compressImage.jpg",
-      );
     } catch (error) {
       console.error(error);
       alert("Error compressing images");
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -41,7 +38,6 @@ function CompressImage() {
     setFiles([]);
     setDownloadUrl(null);
     setCompressComplete(false);
-    setCompressedFileName("");
   };
 
   return (
@@ -57,18 +53,53 @@ function CompressImage() {
         Reduce image file size while maintaining quality
       </p>
 
+      <div className="format-selector">
+        <h3>Select Compression Level</h3>
+
+        <div className="format-options">
+          <button
+            className={level === "high" ? "format-card active" : "format-card"}
+            onClick={() => setLevel("high")}
+          >
+            <span>High</span>
+            <p>Maximum compression</p>
+          </button>
+
+          <button
+            className={level === "medium" ? "format-card active" : "format-card"}
+            onClick={() => setLevel("medium")}
+          >
+            <span>Medium</span>
+            <p>Balanced quality</p>
+          </button>
+
+          <button
+            className={level === "low" ? "format-card active" : "format-card"}
+            onClick={() => setLevel("low")}
+          >
+            <span>Low</span>
+            <p>Best quality</p>
+          </button>
+        </div>
+      </div>
+
       <FileUploadImage
         accept="image/*"
-        maxFiles={10} // allow multiple files
+        maxFiles={10}
         files={files}
         setFiles={setFiles}
         onProcess={handleCompress}
         processComplete={compressComplete}
         downloadUrl={downloadUrl}
-        outputFileName={compressedFileName}
+        outputFileName={
+          files.length > 1
+            ? "Nexora_compressImage.zip"
+            : "Nexora_compressImage.jpg"
+        }
         processLabel="Compress Images"
         successMessage="compressed successfully!!!"
         onReset={resetTool}
+        processing={processing}
       />
 
       <Features />

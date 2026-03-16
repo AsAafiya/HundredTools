@@ -1,8 +1,12 @@
-export const compressImageAPI = async (files) => {
+//compress image
+export const compressImageAPI = async (files, level) => {
   const formData = new FormData();
+
   for (let file of files) {
-  formData.append("file", file); // matches upload.array("file") on backend
-}
+    formData.append("file", file);
+  }
+
+  formData.append("level", level);
 
   const response = await fetch("http://localhost:5000/api/image/compress", {
     method: "POST",
@@ -11,8 +15,7 @@ export const compressImageAPI = async (files) => {
 
   if (!response.ok) throw new Error("Image compression failed");
 
-  const blob = await response.blob();
-  return blob;
+  return await response.blob();
 };
 
 //resize tool

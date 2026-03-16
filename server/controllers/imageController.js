@@ -6,36 +6,58 @@ const archiver = require("archiver");
 //compress images
 exports.compressImage = async (req, res) => {
   try {
+
     if (!req.files || req.files.length === 0) {
       return res.status(400).send("No files uploaded");
+    }
+
+    const { level } = req.body;
+
+    // Set compression quality based on level
+    let quality;
+
+    if (level === "high") {
+      quality = 30; // highest compression
+    } 
+    else if (level === "medium") {
+      quality = 60;
+    } 
+    else {
+      quality = 85; // lowest compression
     }
 
     const compressedFiles = [];
 
     for (const file of req.files) {
+
       const ext = path.extname(file.originalname).toLowerCase();
       const baseName = path.basename(file.originalname, ext);
 
-      const outputPath = `outputs/compressed-${baseName}.jpg`;
+      const outputPath = `outputs/compressed-${Date.now()}-${baseName}.jpg`;
 
       await sharp(file.path)
-        .jpeg({ quality: 60 })
+        .jpeg({ quality })
         .toFile(outputPath);
 
       compressedFiles.push({
         path: outputPath,
         name: `compressed-${baseName}.jpg`,
       });
+
     }
 
-  
+    // If only one file
     if (compressedFiles.length === 1) {
-      return res.download(compressedFiles[0].path, `Nexora_compressImage.jpg`);
+      return res.download(
+        compressedFiles[0].path,
+        "Nexora_compressImage.jpg"
+      );
     }
 
-
+    // If multiple files → create ZIP
     const zipName = "Nexora_compressImage.zip";
     const zipPath = path.join("outputs", zipName);
+
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
 
@@ -61,7 +83,6 @@ exports.compressImage = async (req, res) => {
   }
 };
 
-
 //resize image
 exports.resizeImage = async (req, res) => {
   try {
@@ -86,16 +107,14 @@ exports.resizeImage = async (req, res) => {
 
       resizedFiles.push({
         path: outputPath,
-        name: `resized-${baseName}.jpg`
+        name: `resized-${baseName}.jpg`,
       });
     }
-
 
     if (resizedFiles.length === 1) {
       return res.download(resizedFiles[0].path, "Nexora_resizeImage.jpg");
     }
 
-   
     const zipName = "Nexora_resizeImage.zip";
     const zipPath = path.join("outputs", zipName);
 
@@ -113,7 +132,6 @@ exports.resizeImage = async (req, res) => {
     });
 
     await archive.finalize();
-
   } catch (error) {
     console.log(error);
     res.status(500).send("Error resizing images");
@@ -123,13 +141,11 @@ exports.resizeImage = async (req, res) => {
 //crop tool
 exports.cropImage = async (req, res) => {
   try {
-
     const { x, y, width, height } = req.body;
 
     const croppedFiles = [];
 
     for (const file of req.files) {
-
       const outputPath = `outputs/cropped-${file.originalname}`;
 
       await sharp(file.path)
@@ -137,7 +153,7 @@ exports.cropImage = async (req, res) => {
           left: parseInt(x),
           top: parseInt(y),
           width: parseInt(width),
-          height: parseInt(height)
+          height: parseInt(height),
         })
         .toFile(outputPath);
 
@@ -146,14 +162,13 @@ exports.cropImage = async (req, res) => {
 
     // Multiple images → zip
     if (croppedFiles.length > 1) {
-
       const zipPath = "outputs/Nexora_cropImage.zip";
       const output = fs.createWriteStream(zipPath);
       const archive = archiver("zip");
 
       archive.pipe(output);
 
-      croppedFiles.forEach(file => {
+      croppedFiles.forEach((file) => {
         archive.file(file, { name: file.split("/").pop() });
       });
 
@@ -162,49 +177,44 @@ exports.cropImage = async (req, res) => {
       output.on("close", () => {
         res.download(zipPath);
       });
-
     } else {
-
       res.download(croppedFiles[0], "Nexora_cropImage.jpg");
-
     }
-
   } catch (error) {
     console.log(error);
     res.status(500).send("Error cropping images");
   }
 };
 
-
 //convert image
-
 exports.convertImage = async (req, res) => {
   try {
-
     const { format } = req.body;
     const convertedFiles = [];
 
     for (const file of req.files) {
+      const ext = file.originalname.split(".").pop().toLowerCase();
+
+      // Prevent raster to SVG
+      if (format === "svg" && ext !== "svg") {
+        return res.status(400).send("Only SVG files can be converted to SVG");
+      }
 
       const outputPath = `outputs/converted-${Date.now()}.${format}`;
 
-      await sharp(file.path)
-        .toFormat(format)
-        .toFile(outputPath);
+      await sharp(file.path).toFormat(format).toFile(outputPath);
 
       convertedFiles.push(outputPath);
     }
 
-    // Multiple images → ZIP
     if (convertedFiles.length > 1) {
-
       const zipPath = "outputs/Nexora_convertImage.zip";
       const output = fs.createWriteStream(zipPath);
       const archive = archiver("zip");
 
       archive.pipe(output);
 
-      convertedFiles.forEach(file => {
+      convertedFiles.forEach((file) => {
         archive.file(file, { name: file.split("/").pop() });
       });
 
@@ -213,20 +223,11 @@ exports.convertImage = async (req, res) => {
       output.on("close", () => {
         res.download(zipPath);
       });
-
     } else {
-
-      res.download(
-        convertedFiles[0],
-        `Nexora_convertImage.${format}`
-      );
-
+      res.download(convertedFiles[0], `Nexora_convertImage.${format}`);
     }
-
   } catch (error) {
-
     console.log(error);
     res.status(500).send("Error converting image");
-
   }
 };

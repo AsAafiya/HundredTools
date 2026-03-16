@@ -310,7 +310,7 @@ exports.wordToPdf = async (req, res) => {
 
     await new Promise((resolve, reject) => {
       execFile(
-        "soffice",
+       "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
         [
           "--headless",
           "--convert-to",
