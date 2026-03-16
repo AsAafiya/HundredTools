@@ -3,18 +3,12 @@ import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
 import { RxCross1 } from "react-icons/rx";
 
-function FileUploadSingle({
-  accept = ".pdf",
-  maxSizeMB = 50,
-  endpoint = "/api/pdf/pdf-to-word",
-  downloadName = "converted-file"
-}) {
+function FileUploadSingle2({ accept = ".pdf", maxSizeMB = 50, onFileChange }) {
 
   const inputRef = useRef(null);
 
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -22,13 +16,7 @@ function FileUploadSingle({
 
     const errorList = [];
 
-    const allowedTypes = accept.split(",");
-
-    const isValidType = allowedTypes.some(type =>
-      selectedFile.name.toLowerCase().endsWith(type.trim())
-    );
-
-    if (!isValidType) {
+    if (!selectedFile.name.toLowerCase().endsWith(accept)) {
       errorList.push(`${selectedFile.name} → Invalid file type`);
     }
 
@@ -45,7 +33,7 @@ function FileUploadSingle({
 
   const handleFile = (selectedFiles) => {
 
-    const selectedFile = selectedFiles[0];
+    const selectedFile = selectedFiles[0]; // only first file
 
     if (!selectedFile) return;
 
@@ -85,51 +73,6 @@ function FileUploadSingle({
     }
   };
 
-  const uploadFile = async () => {
-
-    if (!file) {
-      setErrors(["Please select a file first"]);
-      return;
-    }
-
-    try {
-
-      setLoading(true);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
-        method: "POST",
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error("Conversion failed");
-      }
-
-      const blob = await response.blob();
-
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = downloadName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-    } catch (err) {
-
-      console.error(err);
-      setErrors(["Upload or conversion failed"]);
-
-    } finally {
-      setLoading(false);
-    }
-
-  };
-
   return (
     <div className="upload-container">
 
@@ -141,18 +84,20 @@ function FileUploadSingle({
           onDrop={handleDrop}
         >
 
+          {/* Upload UI */}
           {!file && (
             <>
               <div className="upload-icon">
                 <TbUpload />
               </div>
 
-              <h3>Upload File</h3>
+              <h3>Upload a PDF File</h3>
 
               <p>Click to browse from your computer</p>
             </>
           )}
 
+          {/* File Preview */}
           {file && (
 
             <div className="upload-preview">
@@ -165,7 +110,7 @@ function FileUploadSingle({
                   {(file.size / 1024).toFixed(2)} KB
                 </span>
 
-                <br />
+                <br/>
 
                 <button className="remove-btn" onClick={removeFile}>
                    <RxCross1/>
@@ -179,6 +124,7 @@ function FileUploadSingle({
 
         </div>
 
+        {/* Hidden file input */}
         <input
           ref={inputRef}
           type="file"
@@ -190,6 +136,7 @@ function FileUploadSingle({
           }}
         />
 
+        {/* Add File Button */}
         <button
           className="upload-btn"
           onClick={() => inputRef.current.click()}
@@ -197,14 +144,7 @@ function FileUploadSingle({
           Add File
         </button>
 
-        <button
-          className="upload-btn convert-btn"
-          onClick={uploadFile}
-          disabled={!file || loading}
-        >
-          {loading ? "Processing..." : "Convert File"}
-        </button>
-
+        {/* Error Messages */}
         {errors.length > 0 && (
           <div className="upload-errors">
             {errors.map((err, index) => (
@@ -219,4 +159,4 @@ function FileUploadSingle({
   );
 }
 
-export default FileUploadSingle;
+export default FileUploadSingle2;

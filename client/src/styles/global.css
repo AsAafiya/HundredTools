@@ -21,6 +21,26 @@ body {
   color: #1f3568;
   line-height: 1.5;
   font-size: 17px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body[data-theme="dark"] {
+  background: #0b1222;
+  color: #dce6ff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
 }
 
 .site-container {
