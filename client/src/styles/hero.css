@@ -5,7 +5,8 @@
 }
 
 .hero-section {
-  padding: 78px 0 80px;
+  padding: 15px 0 20px;
+  display: flex;
 }
 
 .hero {
@@ -114,7 +115,8 @@
 
 .tool-section {
   text-align: center;
-  padding: 72px 0 58px;
+  /* padding: 72px 0 58px; */
+  padding-bottom: 15px;
 }
 
 .tool-section .site-container {
@@ -126,14 +128,14 @@
 }
 
 .tool-section h2 {
-  margin: 0 0 14px;
+  margin-top: 25px;
   font-size: 52px;
   color: #20356a;
   letter-spacing: -0.02em;
 }
 
 .tool-section p {
-  margin: 0 0 34px;
+  margin: 0 0 10px;
   color: #4b5777;
   font-size: 22px;
   line-height: 1.45;
