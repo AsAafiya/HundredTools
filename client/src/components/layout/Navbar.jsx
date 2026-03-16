@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
-import logo from "../../assets/logos/logo.jpg";
+import logo from "../../assets/logos/logo.png";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 

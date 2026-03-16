@@ -19,7 +19,10 @@ function SplitPdf() {
         Extract specific pages or split PDF into multiple files
       </p>
 
-      <FileUploadSingle />
+      <FileUploadSingle
+        endpoint="/api/pdf/split"
+        downloadName="split-pages.zip"
+      />
       <Features />
     </div>
   );
