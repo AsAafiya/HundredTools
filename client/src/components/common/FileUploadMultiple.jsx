@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
+import { RxCross1 } from "react-icons/rx";
 
 function FileUploadMultiple({ accept = ".pdf", maxSizeMB = 50 , onFilesChange , onMerge,
   downloadUrl , mergeComplete , mergedFileName}) {
@@ -126,10 +127,10 @@ const handleDrop = (e) => {
                     {(file.size / 1024).toFixed(2)} KB
                   </span>
                   <br/>
-                  <button
+                  <button className="remove-btn" 
                     onClick={() => removeFile(index)}
                   >
-                    Remove
+                    <RxCross1/>
                   </button>
 
                 </div>

@@ -1,6 +1,11 @@
 import ToolCard from "./ToolCard";
+import { useNavigate } from "react-router-dom";
 
-const ToolSection = ({ title, subtitle, tools, withDivider = false }) => {
+const ToolSection = ({ title, subtitle, tools, category, withDivider = false }) => {
+  const navigate = useNavigate();
+  const targetCategory =
+    category || title?.toLowerCase().replace(" tools", "").trim();
+
   return (
     <section className={`tool-section ${withDivider ? "section-divider" : ""}`}>
       <div className="site-container">
@@ -19,7 +24,11 @@ const ToolSection = ({ title, subtitle, tools, withDivider = false }) => {
           ))}
         </div>
 
-        <button className="primary-btn">
+        <button
+          type="button"
+          className="primary-btn"
+          onClick={() => navigate(`/tools/${targetCategory}`)}
+        >
           View All {title}
         </button>
       </div>
