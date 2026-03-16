@@ -1,21 +1,42 @@
 //compress image
-export const compressImageAPI = async (files, level) => {
+// export const compressImageAPI = async (files, level) => {
+//   const formData = new FormData();
+
+//   for (let file of files) {
+//     formData.append("file", file);
+//   }
+
+//   formData.append("level", level);
+
+//   const response = await fetch("http://localhost:5000/api/image/compress", {
+//     method: "POST",
+//     body: formData
+//   });
+
+//   if (!response.ok) throw new Error("Image compression failed");
+
+//   return await response.blob();
+// };
+export const compressImageAPI = async (files, quality) => {
+
   const formData = new FormData();
 
-  for (let file of files) {
+  files.forEach((file) => {
     formData.append("file", file);
-  }
-
-  formData.append("level", level);
-
-  const response = await fetch("http://localhost:5000/api/image/compress", {
-    method: "POST",
-    body: formData
   });
 
-  if (!response.ok) throw new Error("Image compression failed");
+  formData.append("level", quality);   // IMPORTANT
 
-  return await response.blob();
+  const response = await fetch(
+    "http://localhost:5000/api/image/compress",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const blob = await response.blob();
+  return blob;
 };
 
 //resize tool

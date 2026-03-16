@@ -57,6 +57,8 @@ function MergePdf() {
         downloadUrl={downloadUrl}
         mergeComplete={mergeComplete}
         mergedFileName={mergedFileName}
+        processLabel="Merge PDF" 
+        downloadLabel="Download Merged PDF" 
       />
 
       <Features />

@@ -4,14 +4,18 @@ import FileUploadImage from "../../common/FileUploadImage";
 import Features from "../../common/Features";
 import { compressImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
+// import { useError } from "../../../context/ErrorContext";
 
 function CompressImage() {
-  const [processing, setProcessing] = useState(false);
-  const [level, setLevel] = useState("medium");
+  // const { showError } = useError();
+
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [compressComplete, setCompressComplete] = useState(false);
+  const [compressedFileName, setCompressedFileName] = useState("");
+  const [quality, setQuality] = useState("medium"); // default medium
 
+  // Handle Compression
   const handleCompress = async () => {
     if (files.length === 0) {
       alert("Please upload at least one image!");
@@ -19,29 +23,37 @@ function CompressImage() {
     }
 
     try {
-      setProcessing(true);
-
-      const compressedBlob = await compressImageAPI(files, level);
+      // Compress images with selected quality
+      const compressedBlob = await compressImageAPI(files, quality);
       const url = window.URL.createObjectURL(compressedBlob);
 
       setDownloadUrl(url);
       setCompressComplete(true);
+
+      // Set file name based on single/multiple files
+      setCompressedFileName(
+        files.length > 1
+          ? "Nexora_compressImage.zip"
+          : "Nexora_compressImage.jpg",
+      );
     } catch (error) {
       console.error(error);
-      alert("Error compressing images");
-    } finally {
-      setProcessing(false);
+      alert("Error compressing images. Please try again.");
     }
   };
 
+  // Reset tool
   const resetTool = () => {
     setFiles([]);
     setDownloadUrl(null);
     setCompressComplete(false);
+    setCompressedFileName("");
+    setQuality("medium");
   };
 
   return (
     <div className="tool-page">
+      {/* Back button */}
       <div className="back-btn">
         <a href="/">
           <FaArrowLeft /> Back to Home
@@ -52,54 +64,53 @@ function CompressImage() {
       <p className="subtitle">
         Reduce image file size while maintaining quality
       </p>
-
       <div className="format-selector">
         <h3>Select Compression Level</h3>
 
         <div className="format-options">
           <button
-            className={level === "high" ? "format-card active" : "format-card"}
-            onClick={() => setLevel("high")}
+            className={
+              quality === "high" ? "format-card active" : "format-card"
+            }
+            onClick={() => setQuality("high")}
           >
             <span>High</span>
             <p>Maximum compression</p>
           </button>
 
           <button
-            className={level === "medium" ? "format-card active" : "format-card"}
-            onClick={() => setLevel("medium")}
+            className={
+              quality === "medium" ? "format-card active" : "format-card"
+            }
+            onClick={() => setQuality("medium")}
           >
             <span>Medium</span>
             <p>Balanced quality</p>
           </button>
 
           <button
-            className={level === "low" ? "format-card active" : "format-card"}
-            onClick={() => setLevel("low")}
+            className={quality === "low" ? "format-card active" : "format-card"}
+            onClick={() => setQuality("low")}
           >
             <span>Low</span>
-            <p>Best quality</p>
+            <p>Best image quality</p>
           </button>
         </div>
       </div>
 
+      {/* File Upload Component */}
       <FileUploadImage
         accept="image/*"
-        maxFiles={10}
+        maxFiles={10} // multiple files
         files={files}
         setFiles={setFiles}
         onProcess={handleCompress}
         processComplete={compressComplete}
         downloadUrl={downloadUrl}
-        outputFileName={
-          files.length > 1
-            ? "Nexora_compressImage.zip"
-            : "Nexora_compressImage.jpg"
-        }
+        outputFileName={compressedFileName}
         processLabel="Compress Images"
-        successMessage="compressed successfully!!!"
+        successMessage="Images compressed successfully!"
         onReset={resetTool}
-        processing={processing}
       />
 
       <Features />

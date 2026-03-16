@@ -90,3 +90,30 @@ export const convertJpgToPdf = async (files) => {
 
   return response.data;
 };
+
+// Split PDF
+export const splitPDF = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post("/pdf/split", formData, {
+    responseType: "blob",
+  });
+
+  return response.data;
+};
+
+
+// Compress PDF
+export const compressPDF = async (file) => {
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post("/pdf/compress", formData, {
+    responseType: "blob"
+  });
+
+  return response.data;
+
+};

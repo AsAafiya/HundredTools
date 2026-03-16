@@ -4,11 +4,14 @@ const { execFile } = require("child_process");
 const { PDFDocument, StandardFonts, rgb, degrees } = require("pdf-lib");
 const archiver = require("archiver");
 const { fromPath } = require("pdf2pic");
+const { exec } = require("child_process");
 
 /* ---------------- MERGE PDF ---------------- */
 
 exports.mergePDF = async (req, res) => {
   try {
+    console.log("merge route hit");
+
     const mergedPdf = await PDFDocument.create();
 
     for (const file of req.files) {
@@ -25,18 +28,18 @@ exports.mergePDF = async (req, res) => {
     fs.writeFileSync(outputPath, mergedPdfBytes);
 
     res.download(outputPath, (err) => {
-  if (err) {
-    console.error("Download interrupted:", err.message);
-  }
+      if (err) {
+        console.error("Download interrupted:", err.message);
+      }
 
-  try {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-  } catch (e) {
-    console.error("File cleanup error:", e.message);
-  }
-});
+      try {
+        if (fs.existsSync(outputPath)) {
+          fs.unlinkSync(outputPath);
+        }
+      } catch (e) {
+        console.error("File cleanup error:", e.message);
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error merging PDFs");
@@ -47,6 +50,8 @@ exports.mergePDF = async (req, res) => {
 
 exports.addPageNumbers = async (req, res) => {
   try {
+    console.log("add page numbers route hit");
+
     const pdfBytes = fs.readFileSync(req.file.path);
 
     const pdfDoc = await PDFDocument.load(pdfBytes);
@@ -77,19 +82,20 @@ exports.addPageNumbers = async (req, res) => {
 
     fs.writeFileSync(outputPath, pdfBytesOut);
 
-res.download(outputPath, (err) => {
-  if (err) {
-    console.error("Download interrupted:", err.message);
-  }
+    res.download(outputPath, (err) => {
+      if (err) {
+        console.error("Download interrupted:", err.message);
+      }
 
-  try {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-  } catch (e) {
-    console.error("File cleanup error:", e.message);
-  }
-});  } catch (error) {
+      try {
+        if (fs.existsSync(outputPath)) {
+          fs.unlinkSync(outputPath);
+        }
+      } catch (e) {
+        console.error("File cleanup error:", e.message);
+      }
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).send("Error adding page numbers");
   }
@@ -102,6 +108,8 @@ exports.pdfToJpg = async (req, res) => {
   let convertedImages = [];
 
   try {
+    console.log("pdf to jpg route hit");
+
     if (!req.file) {
       return res.status(400).send("Please upload a PDF file");
     }
@@ -120,7 +128,7 @@ exports.pdfToJpg = async (req, res) => {
       savePath: outputDir,
       format: "jpg",
       width: 1200,
-      height: 1600
+      height: 1600,
     });
 
     convertedImages = await converter.bulk(-1, { responseType: "image" });
@@ -147,7 +155,8 @@ exports.pdfToJpg = async (req, res) => {
 
     return res.download(zipPath, "converted-images.zip", () => {
       try {
-        if (inputPdfPath && fs.existsSync(inputPdfPath)) fs.unlinkSync(inputPdfPath);
+        if (inputPdfPath && fs.existsSync(inputPdfPath))
+          fs.unlinkSync(inputPdfPath);
       } catch (_) {}
 
       convertedImages.forEach((img) => {
@@ -160,12 +169,12 @@ exports.pdfToJpg = async (req, res) => {
         if (zipPath && fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
       } catch (_) {}
     });
-
   } catch (error) {
     console.log(error);
 
     try {
-      if (inputPdfPath && fs.existsSync(inputPdfPath)) fs.unlinkSync(inputPdfPath);
+      if (inputPdfPath && fs.existsSync(inputPdfPath))
+        fs.unlinkSync(inputPdfPath);
     } catch (_) {}
 
     convertedImages.forEach((img) => {
@@ -187,6 +196,8 @@ exports.jpgToPdf = async (req, res) => {
   const uploadedFiles = req.files || [];
 
   try {
+    console.log("jpg to pdf route hit");
+
     if (!uploadedFiles.length) {
       return res.status(400).send("Upload JPG files");
     }
@@ -231,19 +242,20 @@ exports.jpgToPdf = async (req, res) => {
 
     fs.writeFileSync(outputPath, pdfBytes);
 
-res.download(outputPath, (err) => {
-  if (err) {
-    console.error("Download interrupted:", err.message);
-  }
+    res.download(outputPath, (err) => {
+      if (err) {
+        console.error("Download interrupted:", err.message);
+      }
 
-  try {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-  } catch (e) {
-    console.error("File cleanup error:", e.message);
-  }
-});  } catch (error) {
+      try {
+        if (fs.existsSync(outputPath)) {
+          fs.unlinkSync(outputPath);
+        }
+      } catch (e) {
+        console.error("File cleanup error:", e.message);
+      }
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).send("Error converting JPG to PDF");
   }
@@ -253,6 +265,8 @@ res.download(outputPath, (err) => {
 
 exports.pdfToWord = async (req, res) => {
   try {
+    console.log("pdf to word route hit");
+
     const inputPath = path.resolve(req.file.path);
 
     const outputDir = path.resolve(__dirname, "../outputs");
@@ -261,20 +275,20 @@ exports.pdfToWord = async (req, res) => {
 
     await new Promise((resolve, reject) => {
       execFile(
-      "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
-      [
-        "--headless",
-        "--infilter=writer_pdf_import",
-        "--convert-to",
-        "docx",
-        "--outdir",
-        outputDir,
-        inputPath
-      ],
+        "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+        [
+          "--headless",
+          "--infilter=writer_pdf_import",
+          "--convert-to",
+          "docx",
+          "--outdir",
+          outputDir,
+          inputPath,
+        ],
         (error) => {
           if (error) return reject(error);
           resolve();
-        }
+        },
       );
     });
 
@@ -294,7 +308,8 @@ exports.pdfToWord = async (req, res) => {
       } catch (e) {
         console.error("File cleanup error:", e.message);
       }
-    });  } catch (error) {
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).send("Error converting PDF to Word");
   }
@@ -304,25 +319,20 @@ exports.pdfToWord = async (req, res) => {
 
 exports.wordToPdf = async (req, res) => {
   try {
+    console.log("word to pdf route hit");
+
     const inputPath = path.resolve(req.file.path);
 
     const outputDir = path.resolve(__dirname, "../outputs");
 
     await new Promise((resolve, reject) => {
       execFile(
-       "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
-        [
-          "--headless",
-          "--convert-to",
-          "pdf",
-          "--outdir",
-          outputDir,
-          inputPath,
-        ],
+        "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
+        ["--headless", "--convert-to", "pdf", "--outdir", outputDir, inputPath],
         (error) => {
           if (error) return reject(error);
           resolve();
-        }
+        },
       );
     });
 
@@ -342,7 +352,8 @@ exports.wordToPdf = async (req, res) => {
       } catch (e) {
         console.error("File cleanup error:", e.message);
       }
-    });  } catch (error) {
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).send("Error converting Word to PDF");
   }
@@ -352,6 +363,8 @@ exports.wordToPdf = async (req, res) => {
 
 exports.addWatermark = async (req, res) => {
   try {
+    console.log("add watermark route hit");
+
     const pdfBytes = fs.readFileSync(req.file.path);
 
     const pdfDoc = await PDFDocument.load(pdfBytes);
@@ -385,20 +398,114 @@ exports.addWatermark = async (req, res) => {
 
     fs.writeFileSync(outputPath, newPdf);
 
-res.download(outputPath, (err) => {
-  if (err) {
-    console.error("Download interrupted:", err.message);
-  }
+    res.download(outputPath, (err) => {
+      if (err) {
+        console.error("Download interrupted:", err.message);
+      }
 
-  try {
-    if (fs.existsSync(outputPath)) {
-      fs.unlinkSync(outputPath);
-    }
-  } catch (e) {
-    console.error("File cleanup error:", e.message);
-  }
-});  } catch (error) {
+      try {
+        if (fs.existsSync(outputPath)) {
+          fs.unlinkSync(outputPath);
+        }
+      } catch (e) {
+        console.error("File cleanup error:", e.message);
+      }
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).send("Watermark failed");
+  }
+};
+
+/* ---------------- SPLIT PDF ---------------- */
+
+exports.splitPDF = async (req, res) => {
+  try {
+    console.log("split route hit");
+
+    const pdfPath = req.file.path;
+
+    const pdfBytes = fs.readFileSync(pdfPath);
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    const totalPages = pdfDoc.getPageCount();
+
+    const splitFiles = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      const newPdf = await PDFDocument.create();
+
+      const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+
+      newPdf.addPage(copiedPage);
+
+      const pdfBytes = await newPdf.save();
+
+      const outputPath = path.join("uploads", `page-${i + 1}.pdf`);
+
+      fs.writeFileSync(outputPath, pdfBytes);
+
+      splitFiles.push(outputPath);
+    }
+
+    // res.json({
+    //     message: "PDF split successfully",
+    //     files: splitFiles
+    // });
+    // res.download(splitFiles[0]);
+    // res.download(path.resolve(splitFiles[0]))
+    const archive = archiver("zip");
+
+    res.attachment("split.zip");
+
+    archive.pipe(res);
+
+    splitFiles.forEach((file) => {
+      archive.file(file, { name: path.basename(file) });
+    });
+
+    archive.finalize();
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({ error: "Split failed" });
+  }
+};
+/* ---------------- COMPRESS PDF ---------------- */
+
+exports.compressPDF = async (req, res) => {
+  try {
+    console.log("compress route hit");
+
+    const inputPath = path.resolve(req.file.path); // absolute path
+    const outputPath = path.resolve("uploads", `compressed-${Date.now()}.pdf`);
+
+    const command = `gswin64c -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${outputPath}" "${inputPath}"`;
+
+    exec(command, (error) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Compression failed");
+      }
+
+      res.download(outputPath, (err) => {
+        if (err) {
+          console.error("Download interrupted:", err.message);
+        }
+
+        try {
+          if (fs.existsSync(outputPath)) {
+            fs.unlinkSync(outputPath);
+          }
+        } catch (e) {
+          console.error("Cleanup error:", e.message);
+        }
+      });
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send("Compression error");
   }
 };

@@ -6,6 +6,7 @@ const archiver = require("archiver");
 //compress images
 exports.compressImage = async (req, res) => {
   try {
+    console.log("compress image route hit");
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).send("No files uploaded");
@@ -86,6 +87,8 @@ exports.compressImage = async (req, res) => {
 //resize image
 exports.resizeImage = async (req, res) => {
   try {
+    console.log("resize image route hit");
+
     const { width, height } = req.body;
 
     if (!req.files || req.files.length === 0) {
@@ -141,6 +144,8 @@ exports.resizeImage = async (req, res) => {
 //crop tool
 exports.cropImage = async (req, res) => {
   try {
+    console.log("crop image route hit");
+
     const { x, y, width, height } = req.body;
 
     const croppedFiles = [];
@@ -189,6 +194,8 @@ exports.cropImage = async (req, res) => {
 //convert image
 exports.convertImage = async (req, res) => {
   try {
+    console.log("convert image route hit");
+
     const { format } = req.body;
     const convertedFiles = [];
 
