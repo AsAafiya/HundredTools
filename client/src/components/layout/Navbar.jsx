@@ -178,7 +178,7 @@ const Navbar = () => {
               title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
               onClick={handleThemeToggle}
             >
-              {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+              {theme === "dark" ? "☀️" : "🌙"}
             </button>
           </div>
         </div>
