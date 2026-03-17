@@ -29,7 +29,7 @@ const Footer = () => {
             <div className="footer-links">
               <Link to="/tools/pdf">PDF Tools</Link>
               <Link to="/tools/image">Image Tools</Link>
-              <Link to="/tools/video">Video Tools</Link>
+              {/* <Link to="/tools/video">Video Tools</Link> */}
               <Link to="/my-files">My Files</Link>
             </div>
           </div>
