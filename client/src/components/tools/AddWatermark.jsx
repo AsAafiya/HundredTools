@@ -12,6 +12,8 @@ function AddWatermark() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [complete, setComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [resetKey] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleWatermark = async () => {
 
@@ -21,8 +23,16 @@ function AddWatermark() {
     }
 
     try {
+      const startedAt = Date.now();
+      const minProgressMs = 900;
+      setLoading(true);
 
       const result = await addWatermark(file, text);
+
+      const elapsed = Date.now() - startedAt;
+      if (elapsed < minProgressMs) {
+        await new Promise((resolve) => setTimeout(resolve, minProgressMs - elapsed));
+      }
 
       const url = window.URL.createObjectURL(result);
 
@@ -30,18 +40,18 @@ function AddWatermark() {
       setComplete(true);
       setFileName("Nexora_watermarked.pdf");
 
-      // 🔥 auto download
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Nexora_watermarked.pdf";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
 
+  };
+
+  const handleDownload = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
   return (
@@ -68,6 +78,7 @@ function AddWatermark() {
       /> */}
 
       <FileUploadWatermark
+        key={resetKey}
         onFileChange={setFile}
         onMerge={handleWatermark}
         downloadUrl={downloadUrl}
@@ -75,6 +86,9 @@ function AddWatermark() {
         mergedFileName={fileName}
         watermarkText={text}
         setWatermarkText={setText}
+        onDownload={handleDownload}
+        isProcessing={loading}
+        processingLabel="Applying watermark..."
       />
 
       <Features />

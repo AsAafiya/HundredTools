@@ -11,8 +11,11 @@ function FileUploadMultiple({
   downloadUrl,
   mergeComplete,
   mergedFileName,
-  processLabel = "Process PDF",        // Added prop
-  downloadLabel = "Download PDF",      // Added prop
+  processLabel = "Process PDF",
+  downloadLabel = "Download PDF",
+  onDownload,
+  isProcessing = false,
+  processingLabel = "Converting PDF...",
 }) {
   const inputRef = useRef(null);
 
@@ -92,9 +95,15 @@ function FileUploadMultiple({
     e.preventDefault();
     setDragging(false);
 
-    if (files.length === 0) {
+    if (files.length === 0 && !isProcessing) {
       const droppedFiles = e.dataTransfer.files;
       handleFiles(droppedFiles);
+    }
+  };
+
+  const handleDownloadClick = () => {
+    if (onDownload) {
+      onDownload();
     }
   };
 
@@ -102,9 +111,9 @@ function FileUploadMultiple({
     <div className="upload-container">
       <div className="upload-card">
         <div
-          className={`upload-box ${dragging ? "dragging" : ""}`}
+          className={`upload-box ${dragging ? "dragging" : ""} ${mergeComplete ? "complete-state" : ""}`}
           onClick={() => {
-            if (files.length === 0) {
+            if (files.length === 0 && !isProcessing) {
               inputRef.current.click();
             }
           }}
@@ -127,18 +136,23 @@ function FileUploadMultiple({
 
           {/* File List */}
           {files.length > 0 && !mergeComplete && (
-            <div className="upload-preview">
+            <div className="upload-preview upload-preview-grid">
               {files.map((file, index) => (
                 <div key={index} className="upload-file-item">
-                  <p>{file.name}</p>
+                  <span className="file-card-icon" aria-hidden="true">📄</span>
 
-                  <span>{(file.size / 1024).toFixed(2)} KB</span>
-
-                  <br />
+                  <div className="file-card-meta">
+                    <p className="file-card-name">{file.name}</p>
+                    <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
+                  </div>
 
                   <button
                     className="remove-btn"
-                    onClick={() => removeFile(index)}
+                    disabled={isProcessing}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFile(index);
+                    }}
                   >
                     <RxCross1 />
                   </button>
@@ -173,27 +187,30 @@ function FileUploadMultiple({
             <button
               className="upload-btn"
               onClick={() => inputRef.current.click()}
+              disabled={isProcessing}
             >
               Add Files
             </button>
 
-            {files.length > 0 && (
-              <button className="upload-btn" onClick={removeAllFiles}>
-                Remove All
-              </button>
-            )}
-
-            {files.length > 0 && onMerge && (
-              <button className="upload-btn merge-btn" onClick={onMerge}>
-                {processLabel} {/* <- Use custom label */}
+            {onMerge && (
+              <button
+                className="upload-btn convert-btn"
+                onClick={onMerge}
+                disabled={files.length === 0 || isProcessing}
+              >
+                {isProcessing ? "Processing..." : processLabel}
               </button>
             )}
           </>
         )}
 
-        {/* Success Message */}
-        {mergeComplete && (
-          <p className="success-text">PDF processed successfully</p>
+        {!mergeComplete && isProcessing && (
+          <div className="upload-progress-wrap" role="status" aria-live="polite">
+            <div className="upload-progress-bar">
+              <span className="upload-progress-fill" />
+            </div>
+            <p className="upload-progress-text">{processingLabel}</p>
+          </div>
         )}
 
         {/* Download Button */}
@@ -202,8 +219,9 @@ function FileUploadMultiple({
             href={downloadUrl}
             download={mergedFileName || "output.pdf"}
             className="upload-btn download-btn"
+            onClick={handleDownloadClick}
           >
-            {downloadLabel} {/* <- Use custom label */}
+            {downloadLabel}
           </a>
         )}
 

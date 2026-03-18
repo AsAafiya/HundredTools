@@ -28,9 +28,10 @@ export const pdfToWord = async (file) => {
 };
 
 // Add Page Numbers
-export const addPageNumbers = async (file) => {
+export const addPageNumbers = async (file, position = "bottom-center") => {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("position", position);
 
   const response = await api.post("/pdf/add-page-numbers", formData, {
     responseType: "blob",

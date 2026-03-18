@@ -35,6 +35,12 @@ function PdfToWord() {
 
   };
 
+  const handleDownload = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
+  };
+
   return (
     <div className="tool-page">
 
@@ -54,6 +60,7 @@ function PdfToWord() {
       accept=".pdf"
       endpoint="/api/pdf/pdf-to-word"
       downloadName="converted.docx"
+      onDownload={handleDownload}
     />
 
       <Features />

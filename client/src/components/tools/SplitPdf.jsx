@@ -5,6 +5,12 @@ import Features from "../common/Features";
 import "../../styles/tool.css";
 
 function SplitPdf() {
+  const handleDownload = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
+  };
+
   return (
     <div className="tool-page">
       <div className="back-btn">
@@ -22,6 +28,7 @@ function SplitPdf() {
       <FileUploadSingle
         endpoint="/api/pdf/split"
         downloadName="split-pages.zip"
+        onDownload={handleDownload}
       />
       <Features />
     </div>
