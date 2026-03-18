@@ -10,6 +10,7 @@ import ToolsPage from "../pages/ToolsPage";
 import About from "../pages/About";
 import Privacy from "../pages/Privacy";
 import Terms from "../pages/Terms";
+import Support from "../pages/Support";
 
 import MergePdf from "../components/tools/MergePdf";
 import SplitPdf from "../components/tools/SplitPdf";
@@ -66,6 +67,7 @@ const AppRoutes = () => {
           <Route path="about" element={<About />} />
           <Route path="privacy" element={<Privacy />} />
           <Route path="terms" element={<Terms />} />
+          <Route path="support" element={<Support />} />
 
         </Route>
       </Routes>

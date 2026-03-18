@@ -88,32 +88,32 @@ const Home = () => {
     }
   ];
 
-  const videoTools = [
-    {
-      title: "Compress Video",
-      description: "Reduce video file size while maintaining quality",
-      icon: "↗",
-      path: "/tools/compress-video"
-    },
-    {
-      title: "Convert MP4 to AVI",
-      description: "Convert MP4 videos to AVI format",
-      icon: "🔁",
-      path: "/tools/mp4-to-avi"
-    },
-    {
-      title: "Extract Audio",
-      description: "Extract audio tracks from video files",
-      icon: "🎵",
-      path: "/tools/extract-audio"
-    },
-    {
-      title: "Trim Video",
-      description: "Cut and trim videos easily",
-      icon: "✂️",
-      path: "/tools/trim-video"
-    }
-  ];
+  // const videoTools = [
+  //   {
+  //     title: "Compress Video",
+  //     description: "Reduce video file size while maintaining quality",
+  //     icon: "↗",
+  //     path: "/tools/compress-video"
+  //   },
+  //   {
+  //     title: "Convert MP4 to AVI",
+  //     description: "Convert MP4 videos to AVI format",
+  //     icon: "🔁",
+  //     path: "/tools/mp4-to-avi"
+  //   },
+  //   {
+  //     title: "Extract Audio",
+  //     description: "Extract audio tracks from video files",
+  //     icon: "🎵",
+  //     path: "/tools/extract-audio"
+  //   },
+  //   {
+  //     title: "Trim Video",
+  //     description: "Cut and trim videos easily",
+  //     icon: "✂️",
+  //     path: "/tools/trim-video"
+  //   }
+  // ];
 
   return (
     <div className="home">
@@ -138,11 +138,11 @@ const Home = () => {
 
             <div className="hero-buttons">
 
-              <button className="primary-btn">
+              <Link to="/#tools-section" className="primary-btn">
                 Start Converting Now
-              </button>
+              </Link>
 
-              <Link to="/tools/pdf" className="secondary-btn">
+              <Link to="/tools/all" className="secondary-btn">
                 Explore All Tools
               </Link>
 
@@ -172,6 +172,8 @@ const Home = () => {
         </div>
       </section>
 
+      <section id="tools-section">
+
       {/* PDF TOOLS */}
 
       <ToolSection
@@ -190,8 +192,10 @@ const Home = () => {
         category="image"
         withDivider
       />
+      </section>
       {/* VIDEO TOOLS */}
 
+      {/*
       <ToolSection
         title="Video Tools"
         subtitle="Professional tools for all your video needs"
@@ -199,6 +203,7 @@ const Home = () => {
         category="video"
         withDivider
       />
+      */}
 
     </div>
   );
