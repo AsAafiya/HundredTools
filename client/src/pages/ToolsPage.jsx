@@ -4,6 +4,90 @@ import ToolCard from "../components/tools/ToolCard";
 import "../styles/hero.css";
 
 const toolsByCategory = {
+  all: {
+    title: "All Tools",
+    subtitle: "Browse all available document and image tools",
+    tools: [
+      {
+        title: "Merge PDF",
+        description: "Combine multiple PDF files into a single document effortlessly",
+        icon: "📄",
+        path: "/tools/merge-pdf",
+      },
+      {
+        title: "Split PDF",
+        description: "Extract specific pages or split PDF into multiple files",
+        icon: "✂️",
+        path: "/tools/split-pdf",
+      },
+      {
+        title: "Compress PDF",
+        description: "Reduce PDF file size while maintaining quality",
+        icon: "↗",
+        path: "/tools/compress-pdf",
+      },
+      {
+        title: "PDF to JPG",
+        description: "Convert PDF pages to high-quality JPG images",
+        icon: "🖼️",
+        path: "/tools/pdf-to-jpg",
+      },
+      {
+        title: "JPG to PDF",
+        description: "Convert JPG images into a single PDF file",
+        icon: "🔁",
+        path: "/tools/jpg-to-pdf",
+      },
+      {
+        title: "PDF to Word",
+        description: "Convert PDF documents to editable Word format",
+        icon: "📝",
+        path: "/tools/pdf-to-word",
+      },
+      {
+        title: "Word to PDF",
+        description: "Convert Word documents into PDF format",
+        icon: "🔁",
+        path: "/tools/word-to-pdf",
+      },
+      {
+        title: "Add Page Numbers",
+        description: "Add page numbers to PDF pages with custom position",
+        icon: "🔢",
+        path: "/tools/add-page-numbers",
+      },
+      {
+        title: "Add Watermark",
+        description: "Protect PDFs by adding custom watermarks",
+        icon: "💧",
+        path: "/tools/add-watermark",
+      },
+      {
+        title: "Compress Image",
+        description: "Reduce image file size without losing quality",
+        icon: "↗",
+        path: "/tools/image/compress-image",
+      },
+      {
+        title: "Resize Image",
+        description: "Change image dimensions easily",
+        icon: "↙",
+        path: "/tools/image/resize-image",
+      },
+      {
+        title: "Convert Image",
+        description: "Convert image format quickly",
+        icon: "🔁",
+        path: "/tools/image/convert-image",
+      },
+      {
+        title: "Crop Image",
+        description: "Crop images to custom dimensions",
+        icon: "✂️",
+        path: "/tools/image/crop-image",
+      },
+    ],
+  },
   pdf: {
     title: "PDF Tools",
     subtitle: "All available PDF tools",

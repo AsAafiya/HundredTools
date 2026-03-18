@@ -138,11 +138,11 @@ const Home = () => {
 
             <div className="hero-buttons">
 
-              <button className="primary-btn">
+              <Link to="/#tools-section" className="primary-btn">
                 Start Converting Now
-              </button>
+              </Link>
 
-              <Link to="/tools/pdf" className="secondary-btn">
+              <Link to="/tools/all" className="secondary-btn">
                 Explore All Tools
               </Link>
 
@@ -172,6 +172,8 @@ const Home = () => {
         </div>
       </section>
 
+      <section id="tools-section">
+
       {/* PDF TOOLS */}
 
       <ToolSection
@@ -190,6 +192,7 @@ const Home = () => {
         category="image"
         withDivider
       />
+      </section>
       {/* VIDEO TOOLS */}
 
       {/*

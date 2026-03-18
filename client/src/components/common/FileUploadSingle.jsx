@@ -312,6 +312,14 @@ function FileUploadSingle({
     if (onDownload) {
       onDownload();
     }
+
+    setTimeout(() => {
+      setFile(null);
+      setErrors([]);
+      setLoading(false);
+      setDownloadUrl(null);
+      setConvertComplete(false);
+    }, 300);
   };
 
   const uploadFile = async () => {
@@ -383,9 +391,9 @@ function FileUploadSingle({
                 <TbUpload />
               </div>
 
-              <h3>Upload File</h3>
+              <h3>Drag & Drop Files Here</h3>
 
-              <p>Click to browse from your computer</p>
+              <p>or click to browse from your computer</p>
             </>
           )}
 
@@ -439,18 +447,20 @@ function FileUploadSingle({
             <button
               className="upload-btn"
               onClick={() => inputRef.current.click()}
-              disabled={!!file || loading}
+              disabled={loading}
             >
-              Add File
+              Add Files
             </button>
 
-            <button
-              className="upload-btn convert-btn"
-              onClick={uploadFile}
-              disabled={!file || loading}
-            >
-              {loading ? "Processing..." : "Convert File"}
-            </button>
+            {file && (
+              <button
+                className="upload-btn convert-btn"
+                onClick={uploadFile}
+                disabled={!file || loading}
+              >
+                {loading ? "Processing..." : "Convert File"}
+              </button>
+            )}
           </>
         )}
 

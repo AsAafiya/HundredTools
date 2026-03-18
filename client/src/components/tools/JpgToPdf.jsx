@@ -1,47 +1,24 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { TbUpload } from "react-icons/tb";
-import { RxCross1 } from "react-icons/rx";
+import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import { convertJpgToPdf } from "../../services/pdfService";
 import "../../styles/tool.css";
-import "../../styles/fileUpload.css";
 
 function JpgToPdf() {
-  const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
 
-  const handlePick = (event) => {
-    const selectedFiles = Array.from(event.target.files || []);
-
-    if (selectedFiles.length === 0) return;
-
-    setFiles(selectedFiles);
+  const handleReset = () => {
+    setFiles([]);
+    setLoading(false);
     setMessage("");
-    event.target.value = "";
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    if (files.length > 0 || complete) return;
-
-    const droppedFiles = Array.from(event.dataTransfer.files || []).filter((file) =>
-      /\.jpe?g$/i.test(file.name)
-    );
-
-    if (droppedFiles.length > 0) {
-      setFiles(droppedFiles);
-      setMessage("");
-    }
-  };
-
-  const removeFile = (indexToRemove) => {
-    setFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
+    setDownloadUrl("");
+    setComplete(false);
   };
 
   const handleConvert = async () => {
@@ -76,7 +53,7 @@ function JpgToPdf() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      handleReset();
     }, 300);
   };
 
@@ -91,105 +68,20 @@ function JpgToPdf() {
       <h1>JPG to PDF</h1>
       <p className="subtitle">Convert one or more JPG images into a PDF</p>
 
-      <div className="upload-container">
-        <div className="upload-card">
-          <div
-            className={`upload-box ${complete ? "complete-state" : ""}`}
-            onClick={() => {
-              if (files.length === 0 && !complete && !loading) {
-                inputRef.current.click();
-              }
-            }}
-            onDragOver={(event) => event.preventDefault()}
-            onDrop={handleDrop}
-          >
-            {files.length === 0 && !complete && (
-              <>
-                <div className="upload-icon">
-                  <TbUpload />
-                </div>
-                <h3>Upload JPG Files</h3>
-                <p>Click to browse from your computer</p>
-              </>
-            )}
-
-            {files.length > 0 && !complete && (
-              <div className="upload-preview upload-preview-grid">
-                {files.map((file, index) => (
-                  <div className="upload-file-item" key={`${file.name}-${index}`}>
-                    <span className="file-card-icon" aria-hidden="true">📄</span>
-                    <div className="file-card-meta">
-                      <p className="file-card-name">{file.name}</p>
-                      <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
-                    </div>
-                    <button
-                      className="remove-btn"
-                      disabled={loading}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        removeFile(index);
-                      }}
-                    >
-                      <RxCross1 />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {complete && (
-              <div className="upload-preview">
-                <p className="merged-file-name">converted.pdf</p>
-              </div>
-            )}
-          </div>
-
-          <input
-            ref={inputRef}
-            type="file"
-            accept=".jpg,.jpeg,image/jpeg"
-            multiple
-            style={{ display: "none" }}
-            onChange={handlePick}
-          />
-
-          {!complete && (
-            <>
-              <button
-                className="upload-btn"
-                onClick={() => inputRef.current.click()}
-                disabled={files.length > 0 || loading}
-              >
-                Add File
-              </button>
-
-              <button
-                type="button"
-                className="upload-btn convert-btn"
-                onClick={handleConvert}
-                disabled={!files.length || loading}
-              >
-                {loading ? "Converting..." : "Convert File"}
-              </button>
-            </>
-          )}
-
-          {!complete && loading && (
-            <div className="upload-progress-wrap" role="status" aria-live="polite">
-              <div className="upload-progress-bar">
-                <span className="upload-progress-fill" />
-              </div>
-              <p className="upload-progress-text">Converting JPG to PDF...</p>
-            </div>
-          )}
-
-          {complete && downloadUrl && (
-            <a href={downloadUrl} download="converted.pdf" className="upload-btn download-btn" onClick={handleDownload}>
-              Download PDF
-            </a>
-          )}
-        </div>
-      </div>
+      <FileUploadMultiple
+        accept=".jpg,.jpeg,image/jpeg"
+        onFilesChange={setFiles}
+        onMerge={handleConvert}
+        downloadUrl={downloadUrl}
+        mergeComplete={complete}
+        mergedFileName="converted.pdf"
+        processLabel="Convert File"
+        downloadLabel="Download PDF"
+        onDownload={handleDownload}
+        isProcessing={loading}
+        processingLabel="Converting JPG to PDF..."
+        minFilesForProcess={1}
+      />
 
       {message && <p className="subtitle">{message}</p>}
 

@@ -22,6 +22,7 @@ function AddPageNumbers() {
   const [message, setMessage] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   const handleAddNumbers = async () => {
     if (!selectedFile) {
@@ -55,7 +56,12 @@ function AddPageNumbers() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      setSelectedFile(null);
+      setDownloadUrl("");
+      setComplete(false);
+      setMessage("");
+      setLoading(false);
+      setResetKey((k) => k + 1);
     }, 300);
   };
 
@@ -70,7 +76,15 @@ function AddPageNumbers() {
       <h1>Add Page Numbers</h1>
       <p className="subtitle">Add page numbers to every page of your PDF</p>
 
-      <div style={{ margin: "0 auto 8px", display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap", maxWidth: "560px" }}>
+      <div
+        style={{
+          margin: "0 auto 8px",
+          display: "grid",
+          gridTemplateColumns: "repeat(3, minmax(110px, 1fr))",
+          gap: "10px",
+          maxWidth: "470px",
+        }}
+      >
         {POSITIONS.map((pos) => (
           <button
             key={pos.value}
@@ -94,6 +108,7 @@ function AddPageNumbers() {
       </div>
 
       <FileUploadSingle2
+        key={resetKey}
         accept=".pdf"
         onFileChange={setSelectedFile}
         onAction={handleAddNumbers}

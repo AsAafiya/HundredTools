@@ -111,9 +111,9 @@ function FileUploadWatermark({
                 <TbUpload />
               </div>
 
-              <h3>Upload a PDF File</h3>
+              <h3>Drag & Drop Files Here</h3>
 
-              <p>Click to browse from your computer</p>
+              <p>or click to browse from your computer</p>
             </>
           )}
 
@@ -166,7 +166,7 @@ function FileUploadWatermark({
 
         {!mergeComplete && (
           <>
-            <p style={{ margin: "10px 0 6px", fontWeight: 600 }}>
+            <p className="watermark-steps">
               Step 1: Add PDF • Step 2: Enter watermark text • Step 3: Apply watermark
             </p>
 
@@ -187,7 +187,7 @@ function FileUploadWatermark({
                 onClick={() => inputRef.current.click()}
                 disabled={isProcessing}
             >
-              Add PDF
+              Add Files
             </button>
 
             {onMerge && (
@@ -201,8 +201,8 @@ function FileUploadWatermark({
             </button>
             )}
 
-            {!file && <p>Please add one PDF file to continue.</p>}
-            {file && !watermarkText && <p>Please enter watermark text to enable Apply Watermark.</p>}
+            {!file && <p className="watermark-hint">Please add one PDF file to continue.</p>}
+            {file && !watermarkText && <p className="watermark-hint">Please enter watermark text to enable Apply Watermark.</p>}
           </>
         )}
 

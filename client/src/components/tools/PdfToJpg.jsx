@@ -12,6 +12,7 @@ function PdfToJpg() {
   const [message, setMessage] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   const handleConvert = async () => {
     if (!selectedFile) {
@@ -45,7 +46,12 @@ function PdfToJpg() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      setSelectedFile(null);
+      setDownloadUrl("");
+      setComplete(false);
+      setMessage("");
+      setLoading(false);
+      setResetKey((k) => k + 1);
     }, 300);
   };
 
@@ -61,6 +67,7 @@ function PdfToJpg() {
       <p className="subtitle">Convert PDF pages to high-quality JPG images</p>
 
       <FileUploadSingle2
+        key={resetKey}
         accept=".pdf"
         onFileChange={setSelectedFile}
         onAction={handleConvert}

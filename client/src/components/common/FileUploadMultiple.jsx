@@ -16,6 +16,9 @@ function FileUploadMultiple({
   onDownload,
   isProcessing = false,
   processingLabel = "Converting PDF...",
+  minFilesForProcess = 1,
+  minFilesMessage = "",
+  showOnlyProcessAfterSelection = false,
 }) {
   const inputRef = useRef(null);
 
@@ -25,12 +28,34 @@ function FileUploadMultiple({
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
+  const acceptedTypes = accept
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+
+  const isAcceptedFile = (file) => {
+    if (acceptedTypes.length === 0) {
+      return true;
+    }
+
+    const lowerName = file.name.toLowerCase();
+    const lowerMimeType = (file.type || "").toLowerCase();
+
+    return acceptedTypes.some((type) => {
+      if (type.startsWith(".")) {
+        return lowerName.endsWith(type);
+      }
+
+      return lowerMimeType === type;
+    });
+  };
+
   const validateFiles = (selectedFiles) => {
     const valid = [];
     const errorList = [];
 
     for (let file of selectedFiles) {
-      if (!file.name.toLowerCase().endsWith(accept)) {
+      if (!isAcceptedFile(file)) {
         errorList.push(`${file.name} → Invalid file type`);
         continue;
       }
@@ -81,7 +106,7 @@ function FileUploadMultiple({
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    if (files.length === 0) {
+    if (!isProcessing) {
       setDragging(true);
     }
   };
@@ -95,7 +120,7 @@ function FileUploadMultiple({
     e.preventDefault();
     setDragging(false);
 
-    if (files.length === 0 && !isProcessing) {
+    if (!isProcessing) {
       const droppedFiles = e.dataTransfer.files;
       handleFiles(droppedFiles);
     }
@@ -113,7 +138,7 @@ function FileUploadMultiple({
         <div
           className={`upload-box ${dragging ? "dragging" : ""} ${mergeComplete ? "complete-state" : ""}`}
           onClick={() => {
-            if (files.length === 0 && !isProcessing) {
+            if (!isProcessing) {
               inputRef.current.click();
             }
           }}
@@ -192,14 +217,28 @@ function FileUploadMultiple({
               Add Files
             </button>
 
-            {onMerge && (
+            {files.length > 0 && (
+              <button
+                className="upload-btn"
+                onClick={removeAllFiles}
+                disabled={isProcessing}
+              >
+                Remove All
+              </button>
+            )}
+
+            {files.length > 0 && onMerge && (
               <button
                 className="upload-btn convert-btn"
                 onClick={onMerge}
-                disabled={files.length === 0 || isProcessing}
+                disabled={files.length < minFilesForProcess || isProcessing}
               >
                 {isProcessing ? "Processing..." : processLabel}
               </button>
+            )}
+
+            {files.length > 0 && files.length < minFilesForProcess && minFilesMessage && (
+              <p className="upload-progress-text">{minFilesMessage}</p>
             )}
           </>
         )}

@@ -192,6 +192,12 @@
   font-size:14px;
   text-align:center;
   margin-top: 20px;
+  color: #334155;
+  background: #ffffff;
+}
+
+.watermark-input::placeholder {
+  color: #64748b;
 }
 
 .watermark-input:focus{
@@ -396,6 +402,33 @@
   font-weight: 600;
   color: #4b587c;
   text-align: center;
+}
+
+.watermark-steps {
+  margin: 10px 0 6px;
+  font-weight: 600;
+  color: #4b587c;
+}
+
+.watermark-hint {
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: #5f6b85;
+}
+
+body[data-theme="dark"] .watermark-steps,
+body[data-theme="dark"] .watermark-hint {
+  color: #4b587c;
+}
+
+body[data-theme="dark"] .watermark-input {
+  color: #334155;
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+body[data-theme="dark"] .watermark-input::placeholder {
+  color: #64748b;
 }
 
 @keyframes uploadProgressSlide {

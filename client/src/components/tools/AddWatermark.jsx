@@ -12,8 +12,18 @@ function AddWatermark() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [complete, setComplete] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [resetKey] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const handleReset = () => {
+    setFile(null);
+    setText("");
+    setDownloadUrl(null);
+    setComplete(false);
+    setFileName("");
+    setLoading(false);
+    setResetKey((k) => k + 1);
+  };
 
   const handleWatermark = async () => {
 
@@ -50,7 +60,7 @@ function AddWatermark() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      handleReset();
     }, 300);
   };
 

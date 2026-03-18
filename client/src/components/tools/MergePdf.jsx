@@ -26,7 +26,6 @@ function MergePdf() {
   const handleMerge = async () => {
 
     if (files.length < 2) {
-      alert("Upload at least 2 PDFs");
       return;
     }
 
@@ -59,7 +58,7 @@ function MergePdf() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      handleReset();
     }, 300);
   };
 
@@ -91,6 +90,8 @@ function MergePdf() {
         onDownload={handleDownload}
         isProcessing={loading}
         processingLabel="Merging your PDFs..."
+        minFilesForProcess={2}
+        minFilesMessage="Upload at least 2 PDFs to merge"
       />
 
       <Features />

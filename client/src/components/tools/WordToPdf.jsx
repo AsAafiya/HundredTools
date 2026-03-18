@@ -8,12 +8,6 @@ import "../../styles/tool.css";
 
 function WordToPdf() {
 
-  const handleDownload = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 300);
-  };
-
   return (
 
     <div className="tool-page">
@@ -34,7 +28,6 @@ function WordToPdf() {
         accept=".doc,.docx"
         endpoint="/api/pdf/word-to-pdf"
         downloadName="converted.pdf"
-        onDownload={handleDownload}
       />
 
       <Features />

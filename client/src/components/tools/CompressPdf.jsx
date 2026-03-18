@@ -45,7 +45,7 @@ function CompressPdf() {
 
   const handleDownload = () => {
     setTimeout(() => {
-      window.location.reload();
+      handleReset();
     }, 300);
   };
 

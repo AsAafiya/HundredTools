@@ -287,9 +287,9 @@ function FileUploadSingle2({
                 <TbUpload />
               </div>
 
-              <h3>Upload a PDF File</h3>
+              <h3>Drag & Drop Files Here</h3>
 
-              <p>Click to browse from your computer</p>
+              <p>or click to browse from your computer</p>
             </>
           )}
 
@@ -345,12 +345,12 @@ function FileUploadSingle2({
             <button
               className="upload-btn"
               onClick={() => inputRef.current.click()}
-              disabled={!!file || actionLoading}
+              disabled={actionLoading}
             >
-              Add File
+              Add Files
             </button>
 
-            {onAction && (
+            {file && onAction && (
               <button
                 type="button"
                 className="upload-btn convert-btn"
