@@ -6,11 +6,24 @@ const archiver = require("archiver");
 const { fromPath } = require("pdf2pic");
 const { exec } = require("child_process");
 
+const outputDir = path.resolve(__dirname, "../outputs");
+
+const ensureOutputDir = () => {
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+};
+
 /* ---------------- MERGE PDF ---------------- */
 
 exports.mergePDF = async (req, res) => {
   try {
     console.log("merge route hit");
+    ensureOutputDir();
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).send("Please upload PDF files");
+    }
 
     const mergedPdf = await PDFDocument.create();
 
@@ -23,7 +36,7 @@ exports.mergePDF = async (req, res) => {
     }
 
     const mergedPdfBytes = await mergedPdf.save();
-    const outputPath = "outputs/merged.pdf";
+    const outputPath = path.join(outputDir, `merged-${Date.now()}.pdf`);
 
     fs.writeFileSync(outputPath, mergedPdfBytes);
 
@@ -51,6 +64,10 @@ exports.mergePDF = async (req, res) => {
 exports.addPageNumbers = async (req, res) => {
   try {
     console.log("add page numbers route hit");
+
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
 
     const pdfBytes = fs.readFileSync(req.file.path);
 
@@ -89,7 +106,7 @@ exports.addPageNumbers = async (req, res) => {
 
     const pdfBytesOut = await pdfDoc.save();
 
-    const outputPath = "outputs/page-numbered.pdf";
+    const outputPath = path.join(outputDir, `page-numbered-${Date.now()}.pdf`);
 
     fs.writeFileSync(outputPath, pdfBytesOut);
 
@@ -208,6 +225,7 @@ exports.jpgToPdf = async (req, res) => {
 
   try {
     console.log("jpg to pdf route hit");
+    ensureOutputDir();
 
     if (!uploadedFiles.length) {
       return res.status(400).send("Upload JPG files");
@@ -278,11 +296,12 @@ exports.pdfToWord = async (req, res) => {
   try {
     console.log("pdf to word route hit");
 
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
+
     const inputPath = path.resolve(req.file.path);
-
-    const outputDir = path.resolve(__dirname, "../outputs");
-
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    ensureOutputDir();
 
     await new Promise((resolve, reject) => {
       execFile(
@@ -332,9 +351,12 @@ exports.wordToPdf = async (req, res) => {
   try {
     console.log("word to pdf route hit");
 
-    const inputPath = path.resolve(req.file.path);
+    if (!req.file) {
+      return res.status(400).send("Please upload a Word file");
+    }
 
-    const outputDir = path.resolve(__dirname, "../outputs");
+    const inputPath = path.resolve(req.file.path);
+    ensureOutputDir();
 
     await new Promise((resolve, reject) => {
       execFile(
@@ -376,6 +398,10 @@ exports.addWatermark = async (req, res) => {
   try {
     console.log("add watermark route hit");
 
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
+
     const pdfBytes = fs.readFileSync(req.file.path);
 
     const pdfDoc = await PDFDocument.load(pdfBytes);
@@ -405,7 +431,7 @@ exports.addWatermark = async (req, res) => {
 
     const newPdf = await pdfDoc.save();
 
-    const outputPath = "outputs/watermarked.pdf";
+    const outputPath = path.join(outputDir, `watermarked-${Date.now()}.pdf`);
 
     fs.writeFileSync(outputPath, newPdf);
 
@@ -433,6 +459,10 @@ exports.addWatermark = async (req, res) => {
 exports.splitPDF = async (req, res) => {
   try {
     console.log("split route hit");
+
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
 
     const pdfPath = req.file.path;
 
@@ -489,8 +519,13 @@ exports.compressPDF = async (req, res) => {
   try {
     console.log("compress route hit");
 
+    if (!req.file) {
+      return res.status(400).send("Please upload a PDF file");
+    }
+
     const inputPath = path.resolve(req.file.path); // absolute path
-    const outputPath = path.resolve("uploads", `compressed-${Date.now()}.pdf`);
+    ensureOutputDir();
+    const outputPath = path.join(outputDir, `compressed-${Date.now()}.pdf`);
 
     const command = `gswin64c -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${outputPath}" "${inputPath}"`;
 
