@@ -28,6 +28,14 @@ import PdfToWord from "../components/tools/PdfToWord";
 import WordToPdf from "../components/tools/WordToPdf";
 import AddWatermark from "../components/tools/AddWatermark";
 
+
+import AdminLayout from "../admin/AdminLayout";
+import Dashboard from "../admin/pages/Dashboard";
+import Users from "../admin/pages/Users";
+import Files from "../admin/pages/Files";
+import Analytics from "../admin/pages/Analytics";
+import Settings from "../admin/pages/Settings";
+
 const AppRoutes = () => {
   return (
     <>
@@ -35,7 +43,6 @@ const AppRoutes = () => {
 
       <Routes>
         <Route path="/" element={<MainLayout />}>
-
           <Route index element={<Home />} />
 
           {/* Individual PDF Tools */}
@@ -46,14 +53,17 @@ const AppRoutes = () => {
           <Route path="tools/pdf-to-jpg" element={<PdfToJpg />} />
           <Route path="tools/jpg-to-pdf" element={<JpgToPdf />} />
           <Route path="tools/add-page-numbers" element={<AddPageNumbers />} />
-          <Route path="tools/image/compress-image" element={<CompressImage />} />
+          <Route
+            path="tools/image/compress-image"
+            element={<CompressImage />}
+          />
           <Route path="tools/image/resize-image" element={<ResizeImage />} />
           <Route path="tools/image/convert-image" element={<ConvertImage />} />
           <Route path="tools/image/crop-image" element={<CropImage />} />
 
-        <Route path="tools/pdf-to-word" element={<PdfToWord />} />
-        <Route path="tools/word-to-pdf" element={<WordToPdf />} />
-        <Route path="tools/add-watermark" element={<AddWatermark />} />
+          <Route path="tools/pdf-to-word" element={<PdfToWord />} />
+          <Route path="tools/word-to-pdf" element={<WordToPdf />} />
+          <Route path="tools/add-watermark" element={<AddWatermark />} />
 
           {/* Category page */}
           <Route path="tools/:category" element={<ToolsPage />} />
@@ -69,6 +79,12 @@ const AppRoutes = () => {
           <Route path="terms" element={<Terms />} />
           <Route path="support" element={<Support />} />
 
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="" element={<Dashboard />} />
+          <Route path="users" element={<Users />} />
+          <Route path="files" element={<Files />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </>

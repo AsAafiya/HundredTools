@@ -73,6 +73,9 @@ function FileUploadMultiple({
   };
 
   const handleFiles = (selectedFiles) => {
+
+    if (isProcessing) return;
+
     const fileArray = Array.from(selectedFiles);
     const validated = validateFiles(fileArray);
 
@@ -87,6 +90,9 @@ function FileUploadMultiple({
   };
 
   const removeFile = (index) => {
+
+    if (isProcessing) return;
+
     const updated = files.filter((_, i) => i !== index);
     setFiles(updated);
 
@@ -96,6 +102,9 @@ function FileUploadMultiple({
   };
 
   const removeAllFiles = () => {
+
+    if (isProcessing) return;
+
     setFiles([]);
     setErrors([]);
 
@@ -186,6 +195,7 @@ function FileUploadMultiple({
             </div>
           )}
 
+          {/* After Merge */}
           {mergeComplete && (
             <div className="upload-preview">
               <p className="merged-file-name">{mergedFileName}</p>
@@ -200,6 +210,7 @@ function FileUploadMultiple({
           accept={accept}
           multiple
           style={{ display: "none" }}
+          disabled={isProcessing}
           onChange={(e) => {
             handleFiles(e.target.files);
             e.target.value = "";
