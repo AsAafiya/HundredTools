@@ -12,6 +12,8 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
+  const [mobileMenu, setMobileMenu] = useState(false);
+const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
   const navRef = useRef(null);
@@ -32,6 +34,7 @@ const Navbar = () => {
     const handleOutsideClick = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setOpenMenu(null);
+        // setMobileMenu(false);
       }
     };
 
@@ -78,16 +81,16 @@ const Navbar = () => {
         { name: "Crop Image", path: "/tools/image/crop-image" },
       ],
     },
-    // {
-    //   key: "video",
-    //   label: "Video Tools",
-    //   path: "/tools/video",
-    //   viewAllLabel: "View All Tools",
-    //   items: [
-    //     { name: "Compress Video", path: "/tools/compress-video" },
-    //     { name: "Trim Video", path: "/tools/trim-video" },
-    //   ],
-    // },
+    {
+      key: "video",
+      label: "Video Tools",
+      path: "/tools/video",
+      viewAllLabel: "View All Tools",
+      items: [
+        { name: "Compress Video", path: "/tools/compress-video" },
+        { name: "Trim Video", path: "/tools/trim-video" },
+      ],
+    },
   ];
 
   return (
@@ -201,11 +204,65 @@ const Navbar = () => {
               >
                 {theme === "dark" ? "☀️" : "🌙"}
               </button>
+
+              <div
+  className="hamburger"
+  onClick={() => setMobileMenu(!mobileMenu)}
+>
+  {mobileMenu ? "✖" : "☰"}
+</div>
             </div>
           </div>
 
         </div>
       </div>
+
+{mobileMenu && (
+  <div className="mobile-menu">
+
+    {navMenus.map((menu) => (
+      <div className="mobile-dropdown" key={menu.key}>
+
+   <div
+  className="mobile-dropdown-title"
+  onClick={(e) => {
+    e.stopPropagation();
+    if (openMobileDropdown === menu.key) {
+      setOpenMobileDropdown(null);
+    } else {
+      setOpenMobileDropdown(menu.key);
+    }
+  }}
+>
+  {menu.label}
+
+  <span className="mobile-arrow">
+    {openMobileDropdown === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+  </span>
+</div>
+        {openMobileDropdown === menu.key && (
+          <div className="mobile-submenu">
+            {menu.items.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => {
+                  setMobileMenu(false);
+                  setOpenMobileDropdown(null);
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        )}
+
+      </div>
+    ))}
+
+  </div>
+)}
+
 
       {/* MODALS */}
       {showLogin && (
@@ -235,3 +292,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
