@@ -8,6 +8,7 @@ import Features from "../common/Features";
 import { wordToPdf } from "../../services/pdfService";
 
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function WordToPdf() {
 
@@ -15,11 +16,11 @@ function WordToPdf() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [convertComplete, setConvertComplete] = useState(false);
   const [fileName, setFileName] = useState("");
-
+   const { showError } = useError();
   const handleConvert = async () => {
 
     if (!file) {
-      alert("Upload a Word file first");
+      showError("Upload a Word file first");
       return;
     }
 
@@ -36,7 +37,7 @@ function WordToPdf() {
     } catch (error) {
 
       console.error(error);
-      alert("Conversion failed");
+      showError("Conversion failed");
 
     }
 

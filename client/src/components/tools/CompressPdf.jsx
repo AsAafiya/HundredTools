@@ -4,12 +4,13 @@ import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import { compressPDF } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function CompressPdf() {
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [mergeComplete, setMergeComplete] = useState(false);
-
+   const { showError } = useError();
   const handleCompress = async () => {
     try {
       const blob = await compressPDF(files[0]);

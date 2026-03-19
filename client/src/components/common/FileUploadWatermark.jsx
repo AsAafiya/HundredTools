@@ -11,7 +11,8 @@ function FileUploadWatermark({
   mergeComplete,
   mergedFileName,
   watermarkText,
-  setWatermarkText
+  setWatermarkText,
+  processing = false
 }) {
 
   const inputRef = useRef(null);
@@ -42,19 +43,21 @@ function FileUploadWatermark({
 
   const handleFile = (selectedFiles) => {
 
-    const selectedFile = selectedFiles[0]; // only first file
+    if (processing) return;
+
+    const selectedFile = selectedFiles[0];
 
     if (!selectedFile) return;
 
     const validated = validateFile(selectedFile);
 
     if (validated) {
-        setFile(validated);
-        if (onFileChange) {
-            onFileChange(validated);
-        }
-        }
+      setFile(validated);
 
+      if (onFileChange) {
+        onFileChange(validated);
+      }
+    }
   };
 
   const handleDragOver = (e) => {
@@ -62,7 +65,10 @@ function FileUploadWatermark({
   };
 
   const handleDrop = (e) => {
+
     e.preventDefault();
+
+    if (processing) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -75,8 +81,15 @@ function FileUploadWatermark({
   };
 
   const removeFile = () => {
+
+    if (processing) return;
+
     setFile(null);
     setErrors([]);
+
+    if (onFileChange) {
+      onFileChange(null);
+    }
   };
 
   return (
@@ -86,11 +99,15 @@ function FileUploadWatermark({
 
         <div
           className="upload-box"
+          onClick={() => {
+            if (!processing && !file) {
+              inputRef.current.click();
+            }
+          }}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
 
-          {/* Upload UI */}
           {!file && (
             <>
               <div className="upload-icon">
@@ -103,7 +120,6 @@ function FileUploadWatermark({
             </>
           )}
 
-          {/* File Preview */}
           {file && (
 
             <div className="upload-preview">
@@ -111,27 +127,31 @@ function FileUploadWatermark({
               <div className="upload-file-item">
 
                 <div className="file-info">
-                    <p className="file-name">{file.name}</p>
-                    <span className="file-size">
+                  <p className="file-name">{file.name}</p>
+
+                  <span className="file-size">
                     {(file.size / 1024).toFixed(2)} KB
-                    </span>
+                  </span>
                 </div>
 
-                <button className="remove-btn" onClick={removeFile}>
-                    Remove File
+                <button
+                  className="remove-btn"
+                  onClick={removeFile}
+                  disabled={processing}
+                >
+                  Remove File
                 </button>
 
                 <input
-                    type="text"
-                    placeholder="Enter watermark text"
-                    value={watermarkText}
-                    onChange={(e) => setWatermarkText(e.target.value)}
-                    className="watermark-input"
+                  type="text"
+                  placeholder="Enter watermark text"
+                  value={watermarkText}
+                  onChange={(e) => setWatermarkText(e.target.value)}
+                  className="watermark-input"
+                  disabled={processing}
                 />
 
-
               </div>
-
 
             </div>
 
@@ -139,12 +159,12 @@ function FileUploadWatermark({
 
         </div>
 
-        {/* Hidden file input */}
         <input
           ref={inputRef}
           type="file"
           accept={accept}
           style={{ display: "none" }}
+          disabled={processing}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";
@@ -153,26 +173,26 @@ function FileUploadWatermark({
 
         {/* Add File Button */}
         {!file && (
-        <button
+          <button
             className="upload-btn"
             onClick={() => inputRef.current.click()}
-        >
-            Add File
-        </button>
+            disabled={processing}
+          >
+            {processing ? "Processing..." : "Add File"}
+          </button>
         )}
 
-        {/* Upload Button */}
+        {/* Watermark Button */}
         {file && onMerge && (
-        <button
+          <button
             className="upload-btn"
-            disabled={!watermarkText}
+            disabled={!watermarkText || processing}
             onClick={onMerge}
-        >
-            Add Watermark
-        </button>
+          >
+            {processing ? "Processing..." : "Add Watermark"}
+          </button>
         )}
 
-        {/* Error Messages */}
         {errors.length > 0 && (
           <div className="upload-errors">
             {errors.map((err, index) => (

@@ -5,15 +5,17 @@ import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
 import { addPageNumbers } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function AddPageNumbers() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+   const { showError } = useError();
 
   const handleAddNumbers = async () => {
     if (!selectedFile) {
-      setMessage("Please upload a PDF file first.");
+      showError("Please upload a PDF file first.");
       return;
     }
 
@@ -30,9 +32,9 @@ function AddPageNumbers() {
       a.click();
       URL.revokeObjectURL(downloadUrl);
 
-      setMessage("Page numbers added successfully. Download started.");
+      showError("Page numbers added successfully. Download started.");
     } catch {
-      setMessage("Failed to add page numbers. Please try again.");
+      showError("Failed to add page numbers. Please try again.");
     } finally {
       setLoading(false);
     }

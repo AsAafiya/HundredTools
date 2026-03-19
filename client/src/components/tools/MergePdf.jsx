@@ -4,6 +4,7 @@ import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import { mergePDF } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function MergePdf() {
 
@@ -11,11 +12,11 @@ function MergePdf() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [mergeComplete, setMergeComplete] = useState(false);
   const [mergedFileName, setMergedFileName] = useState("");
-
+   const { showError } = useError();
   const handleMerge = async () => {
 
     if (files.length < 2) {
-      alert("Upload at least 2 PDFs");
+      showError("Upload at least 2 PDFs");
       return;
     }
 

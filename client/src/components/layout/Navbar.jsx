@@ -12,8 +12,12 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "light",
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => localStorage.getItem("isLoggedIn") === "true",
+  );
   const navRef = useRef(null);
 
   const handleLoginSuccess = () => {
@@ -95,7 +99,11 @@ const Navbar = () => {
       <div className="site-container navbar-container" ref={navRef}>
         <div className="navbar-left">
           <div className="logo">
-            <Link to="/" className="logo-link" onClick={() => setOpenMenu(null)}>
+            <Link
+              to="/"
+              className="logo-link"
+              onClick={() => setOpenMenu(null)}
+            >
               <span className="logo-mark">
                 <img src={logo} alt="HundredTools" className="logo-image" />
               </span>
@@ -111,7 +119,9 @@ const Navbar = () => {
           <NavLink
             to="/"
             onClick={() => setOpenMenu(null)}
-            className={({ isActive }) => (isActive ? "nav-link active-link" : "nav-link")}
+            className={({ isActive }) =>
+              isActive ? "nav-link active-link" : "nav-link"
+            }
           >
             Home
           </NavLink>
@@ -121,7 +131,11 @@ const Navbar = () => {
               <button
                 type="button"
                 className={`nav-dropdown-trigger ${openMenu === menu.key ? "active-link" : ""}`}
-                onClick={() => setOpenMenu((current) => (current === menu.key ? null : menu.key))}
+                onClick={() =>
+                  setOpenMenu((current) =>
+                    current === menu.key ? null : menu.key,
+                  )
+                }
               >
                 {menu.label}
                 <span className="nav-caret">
@@ -129,7 +143,10 @@ const Navbar = () => {
                 </span>
               </button>
 
-              <div className={`dropdown-menu ${openMenu === menu.key ? "open" : ""}`} role="menu">
+              <div
+                className={`dropdown-menu ${openMenu === menu.key ? "open" : ""}`}
+                role="menu"
+              >
                 {menu.items.map((item) => (
                   <Link
                     key={item.name}
@@ -141,7 +158,11 @@ const Navbar = () => {
                   </Link>
                 ))}
 
-                <Link to={menu.path} className="dropdown-item dropdown-view-all" onClick={() => setOpenMenu(null)}>
+                <Link
+                  to={menu.path}
+                  className="dropdown-item dropdown-view-all"
+                  onClick={() => setOpenMenu(null)}
+                >
                   {menu.viewAllLabel}
                 </Link>
               </div>
@@ -153,19 +174,47 @@ const Navbar = () => {
           <div className="nav-actions">
             {isLoggedIn ? (
               <>
-                <NavLink to="/my-files" className={({ isActive }) => (isActive ? "active-action" : "")}>My Files</NavLink>
-                <NavLink to="/profile" className={({ isActive }) => (isActive ? "active-action" : "")}>Profile</NavLink>
+                <NavLink
+                  to="/my-files"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
+                  }
+                >
+                  My Files
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
+                  }
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    isActive ? "admin-btn active" : "admin-btn"
+                  }
+                >
+                  Admin
+                </NavLink>
                 <button className="nav-text-btn" onClick={handleLogout}>
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <button className="nav-text-btn" onClick={() => setShowLogin(true)}>
+                <button
+                  className="nav-text-btn"
+                  onClick={() => setShowLogin(true)}
+                >
                   Login
                 </button>
 
-                <button className="primary-btn" onClick={() => setShowSignup(true)}>
+                <button
+                  className="primary-btn"
+                  onClick={() => setShowSignup(true)}
+                >
                   Get Started
                 </button>
               </>
@@ -174,8 +223,16 @@ const Navbar = () => {
             <button
               type="button"
               className="theme-toggle-btn"
-              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-              title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+              aria-label={
+                theme === "dark"
+                  ? "Switch to light theme"
+                  : "Switch to dark theme"
+              }
+              title={
+                theme === "dark"
+                  ? "Switch to light theme"
+                  : "Switch to dark theme"
+              }
               onClick={handleThemeToggle}
             >
               {theme === "dark" ? "☀️" : "🌙"}

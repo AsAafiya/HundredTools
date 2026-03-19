@@ -4,6 +4,7 @@ import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
 import { pdfToWord } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function PdfToWord() {
 
@@ -11,11 +12,11 @@ function PdfToWord() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [convertComplete, setConvertComplete] = useState(false);
   const [fileName, setFileName] = useState("");
-
+   const { showError } = useError();
   const handleConvert = async () => {
 
     if (!file) {
-      alert("Upload a PDF first");
+      showError("Upload a PDF first");
       return;
     }
 

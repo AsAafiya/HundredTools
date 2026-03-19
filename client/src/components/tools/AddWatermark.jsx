@@ -4,6 +4,7 @@ import FileUploadWatermark from "../common/FileUploadWatermark";
 import Features from "../common/Features";
 import { addWatermark } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function AddWatermark() {
 
@@ -12,11 +13,12 @@ function AddWatermark() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [complete, setComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+   const { showError } = useError();
 
   const handleWatermark = async () => {
 
     if (!file) {
-      alert("Upload a PDF first");
+      showError("Upload a PDF first");
       return;
     }
 

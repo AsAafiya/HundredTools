@@ -13,6 +13,7 @@ function FileUploadMultiple({
   mergedFileName,
   processLabel = "Process PDF",        // Added prop
   downloadLabel = "Download PDF",      // Added prop
+  isProcessing = false
 }) {
   const inputRef = useRef(null);
 
@@ -45,6 +46,9 @@ function FileUploadMultiple({
   };
 
   const handleFiles = (selectedFiles) => {
+
+    if (isProcessing) return;
+
     const fileArray = Array.from(selectedFiles);
     const validated = validateFiles(fileArray);
 
@@ -59,6 +63,9 @@ function FileUploadMultiple({
   };
 
   const removeFile = (index) => {
+
+    if (isProcessing) return;
+
     const updated = files.filter((_, i) => i !== index);
     setFiles(updated);
 
@@ -68,6 +75,9 @@ function FileUploadMultiple({
   };
 
   const removeAllFiles = () => {
+
+    if (isProcessing) return;
+
     setFiles([]);
     setErrors([]);
 
@@ -78,7 +88,7 @@ function FileUploadMultiple({
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    if (files.length === 0) {
+    if (!isProcessing && files.length === 0) {
       setDragging(true);
     }
   };
@@ -92,7 +102,7 @@ function FileUploadMultiple({
     e.preventDefault();
     setDragging(false);
 
-    if (files.length === 0) {
+    if (!isProcessing && files.length === 0) {
       const droppedFiles = e.dataTransfer.files;
       handleFiles(droppedFiles);
     }
@@ -104,7 +114,7 @@ function FileUploadMultiple({
         <div
           className={`upload-box ${dragging ? "dragging" : ""}`}
           onClick={() => {
-            if (files.length === 0) {
+            if (!isProcessing && files.length === 0) {
               inputRef.current.click();
             }
           }}
@@ -139,6 +149,7 @@ function FileUploadMultiple({
                   <button
                     className="remove-btn"
                     onClick={() => removeFile(index)}
+                    disabled={isProcessing}
                   >
                     <RxCross1 />
                   </button>
@@ -147,6 +158,7 @@ function FileUploadMultiple({
             </div>
           )}
 
+          {/* After Merge */}
           {mergeComplete && (
             <div className="upload-preview">
               <p className="merged-file-name">{mergedFileName}</p>
@@ -161,6 +173,7 @@ function FileUploadMultiple({
           accept={accept}
           multiple
           style={{ display: "none" }}
+          disabled={isProcessing}
           onChange={(e) => {
             handleFiles(e.target.files);
             e.target.value = "";
@@ -173,19 +186,28 @@ function FileUploadMultiple({
             <button
               className="upload-btn"
               onClick={() => inputRef.current.click()}
+              disabled={isProcessing}
             >
               Add Files
             </button>
 
             {files.length > 0 && (
-              <button className="upload-btn" onClick={removeAllFiles}>
+              <button
+                className="upload-btn"
+                onClick={removeAllFiles}
+                disabled={isProcessing}
+              >
                 Remove All
               </button>
             )}
 
-            {files.length > 0 && onMerge && (
-              <button className="upload-btn merge-btn" onClick={onMerge}>
-                {processLabel} {/* <- Use custom label */}
+            {files.length > 0 && (
+              <button
+                className="upload-btn merge-btn"
+                onClick={onMerge}
+                disabled={isProcessing}
+              >
+                {isProcessing ? "Processing..." : processLabel}
               </button>
             )}
           </>
