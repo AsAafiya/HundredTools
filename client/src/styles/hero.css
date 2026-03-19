@@ -2,6 +2,7 @@
   background: #e4e8fa;
   text-align: center;
   color: #1f3568;
+  max-width: 100%;
 }
 
 .hero-section {
@@ -60,6 +61,10 @@
 
 .hero .primary-btn {
   box-shadow: 0 8px 24px rgba(77, 119, 224, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .secondary-btn {

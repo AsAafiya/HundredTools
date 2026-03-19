@@ -25,22 +25,16 @@ const Footer = () => {
           </div>
 
           <div className="footer-column">
-            <h4>Product</h4>
-            <div className="footer-links">
-              <Link to="/tools/pdf">PDF Tools</Link>
-              <Link to="/tools/image">Image Tools</Link>
-              <Link to="/tools/video">Video Tools</Link>
-              <Link to="/my-files">My Files</Link>
-            </div>
-          </div>
-
-          <div className="footer-column">
             <h4>Company</h4>
             <div className="footer-links">
               <Link to="/about">About Us</Link>
               <Link to="/profile">Profile</Link>
-              <a href="mailto:support@hundredtools.com">Contact</a>
-              <a href="mailto:support@hundredtools.com">Help Center</a>
+              <Link to="/support">
+                Contact
+              </Link>
+              <Link to="/support">
+                Help Center
+              </Link>
             </div>
           </div>
 
@@ -49,9 +43,12 @@ const Footer = () => {
             <p className="footer-support-text">
               Need help with conversion or file issues?
             </p>
-            <a href="mailto:support@hundredtools.com" className="footer-support-btn">
+            <Link
+              to="/support"
+              className="footer-support-btn"
+            >
               Contact Support
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -60,7 +57,7 @@ const Footer = () => {
           <div className="footer-policy-links">
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>
-            <a href="#">Cookie Policy</a>
+            <Link to="/privacy">Cookie Policy</Link>
           </div>
         </div>
       </div>

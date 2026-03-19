@@ -7,7 +7,17 @@ function FileUploadSingle2({
   accept = ".pdf",
   maxSizeMB = 50,
   onFileChange,
-  processing = false
+  children,
+  onAction,
+  actionLabel = "Convert File",
+  actionLoadingLabel = "Processing...",
+  actionLoading = false,
+  actionDisabled = false,
+  complete = false,
+  completedFileName = "output.pdf",
+  completedDownloadUrl = "",
+  downloadLabel = "Download PDF",
+  onDownload,
 }) {
 
   const inputRef = useRef(null);
@@ -88,15 +98,21 @@ function FileUploadSingle2({
     }
   };
 
+  const handleDownloadClick = () => {
+    if (onDownload) {
+      onDownload();
+    }
+  };
+
   return (
     <div className="upload-container">
 
       <div className="upload-card">
 
         <div
-          className="upload-box"
+          className={`upload-box ${complete ? "complete-state" : ""}`}
           onClick={() => {
-            if (!processing) {
+            if (!file && !complete) {
               inputRef.current.click();
             }
           }}
@@ -104,37 +120,35 @@ function FileUploadSingle2({
           onDrop={handleDrop}
         >
 
-          {!file && (
+          {!file && !complete && (
             <>
               <div className="upload-icon">
                 <TbUpload />
               </div>
 
-              <h3>Upload a PDF File</h3>
+              <h3>Drag & Drop Files Here</h3>
 
-              <p>Click to browse from your computer</p>
+              <p>or click to browse from your computer</p>
             </>
           )}
 
-          {file && (
+          {file && !complete && (
 
-            <div className="upload-preview">
+            <div className="upload-preview upload-preview-grid">
 
               <div className="upload-file-item">
 
-                <p>{file.name}</p>
+                <span className="file-card-icon" aria-hidden="true">📄</span>
 
-                <span>
-                  {(file.size / 1024).toFixed(2)} KB
-                </span>
+                <div className="file-card-meta">
+                  <p className="file-card-name">{file.name}</p>
+                  <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
+                </div>
 
-                <br/>
-
-                <button
-                  className="remove-btn"
-                  onClick={removeFile}
-                  disabled={processing}
-                >
+                <button className="remove-btn" onClick={(e) => {
+                  e.stopPropagation();
+                  removeFile();
+                }} disabled={actionLoading}>
                   <RxCross1/>
                 </button>
 
@@ -143,6 +157,14 @@ function FileUploadSingle2({
             </div>
 
           )}
+
+          {complete && (
+            <div className="upload-preview">
+              <p className="merged-file-name">{completedFileName}</p>
+            </div>
+          )}
+
+          {file && !complete && children}
 
         </div>
 
@@ -158,13 +180,48 @@ function FileUploadSingle2({
           }}
         />
 
-        <button
-          className="upload-btn"
-          onClick={() => inputRef.current.click()}
-          disabled={processing}
-        >
-          {processing ? "Processing..." : "Add File"}
-        </button>
+        {!complete && (
+          <>
+            <button
+              className="upload-btn"
+              onClick={() => inputRef.current.click()}
+              disabled={actionLoading}
+            >
+              Add Files
+            </button>
+
+            {file && onAction && (
+              <button
+                type="button"
+                className="upload-btn convert-btn"
+                onClick={onAction}
+                disabled={actionDisabled}
+              >
+                {actionLoading ? actionLoadingLabel : actionLabel}
+              </button>
+            )}
+          </>
+        )}
+
+        {!complete && actionLoading && (
+          <div className="upload-progress-wrap" role="status" aria-live="polite">
+            <div className="upload-progress-bar">
+              <span className="upload-progress-fill" />
+            </div>
+            <p className="upload-progress-text">Converting PDF...</p>
+          </div>
+        )}
+
+        {complete && completedDownloadUrl && (
+          <a
+            href={completedDownloadUrl}
+            download={completedFileName}
+            className="upload-btn download-btn"
+            onClick={handleDownloadClick}
+          >
+            {downloadLabel}
+          </a>
+        )}
 
         {errors.length > 0 && (
           <div className="upload-errors">

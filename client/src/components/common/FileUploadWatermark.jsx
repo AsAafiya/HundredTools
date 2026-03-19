@@ -12,7 +12,9 @@ function FileUploadWatermark({
   mergedFileName,
   watermarkText,
   setWatermarkText,
-  processing = false
+  onDownload,
+  isProcessing = false,
+  processingLabel = "Applying watermark...",
 }) {
 
   const inputRef = useRef(null);
@@ -68,7 +70,7 @@ function FileUploadWatermark({
 
     e.preventDefault();
 
-    if (processing) return;
+    if (isProcessing) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -86,9 +88,14 @@ function FileUploadWatermark({
 
     setFile(null);
     setErrors([]);
-
     if (onFileChange) {
       onFileChange(null);
+    }
+  };
+
+  const handleDownloadClick = () => {
+    if (onDownload) {
+      onDownload();
     }
   };
 
@@ -98,63 +105,55 @@ function FileUploadWatermark({
       <div className="upload-card">
 
         <div
-          className="upload-box"
-          onClick={() => {
-            if (!processing && !file) {
-              inputRef.current.click();
-            }
-          }}
+          className={`upload-box ${mergeComplete ? "complete-state" : ""}`}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
 
-          {!file && (
+          {/* Upload UI */}
+          {!file && !mergeComplete && (
             <>
               <div className="upload-icon">
                 <TbUpload />
               </div>
 
-              <h3>Upload a PDF File</h3>
+              <h3>Drag & Drop Files Here</h3>
 
-              <p>Click to browse from your computer</p>
+              <p>or click to browse from your computer</p>
             </>
           )}
 
-          {file && (
+          {/* File Preview */}
+          {file && !mergeComplete && (
 
-            <div className="upload-preview">
+            <div className="upload-preview upload-preview-grid">
 
               <div className="upload-file-item">
 
-                <div className="file-info">
-                  <p className="file-name">{file.name}</p>
+                <span className="file-card-icon" aria-hidden="true">📄</span>
 
-                  <span className="file-size">
-                    {(file.size / 1024).toFixed(2)} KB
-                  </span>
+                <div className="file-info">
+                  <p className="file-card-name">{file.name}</p>
+                  <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
                 </div>
 
-                <button
-                  className="remove-btn"
-                  onClick={removeFile}
-                  disabled={processing}
-                >
-                  Remove File
+                <button className="remove-btn" onClick={(e) => {
+                  e.stopPropagation();
+                  removeFile();
+                }} disabled={isProcessing}>
+                    ❌
                 </button>
-
-                <input
-                  type="text"
-                  placeholder="Enter watermark text"
-                  value={watermarkText}
-                  onChange={(e) => setWatermarkText(e.target.value)}
-                  className="watermark-input"
-                  disabled={processing}
-                />
 
               </div>
 
             </div>
 
+          )}
+
+          {mergeComplete && (
+            <div className="upload-preview">
+              <p className="merged-file-name">{mergedFileName}</p>
+            </div>
           )}
 
         </div>
@@ -171,26 +170,66 @@ function FileUploadWatermark({
           }}
         />
 
-        {/* Add File Button */}
-        {!file && (
-          <button
-            className="upload-btn"
-            onClick={() => inputRef.current.click()}
-            disabled={processing}
-          >
-            {processing ? "Processing..." : "Add File"}
-          </button>
+        {!mergeComplete && (
+          <>
+            <p className="watermark-steps">
+              Step 1: Add PDF • Step 2: Enter watermark text • Step 3: Apply watermark
+            </p>
+
+            {/* Watermark text input */}
+            <input
+              type="text"
+              placeholder="Type watermark text here"
+              value={watermarkText}
+              onChange={(e) => setWatermarkText(e.target.value)}
+              className="watermark-input"
+              disabled={isProcessing}
+              style={{ marginBottom: "10px" }}
+            />
+
+            {/* Buttons — always visible */}
+            <button
+                className="upload-btn"
+                onClick={() => inputRef.current.click()}
+                disabled={isProcessing}
+            >
+              Add Files
+            </button>
+
+            {onMerge && (
+            <button
+                className="upload-btn convert-btn"
+                disabled={!file || !watermarkText || isProcessing}
+                onClick={onMerge}
+              title={!file ? "Please add a PDF first" : !watermarkText ? "Please enter watermark text" : ""}
+            >
+              {isProcessing ? "Applying..." : "Apply Watermark"}
+            </button>
+            )}
+
+            {!file && <p className="watermark-hint">Please add one PDF file to continue.</p>}
+            {file && !watermarkText && <p className="watermark-hint">Please enter watermark text to enable Apply Watermark.</p>}
+          </>
         )}
 
-        {/* Watermark Button */}
-        {file && onMerge && (
-          <button
-            className="upload-btn"
-            disabled={!watermarkText || processing}
-            onClick={onMerge}
+        {!mergeComplete && isProcessing && (
+          <div className="upload-progress-wrap" role="status" aria-live="polite">
+            <div className="upload-progress-bar">
+              <span className="upload-progress-fill" />
+            </div>
+            <p className="upload-progress-text">{processingLabel}</p>
+          </div>
+        )}
+
+        {mergeComplete && downloadUrl && (
+          <a
+            href={downloadUrl}
+            download={mergedFileName || "watermarked.pdf"}
+            className="upload-btn download-btn"
+            onClick={handleDownloadClick}
           >
-            {processing ? "Processing..." : "Add Watermark"}
-          </button>
+            Download PDF
+          </a>
         )}
 
         {errors.length > 0 && (

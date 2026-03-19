@@ -1,40 +1,10 @@
-import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
-import { pdfToWord } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
 function PdfToWord() {
-
-  const [file, setFile] = useState(null);
-  const [downloadUrl, setDownloadUrl] = useState(null);
-  const [convertComplete, setConvertComplete] = useState(false);
-  const [fileName, setFileName] = useState("");
-   const { showError } = useError();
-  const handleConvert = async () => {
-
-    if (!file) {
-      showError("Upload a PDF first");
-      return;
-    }
-
-    try {
-
-      const result = await pdfToWord(file);
-
-      const url = window.URL.createObjectURL(result);
-
-      setDownloadUrl(url);
-      setConvertComplete(true);
-      setFileName("Nexora_converted.docx");
-
-    } catch (error) {
-      console.error(error);
-    }
-
-  };
 
   return (
     <div className="tool-page">

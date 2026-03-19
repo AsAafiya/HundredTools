@@ -49,7 +49,7 @@ const Navbar = () => {
   }, [theme]);
 
   const handleThemeToggle = () => {
-    setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark"));
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   const navMenus = [
@@ -82,28 +82,29 @@ const Navbar = () => {
         { name: "Crop Image", path: "/tools/image/crop-image" },
       ],
     },
-    {
-      key: "video",
-      label: "Video Tools",
-      path: "/tools/video",
-      viewAllLabel: "View All Tools",
-      items: [
-        { name: "Compress Video", path: "/tools/compress-video" },
-        { name: "Trim Video", path: "/tools/trim-video" },
-      ],
-    },
+    // {
+    //   key: "video",
+    //   label: "Video Tools",
+    //   path: "/tools/video",
+    //   viewAllLabel: "View All Tools",
+    //   items: [
+    //     { name: "Compress Video", path: "/tools/compress-video" },
+    //     { name: "Trim Video", path: "/tools/trim-video" },
+    //   ],
+    // },
   ];
 
   return (
     <header className="navbar">
-      <div className="site-container navbar-container" ref={navRef}>
-        <div className="navbar-left">
-          <div className="logo">
-            <Link
-              to="/"
-              className="logo-link"
-              onClick={() => setOpenMenu(null)}
-            >
+      {/* ✅ OUTER CONTAINER (spacing) */}
+      <div className="site-container">
+        
+        {/* ✅ INNER LAYOUT (grid/flex) */}
+        <div className="navbar-container" ref={navRef}>
+
+          {/* LEFT - LOGO */}
+          <div className="navbar-left">
+            <Link to="/" className="logo-link" onClick={() => setOpenMenu(null)}>
               <span className="logo-mark">
                 <img src={logo} alt="HundredTools" className="logo-image" />
               </span>
@@ -113,48 +114,57 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-        </div>
 
-        <nav className="navbar-center">
-          <NavLink
-            to="/"
-            onClick={() => setOpenMenu(null)}
-            className={({ isActive }) =>
-              isActive ? "nav-link active-link" : "nav-link"
-            }
-          >
-            Home
-          </NavLink>
+          {/* CENTER - NAV LINKS */}
+          <nav className="navbar-center">
+            <NavLink
+              to="/"
+              onClick={() => setOpenMenu(null)}
+              className={({ isActive }) =>
+                isActive ? "nav-link active-link" : "nav-link"
+              }
+            >
+              Home
+            </NavLink>
 
-          {navMenus.map((menu) => (
-            <div className="nav-dropdown" key={menu.key}>
-              <button
-                type="button"
-                className={`nav-dropdown-trigger ${openMenu === menu.key ? "active-link" : ""}`}
-                onClick={() =>
-                  setOpenMenu((current) =>
-                    current === menu.key ? null : menu.key,
-                  )
-                }
-              >
-                {menu.label}
-                <span className="nav-caret">
+            {navMenus.map((menu) => (
+              <div className="nav-dropdown" key={menu.key}>
+                <button
+                  className={`nav-dropdown-trigger ${
+                    openMenu === menu.key ? "active-link" : ""
+                  }`}
+                  onClick={() =>
+                    setOpenMenu((prev) =>
+                      prev === menu.key ? null : menu.key
+                    )
+                  }
+                >
+                  {menu.label}
                   {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
-                </span>
-              </button>
+                </button>
 
-              <div
-                className={`dropdown-menu ${openMenu === menu.key ? "open" : ""}`}
-                role="menu"
-              >
-                {menu.items.map((item) => (
+                <div
+                  className={`dropdown-menu ${
+                    openMenu === menu.key ? "open" : ""
+                  }`}
+                >
+                  {menu.items.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className="dropdown-item"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+
                   <Link
-                    key={item.name}
-                    to={item.path}
-                    className="dropdown-item"
+                    to={menu.path}
+                    className="dropdown-item dropdown-view-all"
                     onClick={() => setOpenMenu(null)}
                   >
-                    {item.name}
+                    {menu.viewAllLabel}
                   </Link>
                 ))}
 
@@ -238,9 +248,11 @@ const Navbar = () => {
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
           </div>
+
         </div>
       </div>
 
+      {/* MODALS */}
       {showLogin && (
         <AuthModal onClose={() => setShowLogin(false)}>
           <Login

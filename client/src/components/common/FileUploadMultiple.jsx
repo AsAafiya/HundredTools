@@ -11,9 +11,14 @@ function FileUploadMultiple({
   downloadUrl,
   mergeComplete,
   mergedFileName,
-  processLabel = "Process PDF",        // Added prop
-  downloadLabel = "Download PDF",      // Added prop
-  isProcessing = false
+  processLabel = "Process PDF",
+  downloadLabel = "Download PDF",
+  onDownload,
+  isProcessing = false,
+  processingLabel = "Converting PDF...",
+  minFilesForProcess = 1,
+  minFilesMessage = "",
+  showOnlyProcessAfterSelection = false,
 }) {
   const inputRef = useRef(null);
 
@@ -23,12 +28,34 @@ function FileUploadMultiple({
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
+  const acceptedTypes = accept
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+
+  const isAcceptedFile = (file) => {
+    if (acceptedTypes.length === 0) {
+      return true;
+    }
+
+    const lowerName = file.name.toLowerCase();
+    const lowerMimeType = (file.type || "").toLowerCase();
+
+    return acceptedTypes.some((type) => {
+      if (type.startsWith(".")) {
+        return lowerName.endsWith(type);
+      }
+
+      return lowerMimeType === type;
+    });
+  };
+
   const validateFiles = (selectedFiles) => {
     const valid = [];
     const errorList = [];
 
     for (let file of selectedFiles) {
-      if (!file.name.toLowerCase().endsWith(accept)) {
+      if (!isAcceptedFile(file)) {
         errorList.push(`${file.name} → Invalid file type`);
         continue;
       }
@@ -88,7 +115,7 @@ function FileUploadMultiple({
 
   const handleDragOver = (e) => {
     e.preventDefault();
-    if (!isProcessing && files.length === 0) {
+    if (!isProcessing) {
       setDragging(true);
     }
   };
@@ -102,9 +129,15 @@ function FileUploadMultiple({
     e.preventDefault();
     setDragging(false);
 
-    if (!isProcessing && files.length === 0) {
+    if (!isProcessing) {
       const droppedFiles = e.dataTransfer.files;
       handleFiles(droppedFiles);
+    }
+  };
+
+  const handleDownloadClick = () => {
+    if (onDownload) {
+      onDownload();
     }
   };
 
@@ -112,9 +145,9 @@ function FileUploadMultiple({
     <div className="upload-container">
       <div className="upload-card">
         <div
-          className={`upload-box ${dragging ? "dragging" : ""}`}
+          className={`upload-box ${dragging ? "dragging" : ""} ${mergeComplete ? "complete-state" : ""}`}
           onClick={() => {
-            if (!isProcessing && files.length === 0) {
+            if (!isProcessing) {
               inputRef.current.click();
             }
           }}
@@ -137,19 +170,23 @@ function FileUploadMultiple({
 
           {/* File List */}
           {files.length > 0 && !mergeComplete && (
-            <div className="upload-preview">
+            <div className="upload-preview upload-preview-grid">
               {files.map((file, index) => (
                 <div key={index} className="upload-file-item">
-                  <p>{file.name}</p>
+                  <span className="file-card-icon" aria-hidden="true">📄</span>
 
-                  <span>{(file.size / 1024).toFixed(2)} KB</span>
-
-                  <br />
+                  <div className="file-card-meta">
+                    <p className="file-card-name">{file.name}</p>
+                    <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
+                  </div>
 
                   <button
                     className="remove-btn"
-                    onClick={() => removeFile(index)}
                     disabled={isProcessing}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFile(index);
+                    }}
                   >
                     <RxCross1 />
                   </button>
@@ -201,21 +238,29 @@ function FileUploadMultiple({
               </button>
             )}
 
-            {files.length > 0 && (
+            {files.length > 0 && onMerge && (
               <button
-                className="upload-btn merge-btn"
+                className="upload-btn convert-btn"
                 onClick={onMerge}
-                disabled={isProcessing}
+                disabled={files.length < minFilesForProcess || isProcessing}
               >
                 {isProcessing ? "Processing..." : processLabel}
               </button>
             )}
+
+            {files.length > 0 && files.length < minFilesForProcess && minFilesMessage && (
+              <p className="upload-progress-text">{minFilesMessage}</p>
+            )}
           </>
         )}
 
-        {/* Success Message */}
-        {mergeComplete && (
-          <p className="success-text">PDF processed successfully</p>
+        {!mergeComplete && isProcessing && (
+          <div className="upload-progress-wrap" role="status" aria-live="polite">
+            <div className="upload-progress-bar">
+              <span className="upload-progress-fill" />
+            </div>
+            <p className="upload-progress-text">{processingLabel}</p>
+          </div>
         )}
 
         {/* Download Button */}
@@ -224,8 +269,9 @@ function FileUploadMultiple({
             href={downloadUrl}
             download={mergedFileName || "output.pdf"}
             className="upload-btn download-btn"
+            onClick={handleDownloadClick}
           >
-            {downloadLabel} {/* <- Use custom label */}
+            {downloadLabel}
           </a>
         )}
 
