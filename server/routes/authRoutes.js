@@ -1,10 +1,23 @@
 const express = require("express");
-const { signup, login, checkAuth } = require("../controllers/authController.js");
+
+const { signup, login, getMe } = require("../controllers/authController");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+/*
+  📝 Signup
+*/
 router.post("/signup", signup);
+
+/*
+  🔐 Login
+*/
 router.post("/login", login);
-router.get("/check-auth", checkAuth);
+
+/*
+  🔒 Protected route
+*/
+router.get("/me", authMiddleware, getMe);
 
 module.exports = router;
