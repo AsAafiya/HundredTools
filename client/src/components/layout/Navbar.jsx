@@ -217,7 +217,7 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
         </div>
       </div>
 
-{mobileMenu && (
+   { mobileMenu && (
   <div className="mobile-menu">
 
     {navMenus.map((menu) => (

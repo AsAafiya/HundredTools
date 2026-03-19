@@ -412,27 +412,18 @@ body[data-theme="dark"] .theme-toggle-btn{
     cursor:pointer;
   }
 
-  /* .mobile-menu{
-    position:fixed;
+  
+   .mobile-menu{
+    position:absolute;   
     top:75px;
-    left:50%;
-    width:100%;
-    background:blue;
-    z-index:9999;
-    padding:10px;
-  } */
-  .mobile-menu{
-    position:absolute;   /* 🔥 fixed hata diya */
-    top:75px;
-    right:10px;
-    width:220px;         /* 🔥 chhota width */
+    right:1px;
+    width:230px;        
     background:linear-gradient(to bottom,#6689f1,#4f78e8);
     border-radius:10px;
     box-shadow:0 8px 20px rgba(0,0,0,0.1);
     padding:10px;
-    z-index:999;
+    z-index:999; */
   }
-
 
 
   .mobile-dropdown-title{
@@ -488,13 +479,13 @@ body[data-theme="dark"] .theme-toggle-btn{
 
 /* 🔹 Mobile dropdown background (light theme) */
 body[data-theme="light"] .mobile-submenu {
-  background-color: #ffffff;
+  background:linear-gradient(to bottom,#6689f1,#4f78e8);
   border-radius: 5px;
 }
 
 /* 🔹 Mobile dropdown text */
 body[data-theme="light"] .mobile-submenu a {
-color:black;
+color:white;
   display: block;
   padding: 10px;
 }
@@ -661,50 +652,27 @@ body[data-theme="dark"] .mobile-dropdown-title {
 
 
 /* 🔥 Z Fold - Navbar Right Side Fix */
-@media (min-width: 650px) and (max-width: 900px) {
+/* @media (min-width: 650px) and (max-width: 900px) {
 
   .nav-container {
     display: flex;
     justify-content: space-between; /* left + right */
-    align-items: center;
+    /* align-items: center;
     width: 100%;
-  }
+  } */
 
   /* menu / hamburger right me */
-  .nav-right,
+  /* .nav-right,
   .menu,
   .hamburger {
     margin-left: auto;
-  }
-}
+  } */
+/* } */
 
-
-/* 🔥 FORCE NAVBAR RIGHT - WORKS ALWAYS */
-@media (min-width: 650px) and (max-width: 900px) {
-
-  .nav-container {
-    display: flex !important;
-    align-items: center;
-    width: 100%;
-  }
-
-  /* LOGO */
-  .nav-container > :first-child {
-    flex: 0 0 auto;
-  }
-
-  /* RIGHT SIDE (menu, button etc) */
-  .nav-container > :last-child {
-    margin-left: auto !important;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-}
 
 
 /* 🔥 Z Fold 5 PERFECT NAVBAR FIX */
-@media (min-width: 650px) and (max-width: 900px) {
+/* @media (min-width: 650px) and (max-width: 900px) {
 
   .navbar-container {
     display: flex !important;
@@ -736,7 +704,7 @@ body[data-theme="dark"] .mobile-dropdown-title {
   .navbar-center {
     display: none !important;
   }
-}
+} */
 
 
 /* 🔽 Mobile dropdown text size kam */
@@ -747,4 +715,312 @@ body[data-theme="dark"] .mobile-dropdown-title {
 /* submenu items (andar wale links) */
 .mobile-submenu a {
   font-size: 13px;
+}
+
+
+
+
+
+
+
+/* ================= MOBILE LIGHT THEME VISIBILITY FIX ================= */
+
+@media (max-width:768px){
+
+  /* 🔹 Navbar visibility boost */
+  body[data-theme="light"] .navbar{
+    background: #f1f5ff !important;
+    border-bottom: 1px solid #c7d2fe !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+  }
+
+  /* 🔹 Text & icons darker */
+  body[data-theme="light"] .nav-link,
+  body[data-theme="light"] .nav-dropdown-trigger,
+  body[data-theme="light"] .nav-actions a,
+  body[data-theme="light"] .nav-text-btn{
+    color: #0f172a !important;
+    font-weight: 600;
+  }
+
+  /* 🔹 Hover more visible */
+  body[data-theme="light"] .nav-link:hover,
+  body[data-theme="light"] .nav-dropdown-trigger:hover{
+    background: #e0e7ff !important;
+    color: #1d4ed8 !important;
+  }
+
+  /* 🔹 Active link highlight */
+  body[data-theme="light"] .active-link{
+    background: #c7d2fe !important;
+    color: #1e40af !important;
+  }
+
+  /* 🔹 Mobile menu (blue box) improve */
+  body[data-theme="light"] .mobile-menu{
+    background:linear-gradient(to bottom,#6689f1,#4f78e8);
+  }
+
+  /* 🔹 Mobile dropdown text */
+  body[data-theme="light"] .mobile-submenu a{
+    color: #ffffff !important;
+  }
+
+}
+
+
+
+
+
+
+/* ================= MOBILE DARK THEME VISIBILITY FIX ================= */
+
+@media (max-width:768px){
+
+  /* 🔹 Navbar visibility boost */
+  body[data-theme="dark"] .navbar{
+    background: #0f172a !important;   /* deep dark */
+    border-bottom: 1px solid #334155 !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5) !important;
+  }
+
+  /* 🔹 Text & icons brighter */
+  body[data-theme="dark"] .nav-link,
+  body[data-theme="dark"] .nav-dropdown-trigger,
+  body[data-theme="dark"] .nav-actions a,
+  body[data-theme="dark"] .nav-text-btn{
+    color: #f1f5f9 !important;   /* bright text */
+    font-weight: 600;
+  }
+
+  /* 🔹 Hover more visible */
+  body[data-theme="dark"] .nav-link:hover,
+  body[data-theme="dark"] .nav-dropdown-trigger:hover{
+    background: #1e293b !important;
+    color: #60a5fa !important;
+  }
+
+  /* 🔹 Active link highlight */
+  body[data-theme="dark"] .active-link{
+    background: #1e3a8a !important;
+    color: #93c5fd !important;
+  }
+
+  /* 🔹 Mobile menu (blue box) */
+  body[data-theme="dark"] .mobile-menu{
+    background:linear-gradient(to bottom,#6689f1,#4f78e8);
+  }
+
+  /* 🔹 Mobile dropdown text */
+  body[data-theme="dark"] .mobile-submenu a{
+    color: #ffffff !important;
+  }
+
+}
+
+
+
+
+/* ================= MOBILE REMOVE UNDERLINE ================= */
+
+@media (max-width:768px){
+
+  body[data-theme="light"] .mobile-submenu a,
+  body[data-theme="dark"] .mobile-submenu a{
+    text-decoration: none !important;
+  }
+
+  /* hover / click pe bhi underline na aaye */
+  body[data-theme="light"] .mobile-submenu a:hover,
+  body[data-theme="light"] .mobile-submenu a:active,
+  body[data-theme="dark"] .mobile-submenu a:hover,
+  body[data-theme="dark"] .mobile-submenu a:active{
+    text-decoration: none !important;
+  }
+
+}
+
+
+
+/* ================= REMOVE WHITE HOVER BACKGROUND ================= */
+
+@media (max-width:768px){
+
+  /* 🔹 Mobile submenu hover fix */
+  body[data-theme="light"] .mobile-submenu a:hover,
+  body[data-theme="light"] .mobile-submenu a:focus,
+  body[data-theme="light"] .mobile-submenu a:active{
+    background: transparent !important;   /* ❌ white hatao */
+    color: #ffffff !important;
+  }
+
+  /* 🔹 Dropdown items (agar desktop style mobile me aa raha ho) */
+  body[data-theme="light"] .dropdown-item:hover{
+    background: transparent !important;
+    color: #ffffff !important;
+  }
+
+  /* 🔹 Dark theme bhi same */
+  body[data-theme="dark"] .mobile-submenu a:hover,
+  body[data-theme="dark"] .mobile-submenu a:focus,
+  body[data-theme="dark"] .mobile-submenu a:active{
+    background: transparent !important;
+    color: #ffffff !important;
+  }
+
+}
+
+
+/* ================= THEME ICON SIZE FIX ================= */
+
+@media (max-width:768px){
+
+  /* 🔹 Button size thoda bada */
+  .theme-toggle-btn{
+    height: 38px !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    padding: 0 !important;
+  }
+
+  /* 🔹 Icon bada karo */
+  .theme-toggle-btn i,
+  .theme-toggle-btn svg{
+    font-size: 30px !important;   /* 🔥 main size control */
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+}
+
+
+
+/* ================= NAVBAR RIGHT ALIGN FIX ================= */
+
+@media (max-width:900px){
+
+  /* 🔹 Container full stretch */
+  .navbar .site-container{
+    padding-right: 8px !important;   /* 🔥 right gap kam */
+    padding-left: 12px !important;
+  }
+
+  /* 🔹 Navbar container full width */
+  .navbar-container{
+    width: 100% !important;
+  }
+
+  /* 🔹 Right section ko edge pe push karo */
+  .navbar-right{
+    margin-left: auto !important;
+    padding-right: 0 !important;
+  }
+
+  /* 🔹 Hamburger / icon bilkul right */
+  .hamburger{
+    margin-right: 0 !important;
+  }
+
+}
+
+@media (max-width:900px){
+  body{
+    overflow-x: hidden;  /* extra scroll gap hatao */
+  }
+}
+
+
+
+@media (max-width: 900px){
+
+  
+  .navbar .site-container{
+    padding-left: 10px !important;
+    padding-right: 4px !important;  
+  }
+
+
+  .navbar-container{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .navbar-left{
+    flex: 0 0 auto;
+  }
+
+
+  .navbar-right{
+    margin-left: auto !important;
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+  }
+
+  
+  .hamburger{
+    margin-left: auto !important;
+    margin-right: 0 !important
+
+  }
+}
+  
+
+
+@media (max-width:600px){
+  .navbar-center{
+    display: none !important;
+  }
+
+  .hamburger{
+    display: block !important;
+    font-size: 26px;
+    cursor: pointer;
+  }
+}
+
+@media (min-width:601px){
+  .navbar-center{
+    display: flex !important;
+  }
+
+  .hamburger{
+    display: none !important;
+  }
+}
+
+
+
+
+@media (max-width:600px){
+  .navbar-center{
+    display: none !important;
+  }
+
+  .hamburger{
+    display: block !important;
+  }
+}
+
+@media (min-width:601px){
+  .navbar-center{
+    display: flex !important;
+  }
+
+  .hamburger{
+    display: none !important;
+  }
+}
+
+/* 🔥 FIX iPad Mini (768px range overlap) */
+@media (min-width:600px) and (max-width:900px){
+  .hamburger{
+    display: none !important;
+  }
+
+  .navbar-center{
+    display: flex !important;
+  }
 }
