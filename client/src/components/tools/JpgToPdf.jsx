@@ -1,21 +1,24 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import { convertJpgToPdf } from "../../services/pdfService";
 import "../../styles/tool.css";
 
 function JpgToPdf() {
-  const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const [complete, setComplete] = useState(false);
 
-  const handlePick = (event) => {
-    const selectedFiles = Array.from(event.target.files || []);
-    setFiles(selectedFiles);
+  const handleReset = () => {
+    setFiles([]);
+    setLoading(false);
     setMessage("");
-    event.target.value = "";
+    setDownloadUrl("");
+    setComplete(false);
   };
 
   const handleConvert = async () => {
@@ -25,24 +28,33 @@ function JpgToPdf() {
     }
 
     try {
+      const startedAt = Date.now();
+      const minProgressMs = 900;
       setLoading(true);
       setMessage("");
 
       const blob = await convertJpgToPdf(files);
 
-      const downloadUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = "converted.pdf";
-      a.click();
-      URL.revokeObjectURL(downloadUrl);
+      const elapsed = Date.now() - startedAt;
+      if (elapsed < minProgressMs) {
+        await new Promise((resolve) => setTimeout(resolve, minProgressMs - elapsed));
+      }
 
-      setMessage("Conversion successful. Download started.");
+      const url = URL.createObjectURL(blob);
+      setDownloadUrl(url);
+      setComplete(true);
+      setMessage("Conversion successful.");
     } catch {
       setMessage("Conversion failed. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownload = () => {
+    setTimeout(() => {
+      handleReset();
+    }, 300);
   };
 
   return (
@@ -56,26 +68,20 @@ function JpgToPdf() {
       <h1>JPG to PDF</h1>
       <p className="subtitle">Convert one or more JPG images into a PDF</p>
 
-      <input
-        ref={inputRef}
-        type="file"
+      <FileUploadMultiple
         accept=".jpg,.jpeg,image/jpeg"
-        multiple
-        style={{ display: "none" }}
-        onChange={handlePick}
+        onFilesChange={setFiles}
+        onMerge={handleConvert}
+        downloadUrl={downloadUrl}
+        mergeComplete={complete}
+        mergedFileName="converted.pdf"
+        processLabel="Convert File"
+        downloadLabel="Download PDF"
+        onDownload={handleDownload}
+        isProcessing={loading}
+        processingLabel="Converting JPG to PDF..."
+        minFilesForProcess={1}
       />
-
-      <button className="upload-btn" onClick={() => inputRef.current.click()}>
-        Add JPG Files
-      </button>
-
-      {files.length > 0 && (
-        <p className="subtitle">{files.length} file(s) selected</p>
-      )}
-
-      <button className="upload-btn" onClick={handleConvert} disabled={loading}>
-        {loading ? "Converting..." : "Convert to PDF"}
-      </button>
 
       {message && <p className="subtitle">{message}</p>}
 

@@ -1,9 +1,12 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 
 const pdfRoutes = require("./routes/pdfRoutes");
 const startCleanupJob = require("./utils/cleanupFiles");
-const imageRoutes = require("./routes/imageRoute"); 
+const imageRoutes = require("./routes/imageRoute");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -15,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 /* Routes */
 app.use("/api/pdf", pdfRoutes);
 app.use("/api/image", imageRoutes); 
+app.use("/api/auth", authRoutes);
 
 // start background cleanup job
 startCleanupJob();
@@ -25,6 +29,8 @@ app.get("/", (req, res) => {
 });
 
 /* Start server */
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(process.env.PORT || 5000, () => {
+  console.log("Server running on PORT 5000...");
 });
+
+console.log(process.env.JWT_SECRET);

@@ -59,17 +59,28 @@ exports.addPageNumbers = async (req, res) => {
 
     const pages = pdfDoc.getPages();
 
+    const position = req.body.position || "bottom-center";
+
     pages.forEach((page, index) => {
-      const { width } = page.getSize();
+      const { width, height } = page.getSize();
 
       const text = `Page ${index + 1}`;
       const size = 16;
 
       const textWidth = font.widthOfTextAtSize(text, size);
 
+      const isTop = position.startsWith("top");
+      const isBottom = position.startsWith("bottom");
+      const isLeft = position.endsWith("left");
+      const isRight = position.endsWith("right");
+      const isCenter = position.endsWith("center");
+
+      const x = isLeft ? 20 : isRight ? width - textWidth - 20 : (width - textWidth) / 2;
+      const y = isTop ? height - 30 : 20;
+
       page.drawText(text, {
-        x: (width - textWidth) / 2,
-        y: 40,
+        x,
+        y,
         size,
         font,
         color: rgb(0, 0, 0),
