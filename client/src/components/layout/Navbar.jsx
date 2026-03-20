@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../styles/header.css";
 import logo from "../../assets/logos/logo.png";
 import { useEffect, useRef, useState } from "react";
@@ -8,29 +9,68 @@ import Login from "../../pages/Login";
 import Signup from "../../pages/Signup";
 import AuthModal from "../auth/authModel";
 
+ import { removeToken } from "../../utils/auth"; // agar pehle se nahi hai
+
+
+
+const ADMIN_EMAIL = "soni6767isha@gmail.com";
+
+
+
 const Navbar = () => {
+
+const userEmail = localStorage.getItem("userEmail");
+const isAdmin = userEmail === ADMIN_EMAIL;
+
+
+  
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "light",
   );
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    () => localStorage.getItem("isLoggedIn") === "true",
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
   const navRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true");
-    setShowLogin(false);
-  };
+//   useEffect(() => {
+//   const token = localStorage.getItem("token");
+//   setIsLoggedIn(!!token);
+// }, []);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.setItem("isLoggedIn", "false");
-    setOpenMenu(null);
-  };
+  // const handleLoginSuccess = () => {
+  //   setIsLoggedIn(true);
+  //   localStorage.setItem("isLoggedIn", "true");
+  //   setShowLogin(false);
+  // };
+  const handleLoginSuccess = (token) => {
+  setIsLoggedIn(true);
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("token", token); // ✅ JWT save
+  setShowLogin(false);
+};
+
+  // const handleLogout = () => {
+  //   setIsLoggedIn(false);
+  //   localStorage.setItem("isLoggedIn", "false");
+  //   setOpenMenu(null);
+  // };
+ 
+
+const handleLogout = () => {
+  removeToken();               // JWT remove
+  setIsLoggedIn(false);        // state update
+  localStorage.setItem("isLoggedIn", "false"); // already hai
+  localStorage.removeItem("userEmail");
+  setOpenMenu(null);
+  alert("Logged out successfully"); // notification
+  navigate("/");          // redirect login
+};
+
+
+
+
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -82,22 +122,23 @@ const Navbar = () => {
         { name: "Crop Image", path: "/tools/image/crop-image" },
       ],
     },
-    // {
-    //   key: "video",
-    //   label: "Video Tools",
-    //   path: "/tools/video",
-    //   viewAllLabel: "View All Tools",
-    //   items: [
-    //     { name: "Compress Video", path: "/tools/compress-video" },
-    //     { name: "Trim Video", path: "/tools/trim-video" },
-    //   ],
-    // },
+    {
+      key: "video",
+      label: "Video Tools",
+      path: "/tools/video",
+      viewAllLabel: "View All Tools",
+      items: [
+        { name: "Compress Video", path: "/tools/compress-video" },
+        { name: "Trim Video", path: "/tools/trim-video" },
+      ],
+    },
   ];
 
   return (
     <header className="navbar">
       {/* ✅ OUTER CONTAINER (spacing) */}
       <div className="site-container">
+        </div>
         
         {/* ✅ INNER LAYOUT (grid/flex) */}
         <div className="navbar-container" ref={navRef}>
@@ -159,14 +200,8 @@ const Navbar = () => {
                     </Link>
                   ))}
 
-                  <Link
-                    to={menu.path}
-                    className="dropdown-item dropdown-view-all"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    {menu.viewAllLabel}
-                  </Link>
-                ))}
+              
+        
 
                 <Link
                   to={menu.path}
@@ -199,15 +234,21 @@ const Navbar = () => {
                   }
                 >
                   Profile
-                </NavLink>
-                <NavLink
-                  to="/admin"
-                  className={({ isActive }) =>
-                    isActive ? "admin-btn active" : "admin-btn"
-                  }
-                >
-                  Admin
-                </NavLink>
+                 </NavLink>
+                    
+                    {isAdmin && (
+  <NavLink
+    to="/admin"
+    className={({ isActive }) =>
+      isActive ? "admin-btn active" : "admin-btn"
+    }
+  >
+    Admin
+  </NavLink>
+)}
+
+
+
                 <button className="nav-text-btn" onClick={handleLogout}>
                   Logout
                 </button>
@@ -280,3 +321,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

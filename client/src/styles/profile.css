@@ -19,16 +19,17 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 40px;
+  gap: 70px;
+  flex-direction:row;
 }
 
-.profile-card {
+/* .profile-card {
   background: white;
   border-radius: 20px;
   padding: 30px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
+} */
 
 .avatar {
   width: 120px;
