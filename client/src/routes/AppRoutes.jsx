@@ -78,7 +78,7 @@ const AppRoutes = () => {
           <Route path="privacy" element={<Privacy />} />
           <Route path="terms" element={<Terms />} />
           <Route path="support" element={<Support />} />
-
+         </Route> 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="" element={<Dashboard />} />
           <Route path="users" element={<Users />} />

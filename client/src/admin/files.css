@@ -26,11 +26,16 @@
   background: white;
   padding: 22px;
   border-radius: 20px;
+  border: 1px solid #d5dbf0;
   box-shadow: 0 10px 30px rgba(77,119,224,0.1);
+  transition: 0.2s ease;
 }
 
 .file-card.active {
   border: 2px solid #4D77E0;
+}
+.file-card:hover{
+  transform: translateY(-5px);
 }
 
 .file-card h2 {
