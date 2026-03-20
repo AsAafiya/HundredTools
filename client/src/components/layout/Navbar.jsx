@@ -12,12 +12,10 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "light",
-  );
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    () => localStorage.getItem("isLoggedIn") === "true",
-  );
+  const [mobileMenu, setMobileMenu] = useState(false);
+const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
+  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
   const navRef = useRef(null);
 
   const handleLoginSuccess = () => {
@@ -36,6 +34,7 @@ const Navbar = () => {
     const handleOutsideClick = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setOpenMenu(null);
+        // setMobileMenu(false);
       }
     };
 
@@ -82,16 +81,16 @@ const Navbar = () => {
         { name: "Crop Image", path: "/tools/image/crop-image" },
       ],
     },
-    // {
-    //   key: "video",
-    //   label: "Video Tools",
-    //   path: "/tools/video",
-    //   viewAllLabel: "View All Tools",
-    //   items: [
-    //     { name: "Compress Video", path: "/tools/compress-video" },
-    //     { name: "Trim Video", path: "/tools/trim-video" },
-    //   ],
-    // },
+    {
+      key: "video",
+      label: "Video Tools",
+      path: "/tools/video",
+      viewAllLabel: "View All Tools",
+      items: [
+        { name: "Compress Video", path: "/tools/compress-video" },
+        { name: "Trim Video", path: "/tools/trim-video" },
+      ],
+    },
   ];
 
   return (
@@ -214,33 +213,123 @@ const Navbar = () => {
                   className="primary-btn"
                   onClick={() => setShowSignup(true)}
                 >
-                  Get Started
-                </button>
-              </>
-            )}
+                  {menu.items.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className="dropdown-item"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
 
-            <button
-              type="button"
-              className="theme-toggle-btn"
-              aria-label={
-                theme === "dark"
-                  ? "Switch to light theme"
-                  : "Switch to dark theme"
-              }
-              title={
-                theme === "dark"
-                  ? "Switch to light theme"
-                  : "Switch to dark theme"
-              }
-              onClick={handleThemeToggle}
-            >
-              {theme === "dark" ? "☀️" : "🌙"}
-            </button>
+                  <Link
+                    to={menu.path}
+                    className="dropdown-item dropdown-view-all"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    {menu.viewAllLabel}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </nav>
+
+          {/* RIGHT - ACTIONS */}
+          <div className="navbar-right">
+            <div className="nav-actions">
+              {isLoggedIn ? (
+                <>
+                  <NavLink to="/my-files">My Files</NavLink>
+                  <NavLink to="/profile">Profile</NavLink>
+                  <button className="nav-text-btn" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="nav-text-btn"
+                    onClick={() => setShowLogin(true)}
+                  >
+                    Login
+                  </button>
+                  <button
+                    className="primary-btn"
+                    onClick={() => setShowSignup(true)}
+                  >
+                    Get Started
+                  </button>
+                </>
+              )}
+
+              <button
+                className="theme-toggle-btn"
+                onClick={handleThemeToggle}
+              >
+                {theme === "dark" ? "☀️" : "🌙"}
+              </button>
+
+              <div
+  className="hamburger"
+  onClick={() => setMobileMenu(!mobileMenu)}
+>
+  {mobileMenu ? "✖" : "☰"}
+</div>
+            </div>
           </div>
 
         </div>
       </div>
-    </div>
+
+   { mobileMenu && (
+  <div className="mobile-menu">
+
+    {navMenus.map((menu) => (
+      <div className="mobile-dropdown" key={menu.key}>
+
+   <div
+  className="mobile-dropdown-title"
+  onClick={(e) => {
+    e.stopPropagation();
+    if (openMobileDropdown === menu.key) {
+      setOpenMobileDropdown(null);
+    } else {
+      setOpenMobileDropdown(menu.key);
+    }
+  }}
+>
+  {menu.label}
+
+  <span className="mobile-arrow">
+    {openMobileDropdown === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+  </span>
+</div>
+        {openMobileDropdown === menu.key && (
+          <div className="mobile-submenu">
+            {menu.items.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => {
+                  setMobileMenu(false);
+                  setOpenMobileDropdown(null);
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        )}
+
+      </div>
+    ))}
+
+  </div>
+)}
+
+
       {/* MODALS */}
       {showLogin && (
         <AuthModal onClose={() => setShowLogin(false)}>
@@ -269,3 +358,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
