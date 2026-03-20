@@ -127,57 +127,46 @@ const Navbar = () => {
               Home
             </NavLink>
 
-            {navMenus.map((menu) => (
-              <div className="nav-dropdown" key={menu.key}>
-                <button
-                  className={`nav-dropdown-trigger ${
-                    openMenu === menu.key ? "active-link" : ""
-                  }`}
-                  onClick={() =>
-                    setOpenMenu((prev) =>
-                      prev === menu.key ? null : menu.key
-                    )
-                  }
-                >
-                  {menu.label}
-                  {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
+           {navMenus.map((menu) => (
+  <div className="nav-dropdown" key={menu.key}>
+    <button
+      className={`nav-dropdown-trigger ${
+        openMenu === menu.key ? "active-link" : ""
+      }`}
+      onClick={() =>
+        setOpenMenu((prev) => (prev === menu.key ? null : menu.key))
+      }
+    >
+      {menu.label}
+      {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+    </button>
 
-                <div
-                  className={`dropdown-menu ${
-                    openMenu === menu.key ? "open" : ""
-                  }`}
-                >
-                  {menu.items.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      className="dropdown-item"
-                      onClick={() => setOpenMenu(null)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+    <div
+      className={`dropdown-menu ${
+        openMenu === menu.key ? "open" : ""
+      }`}
+    >
+      {menu.items.map((item) => (
+        <Link
+          key={item.name}
+          to={item.path}
+          className="dropdown-item"
+          onClick={() => setOpenMenu(null)}
+        >
+          {item.name}
+        </Link>
+      ))}
 
-                  <Link
-                    to={menu.path}
-                    className="dropdown-item dropdown-view-all"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    {menu.viewAllLabel}
-                  </Link>
-                ))}
-
-                <Link
-                  to={menu.path}
-                  className="dropdown-item dropdown-view-all"
-                  onClick={() => setOpenMenu(null)}
-                >
-                  {menu.viewAllLabel}
-                </Link>
-              </div>
-            </div>
-          ))}
+      <Link
+        to={menu.path}
+        className="dropdown-item dropdown-view-all"
+        onClick={() => setOpenMenu(null)}
+      >
+        {menu.viewAllLabel}
+      </Link>
+    </div>
+  </div>
+))}
         </nav>
 
         <div className="navbar-right">
@@ -251,7 +240,7 @@ const Navbar = () => {
 
         </div>
       </div>
-
+    </div>
       {/* MODALS */}
       {showLogin && (
         <AuthModal onClose={() => setShowLogin(false)}>
