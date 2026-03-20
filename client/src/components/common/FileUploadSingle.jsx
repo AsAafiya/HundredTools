@@ -68,7 +68,7 @@ function FileUploadSingle({
 
     e.preventDefault();
 
-    if (file) return;
+    if (loading) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -213,6 +213,7 @@ function FileUploadSingle({
           type="file"
           accept={accept}
           style={{ display: "none" }}
+          disabled={loading}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";

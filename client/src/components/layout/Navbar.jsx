@@ -12,8 +12,12 @@ const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "light",
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => localStorage.getItem("isLoggedIn") === "true",
+  );
   const navRef = useRef(null);
 
   const handleLoginSuccess = () => {
@@ -123,90 +127,120 @@ const Navbar = () => {
               Home
             </NavLink>
 
-            {navMenus.map((menu) => (
-              <div className="nav-dropdown" key={menu.key}>
-                <button
-                  className={`nav-dropdown-trigger ${
-                    openMenu === menu.key ? "active-link" : ""
-                  }`}
-                  onClick={() =>
-                    setOpenMenu((prev) =>
-                      prev === menu.key ? null : menu.key
-                    )
+           {navMenus.map((menu) => (
+  <div className="nav-dropdown" key={menu.key}>
+    <button
+      className={`nav-dropdown-trigger ${
+        openMenu === menu.key ? "active-link" : ""
+      }`}
+      onClick={() =>
+        setOpenMenu((prev) => (prev === menu.key ? null : menu.key))
+      }
+    >
+      {menu.label}
+      {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+    </button>
+
+    <div
+      className={`dropdown-menu ${
+        openMenu === menu.key ? "open" : ""
+      }`}
+    >
+      {menu.items.map((item) => (
+        <Link
+          key={item.name}
+          to={item.path}
+          className="dropdown-item"
+          onClick={() => setOpenMenu(null)}
+        >
+          {item.name}
+        </Link>
+      ))}
+
+      <Link
+        to={menu.path}
+        className="dropdown-item dropdown-view-all"
+        onClick={() => setOpenMenu(null)}
+      >
+        {menu.viewAllLabel}
+      </Link>
+    </div>
+  </div>
+))}
+        </nav>
+
+        <div className="navbar-right">
+          <div className="nav-actions">
+            {isLoggedIn ? (
+              <>
+                <NavLink
+                  to="/my-files"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
                   }
                 >
-                  {menu.label}
-                  {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+                  My Files
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
+                  }
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    isActive ? "admin-btn active" : "admin-btn"
+                  }
+                >
+                  Admin
+                </NavLink>
+                <button className="nav-text-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="nav-text-btn"
+                  onClick={() => setShowLogin(true)}
+                >
+                  Login
                 </button>
 
-                <div
-                  className={`dropdown-menu ${
-                    openMenu === menu.key ? "open" : ""
-                  }`}
+                <button
+                  className="primary-btn"
+                  onClick={() => setShowSignup(true)}
                 >
-                  {menu.items.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      className="dropdown-item"
-                      onClick={() => setOpenMenu(null)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  Get Started
+                </button>
+              </>
+            )}
 
-                  <Link
-                    to={menu.path}
-                    className="dropdown-item dropdown-view-all"
-                    onClick={() => setOpenMenu(null)}
-                  >
-                    {menu.viewAllLabel}
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </nav>
-
-          {/* RIGHT - ACTIONS */}
-          <div className="navbar-right">
-            <div className="nav-actions">
-              {isLoggedIn ? (
-                <>
-                  <NavLink to="/my-files">My Files</NavLink>
-                  <NavLink to="/profile">Profile</NavLink>
-                  <button className="nav-text-btn" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className="nav-text-btn"
-                    onClick={() => setShowLogin(true)}
-                  >
-                    Login
-                  </button>
-                  <button
-                    className="primary-btn"
-                    onClick={() => setShowSignup(true)}
-                  >
-                    Get Started
-                  </button>
-                </>
-              )}
-
-              <button
-                className="theme-toggle-btn"
-                onClick={handleThemeToggle}
-              >
-                {theme === "dark" ? "☀️" : "🌙"}
-              </button>
-            </div>
+            <button
+              type="button"
+              className="theme-toggle-btn"
+              aria-label={
+                theme === "dark"
+                  ? "Switch to light theme"
+                  : "Switch to dark theme"
+              }
+              title={
+                theme === "dark"
+                  ? "Switch to light theme"
+                  : "Switch to dark theme"
+              }
+              onClick={handleThemeToggle}
+            >
+              {theme === "dark" ? "☀️" : "🌙"}
+            </button>
           </div>
 
         </div>
       </div>
-
+    </div>
       {/* MODALS */}
       {showLogin && (
         <AuthModal onClose={() => setShowLogin(false)}>

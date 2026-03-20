@@ -5,6 +5,7 @@ import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
 import { addPageNumbers } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 const POSITIONS = [
   { value: "top-left",     label: "Top Left" },
@@ -26,7 +27,7 @@ function AddPageNumbers() {
 
   const handleAddNumbers = async () => {
     if (!selectedFile) {
-      setMessage("Please upload a PDF file first.");
+      showError("Please upload a PDF file first.");
       return;
     }
 
@@ -48,7 +49,7 @@ function AddPageNumbers() {
       setComplete(true);
       setMessage("Page numbers added successfully.");
     } catch {
-      setMessage("Failed to add page numbers. Please try again.");
+      showError("Failed to add page numbers. Please try again.");
     } finally {
       setLoading(false);
     }

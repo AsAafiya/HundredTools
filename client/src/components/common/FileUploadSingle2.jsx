@@ -1,4 +1,3 @@
-
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import "../../styles/fileUpload.css";
@@ -49,6 +48,8 @@ function FileUploadSingle2({
 
   const handleFile = (selectedFiles) => {
 
+    if (processing) return;
+
     const selectedFile = selectedFiles[0];
 
     if (!selectedFile) return;
@@ -62,7 +63,6 @@ function FileUploadSingle2({
         onFileChange(validated);
       }
     }
-
   };
 
   const handleDragOver = (e) => {
@@ -73,7 +73,7 @@ function FileUploadSingle2({
 
     e.preventDefault();
 
-    if (file) return;
+    if (processing) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -88,13 +88,14 @@ function FileUploadSingle2({
 
   const removeFile = () => {
 
+    if (processing) return;
+
     setFile(null);
     setErrors([]);
 
     if (onFileChange) {
       onFileChange(null);
     }
-
   };
 
   const handleDownloadClick = () => {
@@ -172,6 +173,7 @@ function FileUploadSingle2({
           type="file"
           accept={accept}
           style={{ display: "none" }}
+          disabled={processing}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";

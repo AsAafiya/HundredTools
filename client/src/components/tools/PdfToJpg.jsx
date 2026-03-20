@@ -5,6 +5,7 @@ import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
 import { convertPdfToJpg } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function PdfToJpg() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,7 +17,7 @@ function PdfToJpg() {
 
   const handleConvert = async () => {
     if (!selectedFile) {
-      setMessage("Please upload a PDF file first.");
+      showError("Please upload a PDF file first.");
       return;
     }
 
@@ -38,7 +39,7 @@ function PdfToJpg() {
       setComplete(true);
       setMessage("Conversion successful.");
     } catch {
-      setMessage("Conversion failed. Please try again.");
+      showError("Conversion failed. Please try again.");
     } finally {
       setLoading(false);
     }

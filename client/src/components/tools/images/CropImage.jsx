@@ -6,6 +6,7 @@ import { cropImageAPI } from "../../../services/imageService";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import "../../../styles/tool.css";
+import { useError } from "../../../context/ErrorContext";
 
 function CropImage() {
 
@@ -13,9 +14,8 @@ function CropImage() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
-
   const [imageSrc, setImageSrc] = useState(null);
-
+   const { showError } = useError();
   const [crop, setCrop] = useState({
     unit: "px",
     x: 0,
@@ -46,7 +46,7 @@ function CropImage() {
   const handleCrop = async () => {
 
     if (files.length === 0) {
-      alert("Upload an image first!");
+     showError("Upload an image first!");
       return;
     }
 
@@ -71,7 +71,7 @@ function CropImage() {
     } catch (error) {
 
       console.error(error);
-      alert("Error cropping image");
+      showError("Error cropping image");
 
     }
   };
