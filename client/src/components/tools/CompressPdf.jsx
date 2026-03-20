@@ -4,6 +4,7 @@ import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
 import { compressPDF } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function CompressPdf() {
   const [files, setFiles] = useState([]);

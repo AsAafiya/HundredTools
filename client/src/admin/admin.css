@@ -1,0 +1,99 @@
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.admin-logo img {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.admin-logo h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1A2B56;
+  margin: 0;
+}
+
+
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 240px;
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #E0E7FF;
+}
+
+/* Title */
+.admin-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1A2B56;
+  margin-bottom: 30px;
+}
+
+/* Nav */
+.admin-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Links */
+.admin-sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #64748b;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.admin-sidebar a:hover {
+  background: #F2F5FF;
+  color: #4D77E0;
+}
+
+/* Active */
+.admin-sidebar a.active {
+  background: #E0E7FF;
+  color: #4D77E0;
+  font-weight: 500;
+}
+
+/* Bottom */
+.sidebar-bottom {
+  border-top: 1px solid #E0E7FF;
+  padding-top: 10px;
+}
+
+/* Content*/
+.admin-content {
+  flex: 1;
+  padding: 20px;
+ background: #edf0fc;
+
+
+}
+
+/* Optional reset */
+body {
+  margin: 0;
+}

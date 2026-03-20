@@ -45,19 +45,21 @@ function FileUploadWatermark({
 
   const handleFile = (selectedFiles) => {
 
-    const selectedFile = selectedFiles[0]; // only first file
+    if (processing) return;
+
+    const selectedFile = selectedFiles[0];
 
     if (!selectedFile) return;
 
     const validated = validateFile(selectedFile);
 
     if (validated) {
-        setFile(validated);
-        if (onFileChange) {
-            onFileChange(validated);
-        }
-        }
+      setFile(validated);
 
+      if (onFileChange) {
+        onFileChange(validated);
+      }
+    }
   };
 
   const handleDragOver = (e) => {
@@ -65,6 +67,7 @@ function FileUploadWatermark({
   };
 
   const handleDrop = (e) => {
+
     e.preventDefault();
 
     if (isProcessing) return;
@@ -80,6 +83,9 @@ function FileUploadWatermark({
   };
 
   const removeFile = () => {
+
+    if (processing) return;
+
     setFile(null);
     setErrors([]);
     if (onFileChange) {
@@ -152,12 +158,12 @@ function FileUploadWatermark({
 
         </div>
 
-        {/* Hidden file input */}
         <input
           ref={inputRef}
           type="file"
           accept={accept}
           style={{ display: "none" }}
+          disabled={processing}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";
@@ -226,7 +232,6 @@ function FileUploadWatermark({
           </a>
         )}
 
-        {/* Error Messages */}
         {errors.length > 0 && (
           <div className="upload-errors">
             {errors.map((err, index) => (

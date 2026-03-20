@@ -4,10 +4,10 @@ import FileUploadImage from "../../common/FileUploadImage";
 import Features from "../../common/Features";
 import { compressImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
-// import { useError } from "../../../context/ErrorContext";
+import { useError } from "../../../context/ErrorContext";
 
 function CompressImage() {
-  // const { showError } = useError();
+  const { showError } = useError();
 
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
@@ -15,10 +15,11 @@ function CompressImage() {
   const [compressedFileName, setCompressedFileName] = useState("");
   const [quality, setQuality] = useState("medium"); // default medium
 
+
   // Handle Compression
   const handleCompress = async () => {
     if (files.length === 0) {
-      alert("Please upload at least one image!");
+      showError("Please upload at least one image!");
       return;
     }
 
@@ -31,6 +32,7 @@ function CompressImage() {
       setCompressComplete(true);
 
       // Set file name based on single/multiple files
+      // if multiple files, use zip name
       setCompressedFileName(
         files.length > 1
           ? "Nexora_compressImage.zip"
@@ -38,7 +40,7 @@ function CompressImage() {
       );
     } catch (error) {
       console.error(error);
-      alert("Error compressing images. Please try again.");
+    showError("Error compressing images. Please try again.");
     }
   };
 
@@ -101,7 +103,7 @@ function CompressImage() {
       {/* File Upload Component */}
       <FileUploadImage
         accept="image/*"
-        maxFiles={10} // multiple files
+        maxFiles={10} // allow multiple files
         files={files}
         setFiles={setFiles}
         onProcess={handleCompress}

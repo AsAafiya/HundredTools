@@ -126,26 +126,92 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
               Home
             </NavLink>
 
-            {navMenus.map((menu) => (
-              <div className="nav-dropdown" key={menu.key}>
-                <button
-                  className={`nav-dropdown-trigger ${
-                    openMenu === menu.key ? "active-link" : ""
-                  }`}
-                  onClick={() =>
-                    setOpenMenu((prev) =>
-                      prev === menu.key ? null : menu.key
-                    )
+           {navMenus.map((menu) => (
+  <div className="nav-dropdown" key={menu.key}>
+    <button
+      className={`nav-dropdown-trigger ${
+        openMenu === menu.key ? "active-link" : ""
+      }`}
+      onClick={() =>
+        setOpenMenu((prev) => (prev === menu.key ? null : menu.key))
+      }
+    >
+      {menu.label}
+      {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+    </button>
+
+    <div
+      className={`dropdown-menu ${
+        openMenu === menu.key ? "open" : ""
+      }`}
+    >
+      {menu.items.map((item) => (
+        <Link
+          key={item.name}
+          to={item.path}
+          className="dropdown-item"
+          onClick={() => setOpenMenu(null)}
+        >
+          {item.name}
+        </Link>
+      ))}
+
+      <Link
+        to={menu.path}
+        className="dropdown-item dropdown-view-all"
+        onClick={() => setOpenMenu(null)}
+      >
+        {menu.viewAllLabel}
+      </Link>
+    </div>
+  </div>
+))}
+        </nav>
+
+        <div className="navbar-right">
+          <div className="nav-actions">
+            {isLoggedIn ? (
+              <>
+                <NavLink
+                  to="/my-files"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
                   }
                 >
-                  {menu.label}
-                  {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+                  My Files
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    isActive ? "active-action" : ""
+                  }
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    isActive ? "admin-btn active" : "admin-btn"
+                  }
+                >
+                  Admin
+                </NavLink>
+                <button className="nav-text-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="nav-text-btn"
+                  onClick={() => setShowLogin(true)}
+                >
+                  Login
                 </button>
 
-                <div
-                  className={`dropdown-menu ${
-                    openMenu === menu.key ? "open" : ""
-                  }`}
+                <button
+                  className="primary-btn"
+                  onClick={() => setShowSignup(true)}
                 >
                   {menu.items.map((item) => (
                     <Link

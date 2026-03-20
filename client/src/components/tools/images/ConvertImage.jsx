@@ -4,6 +4,7 @@ import FileUploadImage from "../../common/FileUploadImage";
 import Features from "../../common/Features";
 import { convertImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
+import { useError } from "../../../context/ErrorContext";
 
 function ConvertImage() {
   const [svgAllowed, setSvgAllowed] = useState(true);
@@ -13,9 +14,10 @@ function ConvertImage() {
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
 
+    const { showError } = useError();
   const handleConvert = async () => {
     if (files.length === 0) {
-      alert("Upload at least one image");
+      showError("Upload at least one image");
       return;
     }
 
@@ -34,7 +36,7 @@ function ConvertImage() {
       );
     } catch (error) {
       console.error(error);
-      alert("Error converting image");
+     showError("Error converting image");
     }
   };
 
