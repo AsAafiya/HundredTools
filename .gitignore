@@ -5,3 +5,5 @@ server/node_modules
 uploads
 outputs
 dist
+# Ignore local MongoDB database files
+server/data/db/
