@@ -418,7 +418,7 @@ body[data-theme="dark"] .theme-toggle-btn{
     border-radius:10px;
     box-shadow:0 8px 20px rgba(0,0,0,0.1);
     padding:10px;
-    z-index:999; */
+    z-index:999;
   }
 
 
@@ -700,7 +700,6 @@ body[data-theme="dark"] .mobile-dropdown-title {
   .navbar-center {
     display: none !important;
   }
-} */
 
 
 /* 🔽 Mobile dropdown text size kam */
