@@ -3,6 +3,15 @@ import logo from "../assets/logos/HundredTools.jpeg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
+// import { useNavigate } from "react-router-dom"; // redirect ke liye
+import API from "../utils/api"; // backend call
+
+
+
+
+
+
+
 function Signup({ switchToLogin }) {
   const [form, setForm] = useState({
     name: "",
@@ -12,6 +21,8 @@ function Signup({ switchToLogin }) {
   });
 
   const [errors, setErrors] = useState({});
+
+  // const navigate = useNavigate();
 
   const validate = () => {
     let newErrors = {};
@@ -36,11 +47,35 @@ function Signup({ switchToLogin }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = () => {
-    if (validate()) {
-      alert("Signup Successful 🚀");
-    }
-  };
+  // const handleSignup = () => {
+  //   if (validate()) {
+  //     alert("Signup Successful 🚀");
+  //   }
+  // };
+
+const handleSignup = async () => {
+  if (!validate()) return;
+
+  try {
+    await API.post("/signup", {
+      name: form.name,
+      email: form.email,
+      password: form.password
+    });
+
+    // redirect to login page after signup
+    // navigate("/login");
+    alert("Signup successful! Please login");
+    if (switchToLogin) {
+  switchToLogin();
+}
+  } catch (err) {
+    // backend se aaya error show karna
+    setErrors({ general: err.response?.data?.message || "Signup failed" });
+  }
+};
+
+
 
   return (
     <div className="auth-card">
@@ -98,6 +133,12 @@ function Signup({ switchToLogin }) {
       <button className="auth-btn" onClick={handleSignup}>
         Sign Up <FaLongArrowAltRight />
       </button>
+
+{/* ================================== */}
+{errors.general && <p className="error-text">{errors.general}</p>}
+
+{/* -------------------------------------------- */}
+
 
       <div className="divider">
         <span>or</span>

@@ -11,7 +11,7 @@ const isDbConnected = () => mongoose.connection.readyState === 1;
 // 🔐 SIGNUP
 const signup = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name ,email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: "All fields required" });
@@ -31,12 +31,14 @@ const signup = async (req, res) => {
 
     if (isDbConnected()) {
       user = await User.create({
+        name,
         email,
         password: hashedPassword,
       });
     } else {
       user = {
         _id: `local-${crypto.randomUUID()}`,
+        name,
         email,
         password: hashedPassword,
       };

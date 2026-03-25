@@ -2,45 +2,18 @@ import "../user.css";
 import { FaUserPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { AiFillEye } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import API from "../../utils/api";
 
 function Users() {
-  const users = [
-    {
-      name: "John Smith",
-      email: "john.smith@example.com",
-      plan: "Premium",
-      date: "Jan 15, 2026",
-      initials: "JS",
-    },
-    {
-      name: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      plan: "Free",
-      date: "Feb 3, 2026",
-      initials: "SJ",
-    },
-    {
-      name: "Mike Davis",
-      email: "mike.davis@example.com",
-      plan: "Premium",
-      date: "Jan 22, 2026",
-      initials: "MD",
-    },
-    {
-      name: "Emily Brown",
-      email: "emily.brown@example.com",
-      plan: "Free",
-      date: "Feb 10, 2026",
-      initials: "EB",
-    },
-    {
-      name: "Alex Wilson",
-      email: "alex.w@example.com",
-      plan: "Free",
-      date: "Feb 18, 2026",
-      initials: "AW",
-    },
-  ];
+ const [users, setUsers] = useState([]);
+
+ useEffect(() => {
+  // API.get("/users/all-users")
+  API.get("http://localhost:5000/api/users/all-users")
+    .then((res) => setUsers(res.data))
+    .catch((err) => console.log(err));
+}, []);
 
   return (
     <div className="users">
@@ -89,20 +62,23 @@ function Users() {
         <div className="table-header">
           <div className="col name-col">Name</div>
           <div className="col">Email</div>
-          <div className="col">Password</div>
+          <div className="col">Status</div>
           <div className="col">Plan</div>
           <div className="col">Join Date</div>
           <div className="col actions">Actions</div>
         </div>
 
         {/* Rows */}
-        {users.map((user, index) => (
-          <div className="table-row" key={index}>
+        {users.map((user) => (
+          <div className="table-row" key={user._id}>
 
             {/* Name */}
             <div className="col name-col">
               <div className="user-info">
-                <div className="avatar">{user.initials}</div>
+                {/* <div className="avatar">{user.initials}</div> */}
+                <div className="avatar">
+  {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+</div>
                 <span className="user-name">{user.name}</span>
               </div>
             </div>
@@ -115,19 +91,23 @@ function Users() {
 
             {/* Password */}
             <div className="col password-col">
-              <span>••••••••••</span>
+              <span>Hidden</span>
               <AiFillEye />
             </div>
 
             {/* Plan */}
             <div className="col">
-              <span className={`plan ${user.plan.toLowerCase()}`}>
+              {/* <span className={`plan ${user.plan.toLowerCase()}`}>
                 {user.plan}
-              </span>
+              </span> */}
+              <span>Free</span>
             </div>
 
             {/* Date */}
-            <div className="col date-col">{user.date}</div>
+            {/* <div className="col date-col">{user.date}</div> */}
+            <div className="col date-col">
+  {new Date(user.createdAt).toLocaleDateString()}
+</div>
 
             {/* Actions */}
             <div className="col actions">
@@ -136,7 +116,7 @@ function Users() {
             </div>
 
           </div>
-        ))}
+        ))};
 
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../components/ProtectedRoutes";
 
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
@@ -72,8 +73,8 @@ const AppRoutes = () => {
 
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
-          <Route path="my-files" element={<MyFiles />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="my-files" element={<ProtectedRoute><MyFiles /></ProtectedRoute>} />
+          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="about" element={<About />} />
           <Route path="privacy" element={<Privacy />} />
           <Route path="terms" element={<Terms />} />
@@ -86,7 +87,9 @@ const AppRoutes = () => {
           <Route path="analytics" element={<Analytics />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-      </Routes>
+        </Route>
+         </Routes>
+
     </>
   );
 };

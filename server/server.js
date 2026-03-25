@@ -7,6 +7,8 @@ const pdfRoutes = require("./routes/pdfRoutes.js");
 const imageRoutes = require("./routes/imageRoute.js");
 const authRoutes = require("./routes/authRoutes.js");
 const startCleanupJob = require("./utils/cleanupFiles.js");
+const userRoutes = require("./routes/userRoutes.js")
+
 
 dotenv.config();
 
@@ -34,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/pdf", pdfRoutes);
 app.use("/api/image", imageRoutes);
 app.use("/api/auth", authRoutes); // 🔥 ADD THIS
+app.use("/api/users", userRoutes);
 
 // start background cleanup job
 startCleanupJob();
