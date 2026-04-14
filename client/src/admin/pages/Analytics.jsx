@@ -1,5 +1,5 @@
 import React from "react";
-import "../analytics.css";
+import "../Analytics.css";
 
 import { TrendingUp, Users, FileText, Activity } from "lucide-react";
 
