@@ -3,6 +3,11 @@ import logo from "../assets/logos/HundredTools.jpeg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
+
+import API from "../utils/api"; 
+
+
+
 function Signup({ switchToLogin }) {
   const [form, setForm] = useState({
     name: "",
@@ -36,11 +41,28 @@ function Signup({ switchToLogin }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = () => {
-    if (validate()) {
-      alert("Signup Successful 🚀");
-    }
-  };
+
+  const handleSignup = async () => {
+  if (!validate()) return;
+
+  try {
+    await API.post("/signup", {
+      name: form.name,
+      email: form.email,
+      password: form.password
+    });
+
+    // redirect to login page after signup
+    // navigate("/login");
+    alert("Signup successful! Please login");
+    if (switchToLogin) {
+  switchToLogin();
+}
+  } catch (err) {
+    // backend se aaya error show karna
+    setErrors({ general: err.response?.data?.message || "Signup failed" });
+  }
+};
 
   return (
     <div className="auth-card">
