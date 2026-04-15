@@ -1019,3 +1019,24 @@ body[data-theme="dark"] .mobile-dropdown-title {
     display: flex !important;
   }
 }
+
+
+
+
+/* 🔥 DESKTOP RIGHT ALIGN FIX (ADD THIS) */
+
+.navbar-right .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  padding-right: 10%;
+  max-width:100px;
+}
+
+.navbar-right .theme-toggle-btn {
+  min-width: 78px;
+  height: 42px;
+  padding: 0 12px;
+  flex-shrink: 0;
+}

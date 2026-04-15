@@ -3,6 +3,13 @@ import logo from "../assets/logos/HundredTools.jpeg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
+
+  import API from "../utils/api";
+import { saveToken } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+
+
+
 function Login({ switchToSignup, onLoginSuccess }) {
   const [form, setForm] = useState({
     email: "",
@@ -26,13 +33,32 @@ function Login({ switchToSignup, onLoginSuccess }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignIn = () => {
-    if (validate()) {
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-    }
-  };
+const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+  if (!validate()) return;
+
+  try {
+    const res = await API.post("/login", {
+      email: form.email,
+      password: form.password
+    });
+
+    // JWT token store
+    saveToken(res.data.token);
+ localStorage.setItem("userEmail", form.email);
+    localStorage.setItem("userEmail", form.email);
+
+    // Call optional callback
+    if (onLoginSuccess) onLoginSuccess(res.data.token);
+
+    // Redirect to protected page
+    navigate("/profile");
+    
+  } catch (err) {
+    setErrors({ general: err.response?.data?.message || "Login failed" });
+  }
+};
 
   return (
     <div className="auth-card">

@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink,useNavigate } from "react-router-dom";
 import "../../styles/header.css";
 import logo from "../../assets/logos/logo.png";
 import { useEffect, useRef, useState } from "react";
@@ -7,8 +7,16 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Login from "../../pages/Login";
 import Signup from "../../pages/Signup";
 import AuthModal from "../auth/authModel";
+import { removeToken } from "../../utils/auth";
+
+const ADMIN_EMAIL = "soni@gmail.com";
 
 const Navbar = () => {
+
+   const userEmail = localStorage.getItem("userEmail");
+  const isAdmin = userEmail === ADMIN_EMAIL;
+
+
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
@@ -17,6 +25,7 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
   const navRef = useRef(null);
+   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
@@ -24,17 +33,20 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
     setShowLogin(false);
   };
 
-  const handleLogout = () => {
+const handleLogout = () => {
+    removeToken();
     setIsLoggedIn(false);
-    localStorage.setItem("isLoggedIn", "false");
+    localStorage.removeItem("userEmail");
     setOpenMenu(null);
+    alert("Logged out successfully");
+    navigate("/");
   };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setOpenMenu(null);
-        // setMobileMenu(false);
+        setMobileMenu(false);
       }
     };
 
@@ -176,6 +188,13 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
                 <>
                   <NavLink to="/my-files">My Files</NavLink>
                   <NavLink to="/profile">Profile</NavLink>
+
+                  {isAdmin && (
+                  <NavLink to="/admin" className="admin-btn">
+                    Admin
+                  </NavLink>
+                )}
+
                   <button className="nav-text-btn" onClick={handleLogout}>
                     Logout
                   </button>
@@ -268,10 +287,10 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
         <AuthModal onClose={() => setShowLogin(false)}>
           <Login
             onLoginSuccess={handleLoginSuccess}
-            switchToSignup={() => {
-              setShowLogin(false);
-              setShowSignup(true);
-            }}
+            // switchToSignup={() => {
+            //   setShowLogin(false);
+            //   setShowSignup(true);
+            // }}
           />
         </AuthModal>
       )}
@@ -279,10 +298,10 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
       {showSignup && (
         <AuthModal onClose={() => setShowSignup(false)}>
           <Signup
-            switchToLogin={() => {
-              setShowSignup(false);
-              setShowLogin(true);
-            }}
+            // switchToLogin={() => {
+            //   setShowSignup(false);
+            //   setShowLogin(true);
+            // }}
           />
         </AuthModal>
       )}
