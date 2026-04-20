@@ -9,7 +9,7 @@ import Signup from "../../pages/Signup";
 import AuthModal from "../auth/authModel";
 import { removeToken } from "../../utils/auth";
 
-const ADMIN_EMAIL = "soni@gmail.com";
+const ADMIN_EMAIL = "Soni@gmail.com";
 
 const Navbar = () => {
 
@@ -294,17 +294,13 @@ const handleLogout = () => {
           />
         </AuthModal>
       )}
-
-      {showSignup && (
-        <AuthModal onClose={() => setShowSignup(false)}>
-          <Signup
-            // switchToLogin={() => {
-            //   setShowSignup(false);
-            //   setShowLogin(true);
-            // }}
-          />
-        </AuthModal>
-      )}
+{showSignup && (
+  <AuthModal onClose={() => setShowSignup(false)}>
+    <Signup
+      onClose={() => setShowSignup(false)}   // ✅ YE ADD KARNA HAI
+    />
+  </AuthModal>
+)}
     </header>
   );
 };
