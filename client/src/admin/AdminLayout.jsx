@@ -12,7 +12,7 @@ import "./admin.css";
 
 function AdminLayout() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(
+  const [, setIsLoggedIn] = useState(
     () => localStorage.getItem("isLoggedIn") === "true",
   );
   const handleLogout = () => {

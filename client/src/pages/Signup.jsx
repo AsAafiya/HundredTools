@@ -6,9 +6,9 @@ import "../styles/auth.css";
 
 import API from "../utils/api"; 
 
+import { useNavigate } from "react-router-dom";
 
-
-function Signup({ switchToLogin }) {
+function Signup({ switchToLogin,onClose }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -17,6 +17,7 @@ function Signup({ switchToLogin }) {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validate = () => {
     let newErrors = {};
@@ -52,12 +53,16 @@ function Signup({ switchToLogin }) {
       password: form.password
     });
 
-    // redirect to login page after signup
-    // navigate("/login");
-    alert("Signup successful! Please login");
-    if (switchToLogin) {
-  switchToLogin();
-}
+
+alert("Signup successful!");
+
+// 👇 form turant band
+if (onClose) onClose();
+
+// 👇 redirect baad me
+setTimeout(() => {
+  navigate("/");
+}, 2000);
   } catch (err) {
     // backend se aaya error show karna
     setErrors({ general: err.response?.data?.message || "Signup failed" });
@@ -66,6 +71,32 @@ function Signup({ switchToLogin }) {
 
   return (
     <div className="auth-card">
+     
+     {errors.success && (
+  <div style={{
+    position: "fixed",
+    top: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "#4BB543",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "8px",
+    zIndex: 9999
+  }}>
+    {errors.success}
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
       <div className="logo">
         <img src={logo} alt="HundredTools" />
       </div>
@@ -120,6 +151,12 @@ function Signup({ switchToLogin }) {
       <button className="auth-btn" onClick={handleSignup}>
         Sign Up <FaLongArrowAltRight />
       </button>
+
+  
+
+
+
+
 
       <div className="divider">
         <span>or</span>

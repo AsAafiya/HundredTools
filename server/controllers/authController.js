@@ -11,7 +11,7 @@ const isDbConnected = () => mongoose.connection.readyState === 1;
 // 🔐 SIGNUP
 const signup = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name ,email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: "All fields required" });
@@ -31,12 +31,14 @@ const signup = async (req, res) => {
 
     if (isDbConnected()) {
       user = await User.create({
+        name,
         email,
         password: hashedPassword,
       });
     } else {
       user = {
         _id: `local-${crypto.randomUUID()}`,
+        name,
         email,
         password: hashedPassword,
       };
@@ -89,7 +91,7 @@ const login = async (req, res) => {
 
     res.json({
       token,
-      user: { id: user._id, email: user.email },
+      user: { id: user._id, email: user.email ,name:user.name , createdAt: user.createdAt },
     });
 
   } catch (error) {
@@ -111,4 +113,28 @@ const getMe = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, getMe };
+
+// 👥 GET ALL USERS
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching users" });
+  }
+};
+
+// ❌ DELETE USER
+const deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Delete failed" });
+  }
+};
+
+
+
+
+module.exports = { signup, login, getMe ,getAllUsers,deleteUser};

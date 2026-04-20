@@ -44,10 +44,15 @@ const navigate = useNavigate();
       password: form.password
     });
 
+    console.log(res.data);
+
     // JWT token store
     saveToken(res.data.token);
- localStorage.setItem("userEmail", form.email);
-    localStorage.setItem("userEmail", form.email);
+localStorage.setItem("userEmail", res.data.user.email);
+localStorage.setItem("userName", res.data.user.name);
+localStorage.setItem("createdAt", res.data.user.createdAt);
+//  localStorage.setItem("userEmail", form.email);
+//     localStorage.setItem("userEmail", form.email);
 
     // Call optional callback
     if (onLoginSuccess) onLoginSuccess(res.data.token);

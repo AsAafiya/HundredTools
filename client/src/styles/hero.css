@@ -414,6 +414,32 @@ body[data-theme="dark"] .tool-card {
   border: 1px solid #2a3d63;
 }
 
+/* 🔥 FIX: STATS VISIBILITY IN DARK MODE */
+
+body[data-theme="dark"] .stat-card h2 {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="dark"] .stat-card {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+}
+
+/* 🔥 BLUE GLOW VISIBILITY FIX (NO COLOR CHANGE) */
+
+body[data-theme="dark"] .stat-card h2 {
+  color: #6f95ff;  /* thoda brighter blue */
+  font-weight: 700;
+
+  text-shadow: 
+    0 0 6px rgba(77, 119, 224, 0.8),
+    0 0 12px rgba(77, 119, 224, 0.6),
+    0 0 18px rgba(77, 119, 224, 0.4);
+}
+
+
+
 body[data-theme="dark"] .tool-icon {
   background: #1d2f54;
   color: #a8c0ff;
