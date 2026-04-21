@@ -1,8 +1,10 @@
-import { Link, NavLink,useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "../../styles/header.css";
 import logo from "../../assets/logos/logo.png";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
+import { FaUser, FaFolderOpen, FaSignOutAlt, FaUserShield } from "react-icons/fa";
 
 import Login from "../../pages/Login";
 import Signup from "../../pages/Signup";
@@ -12,20 +14,23 @@ import { removeToken } from "../../utils/auth";
 const ADMIN_EMAIL = "Soni@gmail.com";
 
 const Navbar = () => {
-
-   const userEmail = localStorage.getItem("userEmail");
+  const userEmail = localStorage.getItem("userEmail");
   const isAdmin = userEmail === ADMIN_EMAIL;
 
-
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
-const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "light",
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    () => localStorage.getItem("isLoggedIn") === "true",
+  );
   const navRef = useRef(null);
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
@@ -33,7 +38,7 @@ const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
     setShowLogin(false);
   };
 
-const handleLogout = () => {
+  const handleLogout = () => {
     removeToken();
     setIsLoggedIn(false);
     localStorage.removeItem("userEmail");
@@ -109,13 +114,15 @@ const handleLogout = () => {
     <header className="navbar">
       {/* ✅ OUTER CONTAINER (spacing) */}
       <div className="site-container">
-        
         {/* ✅ INNER LAYOUT (grid/flex) */}
         <div className="navbar-container" ref={navRef}>
-
           {/* LEFT - LOGO */}
           <div className="navbar-left">
-            <Link to="/" className="logo-link" onClick={() => setOpenMenu(null)}>
+            <Link
+              to="/"
+              className="logo-link"
+              onClick={() => setOpenMenu(null)}
+            >
               <span className="logo-mark">
                 <img src={logo} alt="HundredTools" className="logo-image" />
               </span>
@@ -138,67 +145,102 @@ const handleLogout = () => {
               Home
             </NavLink>
 
-           {navMenus.map((menu) => (
-  <div className="nav-dropdown" key={menu.key}>
-    <button
-      className={`nav-dropdown-trigger ${
-        openMenu === menu.key ? "active-link" : ""
-      }`}
-      onClick={() =>
-        setOpenMenu((prev) => (prev === menu.key ? null : menu.key))
-      }
-    >
-      {menu.label}
-      {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
-    </button>
+            {navMenus.map((menu) => (
+              <div className="nav-dropdown" key={menu.key}>
+                <button
+                  className={`nav-dropdown-trigger ${
+                    openMenu === menu.key ? "active-link" : ""
+                  }`}
+                  onClick={() =>
+                    setOpenMenu((prev) => (prev === menu.key ? null : menu.key))
+                  }
+                >
+                  {menu.label}
+                  {openMenu === menu.key ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
 
-    <div
-      className={`dropdown-menu ${
-        openMenu === menu.key ? "open" : ""
-      }`}
-    >
-      {menu.items.map((item) => (
-        <Link
-          key={item.name}
-          to={item.path}
-          className="dropdown-item"
-          onClick={() => setOpenMenu(null)}
-        >
-          {item.name}
-        </Link>
-      ))}
+                <div
+                  className={`dropdown-menu ${
+                    openMenu === menu.key ? "open" : ""
+                  }`}
+                >
+                  {menu.items.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className="dropdown-item"
+                      onClick={() => setOpenMenu(null)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
 
-      <Link
-        to={menu.path}
-        className="dropdown-item dropdown-view-all"
-        onClick={() => setOpenMenu(null)}
-      >
-        {menu.viewAllLabel}
-      </Link>
-    </div>
-  </div>
-))}
-        </nav>
-
+                  <Link
+                    to={menu.path}
+                    className="dropdown-item dropdown-view-all"
+                    onClick={() => setOpenMenu(null)}
+                  >
+                    {menu.viewAllLabel}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </nav>
 
           {/* RIGHT - ACTIONS */}
           <div className="navbar-right">
             <div className="nav-actions">
+              <button className="theme-toggle-btn" onClick={handleThemeToggle}>
+                {theme === "dark" ? "☀️" : "🌙"}
+              </button>
               {isLoggedIn ? (
-                <>
-                  <NavLink to="/my-files">My Files</NavLink>
-                  <NavLink to="/profile">Profile</NavLink>
+                <div className="user-menu">
+                  {/* USER ICON */}
+                  <div
+                    className="user-icon"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  >
+                     <FaUser />
+                  </div>
 
-                  {isAdmin && (
-                  <NavLink to="/admin" className="admin-btn">
-                    Admin
-                  </NavLink>
-                )}
+                  {/* DROPDOWN */}
+                  {userMenuOpen && (
+                    <div className="user-dropdown">
+                      <NavLink
+                        to="/my-files"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <FaFolderOpen className="dropdown-icon" />
+                        My Files
+                      </NavLink>
 
-                  <button className="nav-text-btn" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </>
+                      <NavLink
+                        to="/profile"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <FaUser className="dropdown-icon" />
+                        Profile
+                      </NavLink>
+
+                      {isAdmin && (
+                        <NavLink
+                          to="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          <FaUserShield className="dropdown-icon" />
+                          Admin
+                        </NavLink>
+                      )}
+
+                      <hr />
+
+                      <button onClick={handleLogout}>
+                        <FaSignOutAlt className="dropdown-icon" />
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <button
@@ -216,71 +258,62 @@ const handleLogout = () => {
                 </>
               )}
 
-              <button
-                className="theme-toggle-btn"
-                onClick={handleThemeToggle}
-              >
-                {theme === "dark" ? "☀️" : "🌙"}
-              </button>
-
               <div
-  className="hamburger"
-  onClick={() => setMobileMenu(!mobileMenu)}
->
-  {mobileMenu ? "✖" : "☰"}
-</div>
+                className="hamburger"
+                onClick={() => setMobileMenu(!mobileMenu)}
+              >
+                {mobileMenu ? "✖" : "☰"}
+              </div>
             </div>
           </div>
-
         </div>
       </div>
 
-   { mobileMenu && (
-  <div className="mobile-menu">
-
-    {navMenus.map((menu) => (
-      <div className="mobile-dropdown" key={menu.key}>
-
-   <div
-  className="mobile-dropdown-title"
-  onClick={(e) => {
-    e.stopPropagation();
-    if (openMobileDropdown === menu.key) {
-      setOpenMobileDropdown(null);
-    } else {
-      setOpenMobileDropdown(menu.key);
-    }
-  }}
->
-  {menu.label}
-
-  <span className="mobile-arrow">
-    {openMobileDropdown === menu.key ? <FaChevronUp /> : <FaChevronDown />}
-  </span>
-</div>
-        {openMobileDropdown === menu.key && (
-          <div className="mobile-submenu">
-            {menu.items.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                onClick={() => {
-                  setMobileMenu(false);
-                  setOpenMobileDropdown(null);
+      {mobileMenu && (
+        <div className="mobile-menu">
+          {navMenus.map((menu) => (
+            <div className="mobile-dropdown" key={menu.key}>
+              <div
+                className="mobile-dropdown-title"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (openMobileDropdown === menu.key) {
+                    setOpenMobileDropdown(null);
+                  } else {
+                    setOpenMobileDropdown(menu.key);
+                  }
                 }}
               >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        )}
+                {menu.label}
 
-      </div>
-    ))}
-
-  </div>
-)}
-
+                <span className="mobile-arrow">
+                  {openMobileDropdown === menu.key ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  )}
+                </span>
+              </div>
+              {openMobileDropdown === menu.key && (
+                <div className="mobile-submenu">
+                  {menu.items.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      onClick={() => {
+                        setMobileMenu(false);
+                        setOpenMobileDropdown(null);
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* MODALS */}
       {showLogin && (
@@ -294,16 +327,15 @@ const handleLogout = () => {
           />
         </AuthModal>
       )}
-{showSignup && (
-  <AuthModal onClose={() => setShowSignup(false)}>
-    <Signup
-      onClose={() => setShowSignup(false)}   // ✅ YE ADD KARNA HAI
-    />
-  </AuthModal>
-)}
+      {showSignup && (
+        <AuthModal onClose={() => setShowSignup(false)}>
+          <Signup
+            onClose={() => setShowSignup(false)} // ✅ YE ADD KARNA HAI
+          />
+        </AuthModal>
+      )}
     </header>
   );
 };
 
 export default Navbar;
-
