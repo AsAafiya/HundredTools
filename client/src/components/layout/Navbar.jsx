@@ -127,7 +127,7 @@ const Navbar = () => {
                 <img src={logo} alt="HundredTools" className="logo-image" />
               </span>
               <span className="logo-copy">
-                <span className="logo-title">HundredToolsApp</span>
+                <span className="logo-title">HundredTools</span>
                 <span className="logo-tag">Fast document toolkit</span>
               </span>
             </Link>

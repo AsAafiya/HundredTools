@@ -6,7 +6,7 @@ import { LuFiles } from "react-icons/lu";
 import { VscGraph } from "react-icons/vsc";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import logo from "../assets/logos/HundredTools.jpeg";
+import logo from "../assets/logos/logo_with_name.jpg";
 
 import "./admin.css";
 

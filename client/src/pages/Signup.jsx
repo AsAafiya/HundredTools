@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../assets/logos/HundredTools.jpeg";
+import logo from "../assets/logos/logo_with_name.jpg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
