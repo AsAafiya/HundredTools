@@ -1,0 +1,115 @@
+/* Background (same soft SaaS blue gradient vibe) */
+.notfound-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f4f7ff 0%, #eef2ff 100%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card */
+.notfound-card {
+  width: min(520px, 100%);
+  background: #ffffff;
+  border: 1px solid #d5dbf0;
+  border-radius: 30px;
+  padding: 50px 35px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transition: 0.3s ease;
+}
+
+/* Hover soft lift */
+.notfound-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(79, 109, 245, 0.15);
+}
+
+/* 404 Big number */
+.notfound-code {
+  font-size: 110px;
+  font-weight: 800;
+  margin: 0;
+  color: #4f6df5;
+  letter-spacing: 2px;
+}
+
+/* Title */
+.notfound-title {
+  font-size: 26px;
+  margin-top: 10px;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+/* Text */
+.notfound-text {
+  margin: 14px 0 30px;
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Button (same as your upload-btn style) */
+.notfound-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 12px;
+  background: #4f6df5;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  border: 1px solid #d5dbf0;
+}
+
+.notfound-btn:hover {
+  background: #4a5ae0;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(79, 109, 245, 0.35);
+}
+
+/* ===================== */
+/* RESPONSIVE DESIGN */
+/* ===================== */
+
+@media (max-width: 768px) {
+  .notfound-card {
+    padding: 40px 25px;
+    border-radius: 24px;
+  }
+
+  .notfound-code {
+    font-size: 90px;
+  }
+
+  .notfound-title {
+    font-size: 22px;
+  }
+
+  .notfound-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notfound-card {
+    padding: 30px 20px;
+  }
+
+  .notfound-code {
+    font-size: 70px;
+  }
+
+  .notfound-title {
+    font-size: 20px;
+  }
+
+  .notfound-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
