@@ -28,9 +28,10 @@ const app = express();
 /* Middleware */
 app.use(cors({
   origin: [
-    "https://hundredtools.in",
-    "https://www.hundredtools.in"
-  ],
+  "http://localhost:5173",
+  "https://hundredtools.in",
+  "https://www.hundredtools.in"
+],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
