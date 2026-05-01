@@ -28,13 +28,14 @@ import PdfToWord from "../components/tools/PdfToWord";
 import WordToPdf from "../components/tools/WordToPdf";
 import AddWatermark from "../components/tools/AddWatermark";
 
-
 import AdminLayout from "../admin/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
 import Users from "../admin/pages/Users";
 import Files from "../admin/pages/Files";
 import Analytics from "../admin/pages/Analytics";
 import Settings from "../admin/pages/Settings";
+
+import NotFound from "../pages/NotFound";
 
 const AppRoutes = () => {
   return (
@@ -78,7 +79,7 @@ const AppRoutes = () => {
           <Route path="privacy" element={<Privacy />} />
           <Route path="terms" element={<Terms />} />
           <Route path="support" element={<Support />} />
-         </Route> 
+        </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="" element={<Dashboard />} />
           <Route path="users" element={<Users />} />
@@ -86,6 +87,8 @@ const AppRoutes = () => {
           <Route path="analytics" element={<Analytics />} />
           <Route path="settings" element={<Settings />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

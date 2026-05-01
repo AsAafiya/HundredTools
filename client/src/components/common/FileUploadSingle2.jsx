@@ -19,7 +19,6 @@ function FileUploadSingle2({
   downloadLabel = "Download PDF",
   onDownload,
 }) {
-
   const inputRef = useRef(null);
 
   const [file, setFile] = useState(null);
@@ -28,7 +27,6 @@ function FileUploadSingle2({
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
   const validateFile = (selectedFile) => {
-
     const errorList = [];
 
     if (!selectedFile.name.toLowerCase().endsWith(accept)) {
@@ -47,8 +45,7 @@ function FileUploadSingle2({
   };
 
   const handleFile = (selectedFiles) => {
-
-    if (processing) return;
+    if (actionLoading) return;
 
     const selectedFile = selectedFiles[0];
 
@@ -70,10 +67,9 @@ function FileUploadSingle2({
   };
 
   const handleDrop = (e) => {
-
     e.preventDefault();
 
-    if (processing) return;
+    if (actionLoading) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -83,12 +79,10 @@ function FileUploadSingle2({
     }
 
     handleFile(droppedFiles);
-
   };
 
   const removeFile = () => {
-
-    if (processing) return;
+    if (actionLoading) return;
 
     setFile(null);
     setErrors([]);
@@ -106,9 +100,7 @@ function FileUploadSingle2({
 
   return (
     <div className="upload-container">
-
       <div className="upload-card">
-
         <div
           className={`upload-box ${complete ? "complete-state" : ""}`}
           onClick={() => {
@@ -119,7 +111,6 @@ function FileUploadSingle2({
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-
           {!file && !complete && (
             <>
               <div className="upload-icon">
@@ -133,29 +124,31 @@ function FileUploadSingle2({
           )}
 
           {file && !complete && (
-
             <div className="upload-preview upload-preview-grid">
-
               <div className="upload-file-item">
-
-                <span className="file-card-icon" aria-hidden="true">📄</span>
+                <span className="file-card-icon" aria-hidden="true">
+                  📄
+                </span>
 
                 <div className="file-card-meta">
                   <p className="file-card-name">{file.name}</p>
-                  <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
+                  <span className="file-card-size">
+                    {(file.size / 1024).toFixed(2)} KB
+                  </span>
                 </div>
 
-                <button className="remove-btn" onClick={(e) => {
-                  e.stopPropagation();
-                  removeFile();
-                }} disabled={actionLoading}>
-                  <RxCross1/>
+                <button
+                  className="remove-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile();
+                  }}
+                  disabled={actionLoading}
+                >
+                  <RxCross1 />
                 </button>
-
               </div>
-
             </div>
-
           )}
 
           {complete && (
@@ -165,7 +158,6 @@ function FileUploadSingle2({
           )}
 
           {file && !complete && children}
-
         </div>
 
         <input
@@ -173,7 +165,7 @@ function FileUploadSingle2({
           type="file"
           accept={accept}
           style={{ display: "none" }}
-          disabled={processing}
+          disabled={actionLoading}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";
@@ -204,7 +196,11 @@ function FileUploadSingle2({
         )}
 
         {!complete && actionLoading && (
-          <div className="upload-progress-wrap" role="status" aria-live="polite">
+          <div
+            className="upload-progress-wrap"
+            role="status"
+            aria-live="polite"
+          >
             <div className="upload-progress-bar">
               <span className="upload-progress-fill" />
             </div>
@@ -230,9 +226,7 @@ function FileUploadSingle2({
             ))}
           </div>
         )}
-
       </div>
-
     </div>
   );
 }

@@ -45,7 +45,7 @@ function FileUploadWatermark({
 
   const handleFile = (selectedFiles) => {
 
-    if (processing) return;
+   if (isProcessing) return;
 
     const selectedFile = selectedFiles[0];
 
@@ -70,7 +70,7 @@ function FileUploadWatermark({
 
     e.preventDefault();
 
-    if (isProcessing) return;
+   if (isProcessing) return;
 
     const droppedFiles = e.dataTransfer.files;
 
@@ -84,7 +84,7 @@ function FileUploadWatermark({
 
   const removeFile = () => {
 
-    if (processing) return;
+   if (isProcessing) return;
 
     setFile(null);
     setErrors([]);
@@ -163,7 +163,7 @@ function FileUploadWatermark({
           type="file"
           accept={accept}
           style={{ display: "none" }}
-          disabled={processing}
+         disabled={isProcessing}
           onChange={(e) => {
             handleFile(e.target.files);
             e.target.value = "";
