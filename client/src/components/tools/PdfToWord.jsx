@@ -2,7 +2,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
 import "../../styles/tool.css";
-import { useError } from "../../context/ErrorContext";
 
 function PdfToWord() {
 
@@ -23,7 +22,7 @@ function PdfToWord() {
 
      <FileUploadSingle
       accept=".pdf"
-      endpoint="/api/pdf/pdf-to-word"
+      endpoint="/pdf/pdf-to-word"
       downloadName="converted.docx"
     />
 

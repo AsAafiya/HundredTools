@@ -2,12 +2,12 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadWatermark from "../common/FileUploadWatermark";
 import Features from "../common/Features";
-import { addWatermark } from "../../services/pdfService";
+import { addWatermarkWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
 function AddWatermark() {
-
+  const { showError } = useError();
   const [file, setFile] = useState(null);
   const [text, setText] = useState("");
   const [downloadUrl, setDownloadUrl] = useState(null);
@@ -15,6 +15,7 @@ function AddWatermark() {
   const [fileName, setFileName] = useState("");
   const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleReset = () => {
     setFile(null);
@@ -38,7 +39,7 @@ function AddWatermark() {
       const minProgressMs = 900;
       setLoading(true);
 
-      const result = await addWatermark(file, text);
+      const result = await addWatermarkWithProgress(file, text, (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -55,6 +56,7 @@ function AddWatermark() {
       console.error(error);
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
 
   };
@@ -100,6 +102,8 @@ function AddWatermark() {
         onDownload={handleDownload}
         isProcessing={loading}
         processingLabel="Applying watermark..."
+        processing={loading}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

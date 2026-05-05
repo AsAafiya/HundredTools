@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
-import "../../styles/fileUpload.css";
 import { RxCross1 } from "react-icons/rx";
+import api from "../../services/api";
+import "../../styles/fileUpload.css";
 
 function FileUploadSingle({
   accept = ".pdf",
   maxSizeMB = 50,
-  endpoint = "/api/pdf/pdf-to-word",
+  endpoint = "/pdf/pdf-to-word",
   downloadName = "converted-file",
   onDownload,
 }) {
-
   const inputRef = useRef(null);
 
   const [file, setFile] = useState(null);
@@ -18,16 +18,15 @@ function FileUploadSingle({
   const [loading, setLoading] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [convertComplete, setConvertComplete] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
   const validateFile = (selectedFile) => {
-
     const errorList = [];
-
     const allowedTypes = accept.split(",");
 
-    const isValidType = allowedTypes.some(type =>
+    const isValidType = allowedTypes.some((type) =>
       selectedFile.name.toLowerCase().endsWith(type.trim())
     );
 
@@ -42,22 +41,15 @@ function FileUploadSingle({
     setErrors(errorList);
 
     if (errorList.length > 0) return null;
-
     return selectedFile;
   };
 
   const handleFile = (selectedFiles) => {
-
     const selectedFile = selectedFiles[0];
-
     if (!selectedFile) return;
 
     const validated = validateFile(selectedFile);
-
-    if (validated) {
-      setFile(validated);
-    }
-
+    if (validated) setFile(validated);
   };
 
   const handleDragOver = (e) => {
@@ -65,9 +57,7 @@ function FileUploadSingle({
   };
 
   const handleDrop = (e) => {
-
     e.preventDefault();
-
     if (loading) return;
 
     const droppedFiles = e.dataTransfer.files;
@@ -86,9 +76,7 @@ function FileUploadSingle({
   };
 
   const handleDownloadClick = () => {
-    if (onDownload) {
-      onDownload();
-    }
+    if (onDownload) onDownload();
 
     setTimeout(() => {
       setFile(null);
@@ -96,11 +84,11 @@ function FileUploadSingle({
       setLoading(false);
       setDownloadUrl(null);
       setConvertComplete(false);
+      setProgress(0);
     }, 300);
   };
 
   const uploadFile = async () => {
-
     if (!file) {
       setErrors(["Please select a file first"]);
       return;
@@ -111,20 +99,22 @@ function FileUploadSingle({
       const minProgressMs = 900;
 
       setLoading(true);
+      setProgress(0);
 
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
-        method: "POST",
-        body: formData
+      const response = await api.post(endpoint, formData, {
+        responseType: "blob",
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (e) => {
+          if (e.lengthComputable) {
+            setProgress(Math.round((e.loaded * 100) / e.total));
+          }
+        },
       });
 
-      if (!response.ok) {
-        throw new Error("Conversion failed");
-      }
-
-      const blob = await response.blob();
+      const blob = response.data;
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -134,23 +124,18 @@ function FileUploadSingle({
       const url = window.URL.createObjectURL(blob);
       setDownloadUrl(url);
       setConvertComplete(true);
-
     } catch (err) {
-
       console.error(err);
       setErrors(["Upload or conversion failed"]);
-
     } finally {
       setLoading(false);
+      setProgress(0);
     }
-
   };
 
   return (
     <div className="upload-container">
-
       <div className="upload-card">
-
         <div
           className={`upload-box ${convertComplete ? "complete-state" : ""}`}
           onClick={() => {
@@ -161,7 +146,6 @@ function FileUploadSingle({
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-
           {!file && !convertComplete && (
             <>
               <div className="upload-icon">
@@ -175,37 +159,50 @@ function FileUploadSingle({
           )}
 
           {file && !convertComplete && (
-
             <div className="upload-preview upload-preview-grid">
-
               <div className="upload-file-item">
-
-                <span className="file-card-icon" aria-hidden="true">📄</span>
+                <span className="file-card-icon" aria-hidden="true">
+                  📄
+                </span>
 
                 <div className="file-card-meta">
                   <p className="file-card-name">{file.name}</p>
-                  <span className="file-card-size">{(file.size / 1024).toFixed(2)} KB</span>
+                  <span className="file-card-size">
+                    {(file.size / 1024).toFixed(2)} KB
+                  </span>
                 </div>
 
-                <button className="remove-btn" onClick={(e) => {
-                  e.stopPropagation();
-                  removeFile();
-                }} disabled={loading}>
-                  <RxCross1/>
+                <button
+                  className="remove-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile();
+                  }}
+                  disabled={loading}
+                >
+                  <RxCross1 />
                 </button>
-
               </div>
-
             </div>
-
           )}
 
-          {convertComplete && (
+          {!file && !convertComplete && loading && (
+            <div className="upload-progress-wrap" role="status" aria-live="polite">
+              <div className="upload-progress-bar">
+                <span
+                  className="upload-progress-fill"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <p className="upload-progress-text">Converting PDF... {progress}%</p>
+            </div>
+          )}
+
+          {convertComplete && downloadUrl && (
             <div className="upload-preview">
               <p className="merged-file-name">{downloadName}</p>
             </div>
           )}
-
         </div>
 
         <input
@@ -242,17 +239,13 @@ function FileUploadSingle({
           </>
         )}
 
-        {!convertComplete && loading && (
-          <div className="upload-progress-wrap" role="status" aria-live="polite">
-            <div className="upload-progress-bar">
-              <span className="upload-progress-fill" />
-            </div>
-            <p className="upload-progress-text">Converting PDF...</p>
-          </div>
-        )}
-
         {convertComplete && downloadUrl && (
-          <a href={downloadUrl} download={downloadName} className="upload-btn download-btn" onClick={handleDownloadClick}>
+          <a
+            href={downloadUrl}
+            download={downloadName}
+            className="upload-btn download-btn"
+            onClick={handleDownloadClick}
+          >
             Download File
           </a>
         )}
@@ -264,9 +257,7 @@ function FileUploadSingle({
             ))}
           </div>
         )}
-
       </div>
-
     </div>
   );
 }

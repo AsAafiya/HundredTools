@@ -3,7 +3,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
-import { addPageNumbers } from "../../services/pdfService";
+import { addPageNumbersWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
@@ -17,6 +17,7 @@ const POSITIONS = [
 ];
 
 function AddPageNumbers() {
+  const { showError } = useError();
   const [selectedFile, setSelectedFile] = useState(null);
   const [position, setPosition] = useState("bottom-center");
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,7 @@ function AddPageNumbers() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleAddNumbers = async () => {
     if (!selectedFile) {
@@ -37,7 +39,7 @@ function AddPageNumbers() {
       setLoading(true);
       setMessage("");
 
-      const blob = await addPageNumbers(selectedFile, position);
+      const blob = await addPageNumbersWithProgress(selectedFile, position, (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -52,6 +54,7 @@ function AddPageNumbers() {
       showError("Failed to add page numbers. Please try again.");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -122,6 +125,7 @@ function AddPageNumbers() {
         completedDownloadUrl={downloadUrl}
         downloadLabel="Download PDF"
         onDownload={handleDownload}
+        uploadProgress={uploadProgress}
       />
 
       {message && <p className="subtitle">{message}</p>}

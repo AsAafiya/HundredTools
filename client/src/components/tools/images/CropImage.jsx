@@ -16,6 +16,7 @@ function CropImage() {
   const [fileName, setFileName] = useState("");
   const [imageSrc, setImageSrc] = useState(null);
    const { showError } = useError();
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [crop, setCrop] = useState({
     unit: "px",
     x: 0,
@@ -59,7 +60,7 @@ function CropImage() {
         height: crop.height
       };
 
-      const blob = await cropImageAPI(files, cropData);
+      const blob = await cropImageAPI(files, cropData, (p) => setUploadProgress(p));
 
       const url = window.URL.createObjectURL(blob);
 
@@ -84,6 +85,7 @@ function CropImage() {
     setProcessComplete(false);
     setFileName("");
     setImageSrc(null);
+    setUploadProgress(0);
 
   };
 
@@ -136,6 +138,8 @@ function CropImage() {
         processLabel="Crop Image"
         successMessage="Cropped successfully!!!"
         onReset={resetTool}
+        processing={processComplete ? false : uploadProgress > 0}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

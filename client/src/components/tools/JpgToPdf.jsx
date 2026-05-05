@@ -3,16 +3,18 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
-import { convertJpgToPdf } from "../../services/pdfService";
+import { convertJpgToPdfWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
 function JpgToPdf() {
+  const { showError } = useError();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleReset = () => {
     setFiles([]);
@@ -34,7 +36,7 @@ function JpgToPdf() {
       setLoading(true);
       setMessage("");
 
-      const blob = await convertJpgToPdf(files);
+      const blob = await convertJpgToPdfWithProgress(files, (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -49,6 +51,7 @@ function JpgToPdf() {
       showError("Conversion failed. Please try again.");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -80,6 +83,7 @@ function JpgToPdf() {
         downloadLabel="Download PDF"
         onDownload={handleDownload}
         isProcessing={loading}
+        uploadProgress={uploadProgress}
         processingLabel="Converting JPG to PDF..."
         minFilesForProcess={1}
       />

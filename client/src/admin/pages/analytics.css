@@ -1,0 +1,50 @@
+/* Add your analytics styles here */
+
+.page {
+  padding: 2rem;
+}
+.header {
+  margin-bottom: 2rem;
+}
+.analytics-grid-4, .analytics-grid-2 {
+  display: grid;
+  gap: 1.5rem;
+}
+.analytics-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.analytics-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+}
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+.icon-green { background: #22c55e1a; color: #22c55e; }
+.icon-blue { background: #4f46e51a; color: #4f46e5; }
+.icon-orange { background: #f59e0b1a; color: #f59e0b; }
+.icon-purple { background: #a21caf1a; color: #a21caf; }
+.label {
+  font-size: 1rem;
+  color: #6b7280;
+}
+.sub {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+.metrics {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}

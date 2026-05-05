@@ -12,6 +12,7 @@ function ResizeImage() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
    const { showError } = useError();
   const handleResize = async () => {
     if (!width || !height) {
@@ -20,7 +21,7 @@ function ResizeImage() {
     }
 
     try {
-      const blob = await resizeImageAPI(files, width, height);
+      const blob = await resizeImageAPI(files, width, height, (p) => setUploadProgress(p));
 
       const url = window.URL.createObjectURL(blob);
 
@@ -92,6 +93,8 @@ function ResizeImage() {
         successMessage="Resized successfully!!!"
         onReset={resetTool} 
         showProcessButton={width && height}
+        processing={processComplete ? false : uploadProgress > 0}
+        uploadProgress={uploadProgress}
       />
     </div>
   );

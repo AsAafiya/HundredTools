@@ -3,10 +3,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
 import "../../styles/tool.css";
-import { useError } from "../../context/ErrorContext";
 
 function SplitPdf() {
-    const { showError } = useError();
   return (
     <div className="tool-page">
       <div className="back-btn">
@@ -22,7 +20,7 @@ function SplitPdf() {
       </p>
 
       <FileUploadSingle
-        endpoint="/api/pdf/split"
+        endpoint="/pdf/split"
         downloadName="split-pages.zip"
       />
       <Features />

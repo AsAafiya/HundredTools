@@ -159,7 +159,7 @@ exports.pdfToJpg = async (req, res) => {
       height: 1600,
     });
 
-    convertedImages = await converter.bulk(-1, { responseType: "image" });
+    convertedImages = await converter.bulk(-1);
 
     zipPath = path.join(outputDir, `pdf-to-jpg-${Date.now()}.zip`);
 
@@ -527,7 +527,8 @@ exports.compressPDF = async (req, res) => {
     ensureOutputDir();
     const outputPath = path.join(outputDir, `compressed-${Date.now()}.pdf`);
 
-    const command = `gswin64c -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${outputPath}" "${inputPath}"`;
+    const gsCmd = process.platform === "win32" ? "gswin64c" : "gs";
+    const command = `${gsCmd} -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${outputPath}" "${inputPath}"`;
 
     exec(command, (error) => {
       if (error) {

@@ -13,6 +13,7 @@ function ConvertImage() {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
     const { showError } = useError();
   const handleConvert = async () => {
@@ -22,7 +23,7 @@ function ConvertImage() {
     }
 
     try {
-      const blob = await convertImageAPI(files, format);
+      const blob = await convertImageAPI(files, format, (p) => setUploadProgress(p));
 
       const url = URL.createObjectURL(blob);
 
@@ -127,6 +128,8 @@ function ConvertImage() {
         processLabel="Convert Images"
         successMessage="converted successfully!!!"
         onReset={resetTool}
+        processing={processComplete ? false : uploadProgress > 0}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

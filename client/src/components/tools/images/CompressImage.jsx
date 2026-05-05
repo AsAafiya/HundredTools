@@ -14,6 +14,7 @@ function CompressImage() {
   const [compressComplete, setCompressComplete] = useState(false);
   const [compressedFileName, setCompressedFileName] = useState("");
   const [quality, setQuality] = useState("medium"); // default medium
+  const [uploadProgress, setUploadProgress] = useState(0);
 
 
   // Handle Compression
@@ -25,7 +26,7 @@ function CompressImage() {
 
     try {
       // Compress images with selected quality
-      const compressedBlob = await compressImageAPI(files, quality);
+      const compressedBlob = await compressImageAPI(files, quality, (p) => setUploadProgress(p));
       const url = window.URL.createObjectURL(compressedBlob);
 
       setDownloadUrl(url);
@@ -51,6 +52,7 @@ function CompressImage() {
     setCompressComplete(false);
     setCompressedFileName("");
     setQuality("medium");
+    setUploadProgress(0);
   };
 
   return (
@@ -113,6 +115,8 @@ function CompressImage() {
         processLabel="Compress Images"
         successMessage="Images compressed successfully!"
         onReset={resetTool}
+        processing={compressComplete ? false : uploadProgress > 0 || false}
+        uploadProgress={uploadProgress}
       />
 
       <Features />
