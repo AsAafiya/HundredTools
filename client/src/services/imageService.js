@@ -1,28 +1,31 @@
-export const compressImageAPI = async (files, quality) => {
+import api from "./api";
 
+export const compressImageAPI = async (files, quality, onUploadProgress) => {
   const formData = new FormData();
 
   files.forEach((file) => {
     formData.append("file", file);
   });
 
-  formData.append("level", quality);   // IMPORTANT
+  formData.append("level", quality); // IMPORTANT
 
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/image/compress`,
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
+  const response = await api.post(`/image/compress`, formData, {
+    responseType: "blob",
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (onUploadProgress && e.lengthComputable) {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        onUploadProgress(percent);
+      }
+    },
+  });
 
-  const blob = await response.blob();
-  return blob;
+  return response.data;
 };
 
 //resize tool
 
-export const resizeImageAPI = async (files, width, height) => {
+export const resizeImageAPI = async (files, width, height, onUploadProgress) => {
   const formData = new FormData();
 
   files.forEach((file) => {
@@ -32,20 +35,23 @@ export const resizeImageAPI = async (files, width, height) => {
   formData.append("width", width);
   formData.append("height", height);
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/image/resize`, {
-    method: "POST",
-    body: formData
+  const response = await api.post(`/image/resize`, formData, {
+    responseType: "blob",
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (onUploadProgress && e.lengthComputable) {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        onUploadProgress(percent);
+      }
+    },
   });
 
-  if (!response.ok) throw new Error("Resize failed");
-
-  return await response.blob();
+  return response.data;
 };
 
 
 //crop tool
-export const cropImageAPI = async (files, cropData) => {
-
+export const cropImageAPI = async (files, cropData, onUploadProgress) => {
   const formData = new FormData();
 
   for (let file of files) {
@@ -57,19 +63,22 @@ export const cropImageAPI = async (files, cropData) => {
   formData.append("width", cropData.width);
   formData.append("height", cropData.height);
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/image/crop`, {
-    method: "POST",
-    body: formData
+  const response = await api.post(`/image/crop`, formData, {
+    responseType: "blob",
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (onUploadProgress && e.lengthComputable) {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        onUploadProgress(percent);
+      }
+    },
   });
 
-  if (!response.ok) throw new Error("Crop failed");
-
-  return await response.blob();
+  return response.data;
 };
 
 //convert tool
-export const convertImageAPI = async (files, format) => {
-
+export const convertImageAPI = async (files, format, onUploadProgress) => {
   const formData = new FormData();
 
   for (let file of files) {
@@ -78,12 +87,16 @@ export const convertImageAPI = async (files, format) => {
 
   formData.append("format", format);
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/image/convert`, {
-    method: "POST",
-    body: formData
+  const response = await api.post(`/image/convert`, formData, {
+    responseType: "blob",
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (onUploadProgress && e.lengthComputable) {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        onUploadProgress(percent);
+      }
+    },
   });
 
-  if (!response.ok) throw new Error("Image conversion failed");
-
-  return await response.blob();
+  return response.data;
 };

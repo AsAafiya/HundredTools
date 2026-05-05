@@ -2,16 +2,18 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
-import { compressPDF } from "../../services/pdfService";
+import { compressPDFWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
 function CompressPdf() {
+  const { showError } = useError();
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [mergeComplete, setMergeComplete] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleReset = () => {
     setFiles([]);
@@ -22,11 +24,16 @@ function CompressPdf() {
   };
 
   const handleCompress = async () => {
+    if (!files || files.length === 0) {
+      showError("Please upload a PDF file to compress.");
+      return;
+    }
+
     try {
       const startedAt = Date.now();
       const minProgressMs = 900;
       setLoading(true);
-      const blob = await compressPDF(files[0]);
+      const blob = await compressPDFWithProgress(files[0], (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -39,8 +46,10 @@ function CompressPdf() {
       setMergeComplete(true);
     } catch (error) {
       console.error(error);
+      showError("Compression failed. Please try again.");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -74,6 +83,7 @@ function CompressPdf() {
         onReset={handleReset}
         onDownload={handleDownload}
         isProcessing={loading}
+        uploadProgress={uploadProgress}
         processingLabel="Compressing your PDF..."
       />
 

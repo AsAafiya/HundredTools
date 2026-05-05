@@ -19,6 +19,7 @@ function FileUploadMultiple({
   minFilesForProcess = 1,
   minFilesMessage = "",
   showOnlyProcessAfterSelection = false,
+  uploadProgress = 0,
 }) {
   const inputRef = useRef(null);
 
@@ -257,9 +258,9 @@ function FileUploadMultiple({
         {!mergeComplete && isProcessing && (
           <div className="upload-progress-wrap" role="status" aria-live="polite">
             <div className="upload-progress-bar">
-              <span className="upload-progress-fill" />
+              <span className="upload-progress-fill" style={{ width: `${uploadProgress}%` }} />
             </div>
-            <p className="upload-progress-text">{processingLabel}</p>
+            <p className="upload-progress-text">{processingLabel} {uploadProgress ? `${uploadProgress}%` : ""}</p>
           </div>
         )}
 

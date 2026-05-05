@@ -2,18 +2,19 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadMultiple from "../common/FileUploadMultiple";
 import Features from "../common/Features";
-import { mergePDF } from "../../services/pdfService";
+import { mergePDFWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
 function MergePdf() {
-
+  const { showError } = useError();
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [mergeComplete, setMergeComplete] = useState(false);
   const [mergedFileName, setMergedFileName] = useState("");
   const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleReset = () => {
     setFiles([]);
@@ -25,8 +26,8 @@ function MergePdf() {
   };
 
   const handleMerge = async () => {
-
     if (files.length < 2) {
+      showError("Please upload at least 2 PDF files to merge.");
       return;
     }
 
@@ -35,7 +36,7 @@ function MergePdf() {
       const minProgressMs = 900;
       setLoading(true);
 
-      const mergedFile = await mergePDF(files);
+      const mergedFile = await mergePDFWithProgress(files, (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -53,6 +54,7 @@ function MergePdf() {
       console.error(error);
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
 
   };
@@ -90,6 +92,7 @@ function MergePdf() {
         onReset={handleReset}
         onDownload={handleDownload}
         isProcessing={loading}
+        uploadProgress={uploadProgress}
         processingLabel="Merging your PDFs..."
         minFilesForProcess={2}
         minFilesMessage="Upload at least 2 PDFs to merge"

@@ -18,10 +18,12 @@ function FileUploadImage({
   onReset,
   processing = false,
   showProcessButton = true,
+  uploadProgress = 0,
 }) {
   const inputRef = useRef(null);
   const [errors, setErrors] = useState([]);
   const [dragging, setDragging] = useState(false);
+  const progress = uploadProgress || 0;
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -224,6 +226,15 @@ function FileUploadImage({
           <p className="success-text">
             {successMessage}
           </p>
+        )}
+
+        {!processComplete && processing && (
+          <div className="upload-progress-wrap" role="status" aria-live="polite">
+            <div className="upload-progress-bar">
+              <span className="upload-progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+            <p className="upload-progress-text">Processing... {progress}%</p>
+          </div>
         )}
 
         {/* Download Button */}

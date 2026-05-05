@@ -15,7 +15,9 @@ function FileUploadWatermark({
   onDownload,
   isProcessing = false,
   processingLabel = "Applying watermark...",
+  uploadProgress = 0,
 }) {
+  const progress = uploadProgress || 0;
 
   const inputRef = useRef(null);
 
@@ -215,9 +217,9 @@ function FileUploadWatermark({
         {!mergeComplete && isProcessing && (
           <div className="upload-progress-wrap" role="status" aria-live="polite">
             <div className="upload-progress-bar">
-              <span className="upload-progress-fill" />
+              <span className="upload-progress-fill" style={{ width: `${progress}%` }} />
             </div>
-            <p className="upload-progress-text">{processingLabel}</p>
+            <p className="upload-progress-text">{processingLabel} {progress ? `${progress}%` : ""}</p>
           </div>
         )}
 

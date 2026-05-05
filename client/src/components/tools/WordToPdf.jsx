@@ -1,11 +1,8 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
-
 import "../../styles/tool.css";
-import { useError } from "../../context/ErrorContext";
 
 function WordToPdf() {
 
@@ -27,7 +24,7 @@ function WordToPdf() {
 
       <FileUploadSingle
         accept=".doc,.docx"
-        endpoint="/api/pdf/word-to-pdf"
+        endpoint="/pdf/word-to-pdf"
         downloadName="converted.pdf"
       />
 

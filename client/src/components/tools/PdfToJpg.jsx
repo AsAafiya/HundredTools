@@ -3,7 +3,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FileUploadSingle2 from "../common/FileUploadSingle2";
 import Features from "../common/Features";
-import { convertPdfToJpg } from "../../services/pdfService";
+import { convertPdfToJpgWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
@@ -14,6 +14,8 @@ function PdfToJpg() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [complete, setComplete] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const { showError } = useError();
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleConvert = async () => {
     if (!selectedFile) {
@@ -27,7 +29,7 @@ function PdfToJpg() {
       setLoading(true);
       setMessage("");
 
-      const blob = await convertPdfToJpg(selectedFile);
+      const blob = await convertPdfToJpgWithProgress(selectedFile, (p) => setUploadProgress(p));
 
       const elapsed = Date.now() - startedAt;
       if (elapsed < minProgressMs) {
@@ -42,6 +44,7 @@ function PdfToJpg() {
       showError("Conversion failed. Please try again.");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -81,6 +84,7 @@ function PdfToJpg() {
         completedDownloadUrl={downloadUrl}
         downloadLabel="Download ZIP"
         onDownload={handleDownload}
+        uploadProgress={uploadProgress}
       />
 
       {message && <p className="subtitle">{message}</p>}

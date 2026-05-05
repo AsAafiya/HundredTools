@@ -18,11 +18,13 @@ function FileUploadSingle2({
   completedDownloadUrl = "",
   downloadLabel = "Download PDF",
   onDownload,
+  uploadProgress = 0,
 }) {
   const inputRef = useRef(null);
 
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState([]);
+  const progress = uploadProgress || 0;
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -202,9 +204,9 @@ function FileUploadSingle2({
             aria-live="polite"
           >
             <div className="upload-progress-bar">
-              <span className="upload-progress-fill" />
+              <span className="upload-progress-fill" style={{ width: `${progress}%` }} />
             </div>
-            <p className="upload-progress-text">Converting PDF...</p>
+            <p className="upload-progress-text">Converting PDF... {progress}%</p>
           </div>
         )}
 
