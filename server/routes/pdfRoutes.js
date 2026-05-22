@@ -6,14 +6,17 @@ const upload = require("../middleware/uploadMiddleware");
 
 // router.post("/merge", upload.array("files"), mergePDF);
 
+
 const {
-  mergePDF,
+ mergePDF,
   addPageNumbers,
   pdfToJpg,
   jpgToPdf,
   pdfToWord,
   wordToPdf,
-  addWatermark
+  addWatermark,
+  splitPDF,
+  compressPDF
 } = require("../controllers/pdfController");
 
 router.post("/merge", upload.array("files"), mergePDF);
@@ -29,5 +32,8 @@ router.post("/pdf-to-jpg", upload.single("file"), pdfToJpg);
 router.post("/jpg-to-pdf", upload.array("files"), jpgToPdf);
 
 router.post("/add-page-numbers", upload.single("file"), addPageNumbers);
+router.post("/split", upload.single("file"), splitPDF);
+
+router.post("/compress", upload.single("file"), compressPDF);
 
 module.exports = router;

@@ -6,7 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 function FileUploadSingle({
   accept = ".pdf",
   maxSizeMB = 50,
-  endpoint = "/api/pdf/pdf-to-word",
+  endpoint,
   downloadName = "converted-file"
 }) {
 
