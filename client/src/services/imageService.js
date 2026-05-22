@@ -4,7 +4,7 @@ export const compressImageAPI = async (files) => {
   formData.append("file", file); // matches upload.array("file") on backend
 }
 
-  const response = await fetch("http://localhost:5000/api/image/compress", {
+  const response = await fetch("https://hundredtools.onrender.com/api/image/compress", {
     method: "POST",
     body: formData
   });
@@ -27,7 +27,7 @@ export const resizeImageAPI = async (files, width, height) => {
   formData.append("width", width);
   formData.append("height", height);
 
-  const response = await fetch("http://localhost:5000/api/image/resize", {
+  const response = await fetch("https://hundredtools.onrender.com/api/image/resize", {
     method: "POST",
     body: formData
   });
@@ -52,7 +52,7 @@ export const cropImageAPI = async (files, cropData) => {
   formData.append("width", cropData.width);
   formData.append("height", cropData.height);
 
-  const response = await fetch("http://localhost:5000/api/image/crop", {
+  const response = await fetch("https://hundredtools.onrender.com/api/image/crop", {
     method: "POST",
     body: formData
   });
@@ -73,7 +73,7 @@ export const convertImageAPI = async (files, format) => {
 
   formData.append("format", format);
 
-  const response = await fetch("http://localhost:5000/api/image/convert", {
+  const response = await fetch("https://hundredtools.onrender.com/api/image/convert", {
     method: "POST",
     body: formData
   });
