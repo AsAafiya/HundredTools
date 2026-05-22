@@ -99,7 +99,7 @@ function FileUploadSingle({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`https://hundredtools.onrender.com${endpoint}`, {
         method: "POST",
         body: formData
       });

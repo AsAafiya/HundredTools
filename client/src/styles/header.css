@@ -51,7 +51,10 @@
 }
 
 /* LOGO */
-
+.logo
+{
+  margin-bottom: 0px;
+}
 .logo-link{
   display:inline-flex;
   align-items:center;
