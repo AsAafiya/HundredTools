@@ -305,16 +305,16 @@ exports.pdfToWord = async (req, res) => {
 
     await new Promise((resolve, reject) => {
       execFile(
-        "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
-        [
-          "--headless",
-          "--infilter=writer_pdf_import",
-          "--convert-to",
-          "docx",
-          "--outdir",
-          outputDir,
-          inputPath,
-        ],
+      "soffice",
+      [
+        "--headless",
+        "--infilter=writer_pdf_import",
+        "--convert-to",
+        "docx",
+        "--outdir",
+        outputDir,
+        inputPath
+      ],
         (error) => {
           if (error) return reject(error);
           resolve();
@@ -554,5 +554,110 @@ exports.compressPDF = async (req, res) => {
     console.log(error);
 
     res.status(500).send("Compression error");
+  }
+};
+
+exports.splitPDF = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send("No PDF uploaded");
+    }
+
+    const pdfBytes = fs.readFileSync(req.file.path);
+
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    const outputDir = path.resolve(__dirname, "../outputs");
+
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    const zipPath = path.join(outputDir, `split-${Date.now()}.zip`);
+
+    const archive = archiver("zip", {
+      zlib: { level: 9 },
+    });
+
+    const output = fs.createWriteStream(zipPath);
+
+    archive.pipe(output);
+
+    const totalPages = pdfDoc.getPageCount();
+
+    for (let i = 0; i < totalPages; i++) {
+      const newPdf = await PDFDocument.create();
+
+      const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+
+      newPdf.addPage(copiedPage);
+
+      const pdfBytes = await newPdf.save();
+
+      const tempPath = path.join(outputDir, `page-${i + 1}.pdf`);
+
+      fs.writeFileSync(tempPath, pdfBytes);
+
+      archive.file(tempPath, { name: `page-${i + 1}.pdf` });
+    }
+
+    archive.finalize();
+
+    output.on("close", () => {
+      res.download(zipPath, "split-pdf.zip", () => {
+        try {
+          fs.unlinkSync(zipPath);
+        } catch (_) {}
+      });
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error splitting PDF");
+  }
+};
+
+exports.compressPDF = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send("No PDF uploaded");
+    }
+
+    const inputPath = req.file.path;
+
+    const outputPath = path.join(
+      "outputs",
+      `compressed-${Date.now()}.pdf`
+    );
+
+    execFile(
+      "gs",
+      [
+        "-sDEVICE=pdfwrite",
+        "-dCompatibilityLevel=1.4",
+        "-dPDFSETTINGS=/screen",
+        "-dNOPAUSE",
+        "-dQUIET",
+        "-dBATCH",
+        `-sOutputFile=${outputPath}`,
+        inputPath,
+      ],
+      (error) => {
+        if (error) {
+          console.log(error);
+          return res.status(500).send("Compression failed");
+        }
+
+        res.download(outputPath, () => {
+          try {
+            fs.unlinkSync(outputPath);
+          } catch (_) {}
+        });
+      }
+    );
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error compressing PDF");
   }
 };

@@ -7,9 +7,8 @@ import "../../styles/fileUpload.css";
 function FileUploadSingle({
   accept = ".pdf",
   maxSizeMB = 50,
-  endpoint = "/pdf/pdf-to-word",
-  downloadName = "converted-file",
-  onDownload,
+  endpoint,
+  downloadName = "converted-file"
 }) {
   const inputRef = useRef(null);
 
@@ -104,14 +103,9 @@ function FileUploadSingle({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await api.post(endpoint, formData, {
-        responseType: "blob",
-        headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (e) => {
-          if (e.lengthComputable) {
-            setProgress(Math.round((e.loaded * 100) / e.total));
-          }
-        },
+      const response = await fetch(`https://hundredtools.onrender.com${endpoint}`, {
+        method: "POST",
+        body: formData
       });
 
       const blob = response.data;

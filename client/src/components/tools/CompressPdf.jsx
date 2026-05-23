@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import FileUploadMultiple from "../common/FileUploadMultiple";
+import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
-import { compressPDFWithProgress } from "../../services/pdfService";
+import { compressPDF } from "../../services/pdfService";
 import "../../styles/tool.css";
 import { useError } from "../../context/ErrorContext";
 
@@ -69,23 +69,14 @@ function CompressPdf() {
 
       <h1>Compress PDF</h1>
 
-      <p className="subtitle">Reduce PDF file size while maintaining quality</p>
+      <p className="subtitle">
+        Reduce PDF file size while maintaining quality
+      </p>
 
-      <FileUploadMultiple
-        key={resetKey}
-        accept=".pdf"
-        onFilesChange={setFiles}
-        onMerge={handleCompress}
-        downloadUrl={downloadUrl}
-        mergeComplete={mergeComplete}
-        processLabel="Compress PDF"
-        downloadLabel="Download Compressed PDF"
-        onReset={handleReset}
-        onDownload={handleDownload}
-        isProcessing={loading}
-        uploadProgress={uploadProgress}
-        processingLabel="Compressing your PDF..."
-      />
+      <FileUploadSingle
+  endpoint="/api/pdf/compress"
+  downloadName="compressed.pdf"
+/>
 
       <Features />
     </div>

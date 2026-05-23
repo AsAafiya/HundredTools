@@ -1,6 +1,7 @@
 {
-  "name": "vite-hundredtools",
+  "name": "hundredtools",
   "private": true,
+ "proxy": "https://hundredtools.onrender.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

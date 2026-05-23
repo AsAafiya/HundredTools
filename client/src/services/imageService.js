@@ -3,8 +3,9 @@ import api from "./api";
 export const compressImageAPI = async (files, quality, onUploadProgress) => {
   const formData = new FormData();
 
-  files.forEach((file) => {
-    formData.append("file", file);
+  const response = await fetch("https://hundredtools.onrender.com/api/image/compress", {
+    method: "POST",
+    body: formData
   });
 
   formData.append("level", quality); // IMPORTANT
@@ -35,15 +36,9 @@ export const resizeImageAPI = async (files, width, height, onUploadProgress) => 
   formData.append("width", width);
   formData.append("height", height);
 
-  const response = await api.post(`/image/resize`, formData, {
-    responseType: "blob",
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (e) => {
-      if (onUploadProgress && e.lengthComputable) {
-        const percent = Math.round((e.loaded * 100) / e.total);
-        onUploadProgress(percent);
-      }
-    },
+  const response = await fetch("https://hundredtools.onrender.com/api/image/resize", {
+    method: "POST",
+    body: formData
   });
 
   return response.data;
@@ -63,15 +58,9 @@ export const cropImageAPI = async (files, cropData, onUploadProgress) => {
   formData.append("width", cropData.width);
   formData.append("height", cropData.height);
 
-  const response = await api.post(`/image/crop`, formData, {
-    responseType: "blob",
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (e) => {
-      if (onUploadProgress && e.lengthComputable) {
-        const percent = Math.round((e.loaded * 100) / e.total);
-        onUploadProgress(percent);
-      }
-    },
+  const response = await fetch("https://hundredtools.onrender.com/api/image/crop", {
+    method: "POST",
+    body: formData
   });
 
   return response.data;
@@ -87,15 +76,9 @@ export const convertImageAPI = async (files, format, onUploadProgress) => {
 
   formData.append("format", format);
 
-  const response = await api.post(`/image/convert`, formData, {
-    responseType: "blob",
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (e) => {
-      if (onUploadProgress && e.lengthComputable) {
-        const percent = Math.round((e.loaded * 100) / e.total);
-        onUploadProgress(percent);
-      }
-    },
+  const response = await fetch("https://hundredtools.onrender.com/api/image/convert", {
+    method: "POST",
+    body: formData
   });
 
   return response.data;

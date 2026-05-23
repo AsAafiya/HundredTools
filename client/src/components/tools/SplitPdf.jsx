@@ -2,6 +2,7 @@ import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadSingle from "../common/FileUploadSingle";
 import Features from "../common/Features";
+import { splitPDF } from "../../services/pdfService";
 import "../../styles/tool.css";
 
 function SplitPdf() {
@@ -19,10 +20,11 @@ function SplitPdf() {
         Extract specific pages or split PDF into multiple files
       </p>
 
-      <FileUploadSingle
-        endpoint="/pdf/split"
-        downloadName="split-pages.zip"
-      />
+     <FileUploadSingle
+  endpoint="/api/pdf/split"
+  downloadName="split-pdf.zip"
+/>
+
       <Features />
     </div>
   );
