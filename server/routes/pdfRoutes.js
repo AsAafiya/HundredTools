@@ -6,7 +6,6 @@ const upload = require("../middleware/uploadMiddleware");
 
 // router.post("/merge", upload.array("files"), mergePDF);
 
-
 const {
  mergePDF,
   addPageNumbers,
