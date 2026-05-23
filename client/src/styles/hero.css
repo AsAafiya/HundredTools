@@ -2,10 +2,12 @@
   background: #e4e8fa;
   text-align: center;
   color: #1f3568;
+  max-width: 100%;
 }
 
 .hero-section {
-  padding: 78px 0 80px;
+  padding: 15px 0 20px;
+  /* display: flex; */
 }
 
 .hero {
@@ -59,6 +61,10 @@
 
 .hero .primary-btn {
   box-shadow: 0 8px 24px rgba(77, 119, 224, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .secondary-btn {
@@ -114,7 +120,8 @@
 
 .tool-section {
   text-align: center;
-  padding: 72px 0 58px;
+  /* padding: 72px 0 58px; */
+  padding-bottom: 15px;
 }
 
 .tool-section .site-container {
@@ -126,14 +133,14 @@
 }
 
 .tool-section h2 {
-  margin: 0 0 14px;
+  margin-top: 25px;
   font-size: 52px;
   color: #20356a;
   letter-spacing: -0.02em;
 }
 
 .tool-section p {
-  margin: 0 0 34px;
+  margin: 0 0 10px;
   color: #4b5777;
   font-size: 22px;
   line-height: 1.45;
@@ -407,6 +414,32 @@ body[data-theme="dark"] .tool-card {
   border: 1px solid #2a3d63;
 }
 
+/* 🔥 FIX: STATS VISIBILITY IN DARK MODE */
+
+body[data-theme="dark"] .stat-card h2 {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="dark"] .stat-card {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+}
+
+/* 🔥 BLUE GLOW VISIBILITY FIX (NO COLOR CHANGE) */
+
+body[data-theme="dark"] .stat-card h2 {
+  color: #6f95ff;  /* thoda brighter blue */
+  font-weight: 700;
+
+  text-shadow: 
+    0 0 6px rgba(77, 119, 224, 0.8),
+    0 0 12px rgba(77, 119, 224, 0.6),
+    0 0 18px rgba(77, 119, 224, 0.4);
+}
+
+
+
 body[data-theme="dark"] .tool-icon {
   background: #1d2f54;
   color: #a8c0ff;
@@ -419,3 +452,109 @@ body[data-theme="dark"] .tool-card:hover {
 body[data-theme="dark"] .section-divider {
   border-top: 1px solid #243251;
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+
+/* 🔥 MOBILE SQUARE CARDS FIX - FINAL */
+
+@media (max-width: 640px) {
+
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  .tool-card {
+    aspect-ratio: 1 / 1 !important;   /* square */
+    min-height: unset !important;
+    height: auto !important;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    padding: 16px !important;
+  }
+
+  .tool-card h3 {
+    font-size: 16px !important;
+    margin-bottom: 6px;
+  }
+
+  .tool-card p {
+    font-size: 13px !important;
+  }
+
+  .tool-icon {
+    margin-bottom: 10px;
+  }
+}
+
+
+
+/* 🔥 PERFECT EQUAL SQUARE CARDS FIX */
+
+@media (max-width: 640px) {
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .tool-card {
+    width: 100%;
+    aspect-ratio: 1 / 1;   /* 🔥 same height-width */
+    min-height: unset !important;
+    height: auto !important;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    padding: 14px !important;
+  }
+
+  /* 🔥 TEXT CONTROL (important for equal height) */
+  .tool-card h3 {
+    font-size: 15px !important;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  /* .tool-card p {
+    font-size: 12px !important;
+    line-height: 1.3;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   /* 🔥
+
+  } */
+}
+    
+
+
+    /* 🔥 BUTTON AUR NEXT SECTION KA GAP FIX */
+
+/* Button ke niche ka gap kam */
+.tool-section .primary-btn {
+  margin-bottom: 0 !important;
+}
+
+/* Next section (Image Tools) ko upar lao */
+
+/* Extra safety */
+#tools-section {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+  
+
+
+

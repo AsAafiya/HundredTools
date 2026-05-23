@@ -3,24 +3,25 @@ import { FaArrowLeft } from "react-icons/fa";
 import FileUploadImage from "../../common/FileUploadImage";
 import { resizeImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
+import { useError } from "../../../context/ErrorContext";
 
 function ResizeImage() {
   const [files, setFiles] = useState([]);
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
-
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
-
+  const [uploadProgress, setUploadProgress] = useState(0);
+   const { showError } = useError();
   const handleResize = async () => {
     if (!width || !height) {
-      alert("Enter width and height");
+     showError("Enter width and height");
       return;
     }
 
     try {
-      const blob = await resizeImageAPI(files, width, height);
+      const blob = await resizeImageAPI(files, width, height, (p) => setUploadProgress(p));
 
       const url = window.URL.createObjectURL(blob);
 
@@ -31,7 +32,7 @@ function ResizeImage() {
         files.length > 1 ? "Nexora_resizeImage.zip" : "Nexora_resizeImage.jpg",
       );
     } catch (err) {
-      alert("Error resizing image");
+     showError("Error resizing image");
     }
   };
 
@@ -91,6 +92,9 @@ function ResizeImage() {
         processLabel="Resize Images"
         successMessage="Resized successfully!!!"
         onReset={resetTool} 
+        showProcessButton={width && height}
+        processing={processComplete ? false : uploadProgress > 0}
+        uploadProgress={uploadProgress}
       />
     </div>
   );

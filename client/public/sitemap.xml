@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Main Pages -->
+   <url>
+    <loc>https://hundredtools.in/</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/about</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/privacy</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/terms</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/support</loc>
+  </url>
+
+  <!-- Tools -->
+   <url>
+    <loc>https://hundredtools.in/tools/merge-pdf</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/split-pdf</loc>
+  </url>
+   <url>
+    <loc>https://hundredtools.in/tools/compress-pdf</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/pdf-to-jpg</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/jpg-to-pdf</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/add-page-numbers</loc>
+  </url>
+   <url>
+    <loc>https://hundredtools.in/tools/pdf-to-word</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/word-to-pdf</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/add-watermark</loc>
+  </url>
+
+  <!-- Image Tools -->
+   <url>
+    <loc>https://hundredtools.in/tools/image/compress-image</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/image/resize-image</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/image/convert-image</loc>
+  </url>
+  <url>
+    <loc>https://hundredtools.in/tools/image/crop-image</loc>
+  </url>
+
+</urlset>

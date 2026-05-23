@@ -4,27 +4,35 @@ import FileUploadImage from "../../common/FileUploadImage";
 import Features from "../../common/Features";
 import { compressImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
+import { useError } from "../../../context/ErrorContext";
 
 function CompressImage() {
+  const { showError } = useError();
+
   const [files, setFiles] = useState([]);
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [compressComplete, setCompressComplete] = useState(false);
   const [compressedFileName, setCompressedFileName] = useState("");
+  const [quality, setQuality] = useState("medium"); // default medium
+  const [uploadProgress, setUploadProgress] = useState(0);
 
+
+  // Handle Compression
   const handleCompress = async () => {
     if (files.length === 0) {
-      alert("Please upload at least one image!");
+      showError("Please upload at least one image!");
       return;
     }
 
     try {
-      // send all files
-      const compressedBlob = await compressImageAPI(files);
+      // Compress images with selected quality
+      const compressedBlob = await compressImageAPI(files, quality, (p) => setUploadProgress(p));
       const url = window.URL.createObjectURL(compressedBlob);
 
       setDownloadUrl(url);
       setCompressComplete(true);
 
+      // Set file name based on single/multiple files
       // if multiple files, use zip name
       setCompressedFileName(
         files.length > 1
@@ -33,19 +41,23 @@ function CompressImage() {
       );
     } catch (error) {
       console.error(error);
-      alert("Error compressing images");
+    showError("Error compressing images. Please try again.");
     }
   };
 
+  // Reset tool
   const resetTool = () => {
     setFiles([]);
     setDownloadUrl(null);
     setCompressComplete(false);
     setCompressedFileName("");
+    setQuality("medium");
+    setUploadProgress(0);
   };
 
   return (
     <div className="tool-page">
+      {/* Back button */}
       <div className="back-btn">
         <a href="/">
           <FaArrowLeft /> Back to Home
@@ -56,7 +68,41 @@ function CompressImage() {
       <p className="subtitle">
         Reduce image file size while maintaining quality
       </p>
+      <div className="format-selector">
+        <h3>Select Compression Level</h3>
 
+        <div className="format-options">
+          <button
+            className={
+              quality === "high" ? "format-card active" : "format-card"
+            }
+            onClick={() => setQuality("high")}
+          >
+            <span>High</span>
+            <p>Maximum compression</p>
+          </button>
+
+          <button
+            className={
+              quality === "medium" ? "format-card active" : "format-card"
+            }
+            onClick={() => setQuality("medium")}
+          >
+            <span>Medium</span>
+            <p>Balanced quality</p>
+          </button>
+
+          <button
+            className={quality === "low" ? "format-card active" : "format-card"}
+            onClick={() => setQuality("low")}
+          >
+            <span>Low</span>
+            <p>Best image quality</p>
+          </button>
+        </div>
+      </div>
+
+      {/* File Upload Component */}
       <FileUploadImage
         accept="image/*"
         maxFiles={10} // allow multiple files
@@ -67,8 +113,10 @@ function CompressImage() {
         downloadUrl={downloadUrl}
         outputFileName={compressedFileName}
         processLabel="Compress Images"
-        successMessage="compressed successfully!!!"
+        successMessage="Images compressed successfully!"
         onReset={resetTool}
+        processing={compressComplete ? false : uploadProgress > 0 || false}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

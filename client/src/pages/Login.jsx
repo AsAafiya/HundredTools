@@ -1,46 +1,116 @@
-import logo from "../assets/logos/HundredTools.jpeg";
+import { useState } from "react";
+import logo from "../assets/logos/logo_with_name.jpg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import "../styles/auth.css";
 
+
+  import API from "../utils/api";
+import { saveToken } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
+
+
+
 function Login({ switchToSignup, onLoginSuccess }) {
-  const handleSignIn = () => {
-    if (onLoginSuccess) {
-      onLoginSuccess();
+  const [form, setForm] = useState({
+    email: "",
+    password: ""
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+
+    if (!form.email.includes("@")) {
+      newErrors.email = "Enter a valid email";
     }
+
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
+const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+  if (!validate()) return;
+
+  try {
+    const res = await API.post("/login", {
+      email: form.email,
+      password: form.password
+    });
+
+    console.log(res.data);
+
+    // JWT token store
+    saveToken(res.data.token);
+localStorage.setItem("userEmail", res.data.user.email);
+localStorage.setItem("userName", res.data.user.name);
+localStorage.setItem("createdAt", res.data.user.createdAt);
+//  localStorage.setItem("userEmail", form.email);
+//     localStorage.setItem("userEmail", form.email);
+
+    // Call optional callback
+    if (onLoginSuccess) onLoginSuccess(res.data.token);
+
+    // Redirect to protected page
+    navigate("/profile");
+    
+  } catch (err) {
+    setErrors({ general: err.response?.data?.message || "Login failed" });
+  }
+};
+
   return (
-    <>
-      <div className="auth-card">
-        <div className="logo">
-          <img src={logo} alt="HundredTools" />
-        </div>
-
-        <h1>HundredTools</h1>
-        <p className="subtitle">Login To Your Account</p>
-
-        <label>Email Address</label>
-        <input type="email" placeholder="demo@hundredtools.com" />
-
-        <label>Password</label>
-        <input type="password" placeholder="Enter password" />
-
-        <button className="auth-btn" onClick={handleSignIn}>Sign In <FaLongArrowAltRight/></button>
-
-        <div className="divider">
-          <span>or</span>
-        </div>
-
-        <button className="google-btn">Continue with Google</button>
-
-        <p className="signup-text">
-          Don't have an account?
-          <span onClick={switchToSignup} className="auth-link">
-            Sign Up
-          </span>
-        </p>
+    <div className="auth-card">
+      <div className="logo">
+        <img src={logo} alt="HundredTools" />
       </div>
-    </>
+
+      <h1>HundredTools</h1>
+      <p className="subtitle">Login To Your Account</p>
+
+      <label>Email Address</label>
+      <input
+        type="email"
+        placeholder="demo@hundredtools.com"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        className={errors.email ? "error-input" : ""}
+      />
+      {errors.email && <p className="error-text">{errors.email}</p>}
+
+      <label>Password</label>
+      <input
+        type="password"
+        placeholder="Enter password"
+        value={form.password}
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        className={errors.password ? "error-input" : ""}
+      />
+      {errors.password && <p className="error-text">{errors.password}</p>}
+
+      <button className="auth-btn" onClick={handleSignIn}>
+        Sign In <FaLongArrowAltRight />
+      </button>
+
+      <div className="divider">
+        <span>or</span>
+      </div>
+
+      <button className="google-btn">Continue with Google</button>
+
+      <p className="signup-text">
+        Don't have an account?
+        <span onClick={switchToSignup} className="auth-link">
+          Sign Up
+        </span>
+      </p>
+    </div>
   );
 }
 

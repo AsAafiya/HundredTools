@@ -5,6 +5,10 @@ import { SlCalender } from "react-icons/sl";
 import "../styles/profile.css";
 
 function Profile() {
+const name = localStorage.getItem("userName");
+const email = localStorage.getItem("userEmail");
+
+
   return (
     <div className="profile-page">
       <h1 className="profile-title">Profile</h1>
@@ -20,9 +24,14 @@ function Profile() {
               <FiUser />
             </span>
           </div>
-
+{/* 
           <h2>Demo User</h2>
-          <p className="email">demo@hundredtools.com</p>
+          <p className="email">demo@hundredtools.com</p> */}
+<h2>{name || "User"}</h2>
+<p className="email">{email || "No Email"}</p>
+
+
+
 
           <button className="edit-btn">Edit Profile</button>
 
@@ -40,7 +49,8 @@ function Profile() {
             </span>
             <div>
               <p className="label">Full Name</p>
-              <p className="value">Demo User</p>
+              {/* <p className="value">Demo User</p> */}
+              <p className="value">{name || "User"}</p>
             </div>
           </div>
 
@@ -50,7 +60,8 @@ function Profile() {
             </span>
             <div>
               <p className="label">Email Address</p>
-              <p className="value">demo@hundredtools.com</p>
+              {/* <p className="value">demo@hundredtools.com</p> */}
+              <p className="value">{email || "No Email"}</p>
             </div>
           </div>
 
@@ -60,7 +71,11 @@ function Profile() {
             </span>
             <div>
               <p className="label">Member Since</p>
-              <p className="value">February 15, 2026</p>
+              <p className="value">
+  {localStorage.getItem("createdAt")
+    ? new Date(localStorage.getItem("createdAt")).toLocaleDateString()
+    : "N/A"}
+</p>
             </div>
           </div>
         </div>

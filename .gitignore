@@ -2,6 +2,10 @@ node_modules
 client/node_modules
 server/node_modules
 .env
+server/.env
 uploads
 outputs
 dist
+.vscode/
+# Ignore local MongoDB database files
+server/data/db/

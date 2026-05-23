@@ -66,25 +66,25 @@ const Home = () => {
       title: "Compress Image",
       description: "Reduce image file size without losing quality",
       icon: "↗",
-      path: "/tools/compress-image"
+      path: "/tools/image/compress-image"
     },
     {
       title: "Resize Image",
       description: "Change image dimensions easily",
       icon: "↙",
-      path: "/tools/resize-image"
+      path: "/tools/image/resize-image"
     },
     {
       title: "Convert JPG to PNG",
       description: "Convert JPG images to PNG format",
       icon: "🔁",
-      path: "/tools/jpg-to-png"
+      path: "/tools/image/jpg-to-png"
     },
     {
       title: "Remove Background",
       description: "Automatically remove backgrounds from images",
       icon: "⌫",
-      path: "/tools/remove-bg"
+      path: "/tools/image/remove-bg"
     }
   ];
 
@@ -138,11 +138,11 @@ const Home = () => {
 
             <div className="hero-buttons">
 
-              <button className="primary-btn">
+              <Link to="/#tools-section" className="primary-btn">
                 Start Converting Now
-              </button>
+              </Link>
 
-              <Link to="/tools/pdf" className="secondary-btn">
+              <Link to="/tools/all" className="secondary-btn">
                 Explore All Tools
               </Link>
 
@@ -172,6 +172,8 @@ const Home = () => {
         </div>
       </section>
 
+      <section id="tools-section">
+
       {/* PDF TOOLS */}
 
       <ToolSection
@@ -190,8 +192,7 @@ const Home = () => {
         category="image"
         withDivider
       />
-
-      {/* VIDEO TOOLS */}
+      </section>
 
       <ToolSection
         title="Video Tools"
@@ -200,6 +201,7 @@ const Home = () => {
         category="video"
         withDivider
       />
+     
 
     </div>
   );

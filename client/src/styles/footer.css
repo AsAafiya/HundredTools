@@ -11,7 +11,7 @@
 
 .footer-grid {
 	display: grid;
-	grid-template-columns: 1.6fr 1fr 1fr 1.1fr;
+	grid-template-columns: 1.8fr 1fr 1.1fr;
 	gap: 28px;
 	align-items: start;
 	margin-bottom: 26px;
@@ -102,11 +102,11 @@
 
 .footer-bottom-row {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	border-top: 1px solid #eef1fa;
 	padding-top: 14px;
-	gap: 12px;
+	gap: 40px;
 }
 
 .footer-policy-links {
