@@ -1,10 +1,9 @@
 const fs = require("fs");
 const path = require("path");
-const { execFile } = require("child_process");
+const { execFile, exec } = require("child_process");
 const { PDFDocument, StandardFonts, rgb, degrees } = require("pdf-lib");
 const archiver = require("archiver");
 const { fromPath } = require("pdf2pic");
-const { exec } = require("child_process");
 
 const outputDir = path.resolve(__dirname, "../outputs");
 
@@ -18,7 +17,6 @@ const ensureOutputDir = () => {
 
 exports.mergePDF = async (req, res) => {
   try {
-    console.log("merge route hit");
     ensureOutputDir();
 
     if (!req.files || req.files.length === 0) {
@@ -29,29 +27,32 @@ exports.mergePDF = async (req, res) => {
 
     for (const file of req.files) {
       const pdfBytes = fs.readFileSync(file.path);
+
       const pdf = await PDFDocument.load(pdfBytes);
-      const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+
+      const pages = await mergedPdf.copyPages(
+        pdf,
+        pdf.getPageIndices()
+      );
 
       pages.forEach((page) => mergedPdf.addPage(page));
     }
 
     const mergedPdfBytes = await mergedPdf.save();
-    const outputPath = path.join(outputDir, `merged-${Date.now()}.pdf`);
+
+    const outputPath = path.join(
+      outputDir,
+      `merged-${Date.now()}.pdf`
+    );
 
     fs.writeFileSync(outputPath, mergedPdfBytes);
 
-    res.download(outputPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(outputPath, () => {
       try {
         if (fs.existsSync(outputPath)) {
           fs.unlinkSync(outputPath);
         }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
@@ -63,7 +64,7 @@ exports.mergePDF = async (req, res) => {
 
 exports.addPageNumbers = async (req, res) => {
   try {
-    console.log("add page numbers route hit");
+    ensureOutputDir();
 
     if (!req.file) {
       return res.status(400).send("Please upload a PDF file");
@@ -72,27 +73,38 @@ exports.addPageNumbers = async (req, res) => {
     const pdfBytes = fs.readFileSync(req.file.path);
 
     const pdfDoc = await PDFDocument.load(pdfBytes);
-    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    const font = await pdfDoc.embedFont(
+      StandardFonts.HelveticaBold
+    );
 
     const pages = pdfDoc.getPages();
 
-    const position = req.body.position || "bottom-center";
+    const position =
+      req.body.position || "bottom-center";
 
     pages.forEach((page, index) => {
       const { width, height } = page.getSize();
 
       const text = `Page ${index + 1}`;
+
       const size = 16;
 
-      const textWidth = font.widthOfTextAtSize(text, size);
+      const textWidth = font.widthOfTextAtSize(
+        text,
+        size
+      );
 
       const isTop = position.startsWith("top");
-      const isBottom = position.startsWith("bottom");
       const isLeft = position.endsWith("left");
       const isRight = position.endsWith("right");
-      const isCenter = position.endsWith("center");
 
-      const x = isLeft ? 20 : isRight ? width - textWidth - 20 : (width - textWidth) / 2;
+      const x = isLeft
+        ? 20
+        : isRight
+        ? width - textWidth - 20
+        : (width - textWidth) / 2;
+
       const y = isTop ? height - 30 : 20;
 
       page.drawText(text, {
@@ -106,22 +118,19 @@ exports.addPageNumbers = async (req, res) => {
 
     const pdfBytesOut = await pdfDoc.save();
 
-    const outputPath = path.join(outputDir, `page-numbered-${Date.now()}.pdf`);
+    const outputPath = path.join(
+      outputDir,
+      `page-numbered-${Date.now()}.pdf`
+    );
 
     fs.writeFileSync(outputPath, pdfBytesOut);
 
-    res.download(outputPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(outputPath, () => {
       try {
         if (fs.existsSync(outputPath)) {
           fs.unlinkSync(outputPath);
         }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
@@ -130,27 +139,16 @@ exports.addPageNumbers = async (req, res) => {
 };
 
 /* ---------------- PDF TO JPG ---------------- */
-exports.pdfToJpg = async (req, res) => {
-  let inputPdfPath = "";
-  let zipPath = "";
-  let convertedImages = [];
 
+exports.pdfToJpg = async (req, res) => {
   try {
-    console.log("pdf to jpg route hit");
+    ensureOutputDir();
 
     if (!req.file) {
-      return res.status(400).send("Please upload a PDF file");
+      return res.status(400).send("Please upload a PDF");
     }
 
-    inputPdfPath = req.file.path;
-
-    const outputDir = path.resolve(__dirname, "../outputs");
-
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    const converter = fromPath(inputPdfPath, {
+    const converter = fromPath(req.file.path, {
       density: 140,
       saveFilename: `page-${Date.now()}`,
       savePath: outputDir,
@@ -159,95 +157,62 @@ exports.pdfToJpg = async (req, res) => {
       height: 1600,
     });
 
-    convertedImages = await converter.bulk(-1);
+    const convertedImages = await converter.bulk(-1);
 
-    zipPath = path.join(outputDir, `pdf-to-jpg-${Date.now()}.zip`);
+    const zipPath = path.join(
+      outputDir,
+      `pdf-to-jpg-${Date.now()}.zip`
+    );
 
     await new Promise((resolve, reject) => {
       const output = fs.createWriteStream(zipPath);
-      const archive = archiver("zip", { zlib: { level: 9 } });
+
+      const archive = archiver("zip", {
+        zlib: { level: 9 },
+      });
 
       output.on("close", resolve);
+
       archive.on("error", reject);
 
       archive.pipe(output);
 
       convertedImages.forEach((img, index) => {
-        if (img.path && fs.existsSync(img.path)) {
-          archive.file(img.path, { name: `page-${index + 1}.jpg` });
-        }
+        archive.file(img.path, {
+          name: `page-${index + 1}.jpg`,
+        });
       });
 
       archive.finalize();
     });
 
-    return res.download(zipPath, "converted-images.zip", () => {
+    res.download(zipPath, () => {
       try {
-        if (inputPdfPath && fs.existsSync(inputPdfPath))
-          fs.unlinkSync(inputPdfPath);
-      } catch (_) {}
-
-      convertedImages.forEach((img) => {
-        try {
-          if (img.path && fs.existsSync(img.path)) fs.unlinkSync(img.path);
-        } catch (_) {}
-      });
-
-      try {
-        if (zipPath && fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+        fs.unlinkSync(zipPath);
       } catch (_) {}
     });
   } catch (error) {
     console.log(error);
-
-    try {
-      if (inputPdfPath && fs.existsSync(inputPdfPath))
-        fs.unlinkSync(inputPdfPath);
-    } catch (_) {}
-
-    convertedImages.forEach((img) => {
-      try {
-        if (img.path && fs.existsSync(img.path)) fs.unlinkSync(img.path);
-      } catch (_) {}
-    });
-
-    try {
-      if (zipPath && fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
-    } catch (_) {}
-
-    return res.status(500).send("Error converting PDF to JPG");
+    res.status(500).send("Error converting PDF to JPG");
   }
 };
+
 /* ---------------- JPG TO PDF ---------------- */
 
 exports.jpgToPdf = async (req, res) => {
-  const uploadedFiles = req.files || [];
-
   try {
-    console.log("jpg to pdf route hit");
     ensureOutputDir();
 
-    if (!uploadedFiles.length) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).send("Upload JPG files");
     }
 
     const pdfDoc = await PDFDocument.create();
 
-    for (const file of uploadedFiles) {
+    for (const file of req.files) {
       const imageBytes = fs.readFileSync(file.path);
-      const lowerName = (file.originalname || "").toLowerCase();
 
-      let image;
-
-      if (
-        lowerName.endsWith(".jpg") ||
-        lowerName.endsWith(".jpeg") ||
-        file.mimetype === "image/jpeg"
-      ) {
-        image = await pdfDoc.embedJpg(imageBytes);
-      } else {
-        continue;
-      }
+      const image = await pdfDoc.embedJpg(imageBytes);
 
       const { width, height } = image.scale(1);
 
@@ -261,28 +226,19 @@ exports.jpgToPdf = async (req, res) => {
       });
     }
 
-    if (pdfDoc.getPageCount() === 0) {
-      return res.status(400).send("No valid JPG images found");
-    }
-
     const pdfBytes = await pdfDoc.save();
 
-    const outputPath = `outputs/jpg-to-pdf-${Date.now()}.pdf`;
+    const outputPath = path.join(
+      outputDir,
+      `jpg-to-pdf-${Date.now()}.pdf`
+    );
 
     fs.writeFileSync(outputPath, pdfBytes);
 
-    res.download(outputPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(outputPath, () => {
       try {
-        if (fs.existsSync(outputPath)) {
-          fs.unlinkSync(outputPath);
-        }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+        fs.unlinkSync(outputPath);
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
@@ -294,50 +250,44 @@ exports.jpgToPdf = async (req, res) => {
 
 exports.pdfToWord = async (req, res) => {
   try {
-    console.log("pdf to word route hit");
+    ensureOutputDir();
 
     if (!req.file) {
-      return res.status(400).send("Please upload a PDF file");
+      return res.status(400).send("Upload PDF");
     }
 
     const inputPath = path.resolve(req.file.path);
-    ensureOutputDir();
 
     await new Promise((resolve, reject) => {
       execFile(
-      "soffice",
-      [
-        "--headless",
-        "--infilter=writer_pdf_import",
-        "--convert-to",
-        "docx",
-        "--outdir",
-        outputDir,
-        inputPath
-      ],
+        "soffice",
+        [
+          "--headless",
+          "--infilter=writer_pdf_import",
+          "--convert-to",
+          "docx",
+          "--outdir",
+          outputDir,
+          inputPath,
+        ],
         (error) => {
           if (error) return reject(error);
+
           resolve();
-        },
+        }
       );
     });
 
-    const files = fs.readdirSync(outputDir).filter((f) => f.endsWith(".docx"));
+    const files = fs
+      .readdirSync(outputDir)
+      .filter((f) => f.endsWith(".docx"));
 
     const convertedPath = path.join(outputDir, files[0]);
 
-    res.download(convertedPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(convertedPath, () => {
       try {
-        if (fs.existsSync(convertedPath)) {
-          fs.unlinkSync(convertedPath);
-        }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+        fs.unlinkSync(convertedPath);
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
@@ -349,42 +299,43 @@ exports.pdfToWord = async (req, res) => {
 
 exports.wordToPdf = async (req, res) => {
   try {
-    console.log("word to pdf route hit");
+    ensureOutputDir();
 
     if (!req.file) {
-      return res.status(400).send("Please upload a Word file");
+      return res.status(400).send("Upload Word file");
     }
 
     const inputPath = path.resolve(req.file.path);
-    ensureOutputDir();
 
     await new Promise((resolve, reject) => {
       execFile(
         "C:\\Program Files\\LibreOffice\\program\\soffice.exe",
-        ["--headless", "--convert-to", "pdf", "--outdir", outputDir, inputPath],
+        [
+          "--headless",
+          "--convert-to",
+          "pdf",
+          "--outdir",
+          outputDir,
+          inputPath,
+        ],
         (error) => {
           if (error) return reject(error);
+
           resolve();
-        },
+        }
       );
     });
 
-    const files = fs.readdirSync(outputDir).filter((f) => f.endsWith(".pdf"));
+    const files = fs
+      .readdirSync(outputDir)
+      .filter((f) => f.endsWith(".pdf"));
 
     const convertedPath = path.join(outputDir, files[0]);
 
-    res.download(convertedPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(convertedPath, () => {
       try {
-        if (fs.existsSync(convertedPath)) {
-          fs.unlinkSync(convertedPath);
-        }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+        fs.unlinkSync(convertedPath);
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
@@ -396,10 +347,10 @@ exports.wordToPdf = async (req, res) => {
 
 exports.addWatermark = async (req, res) => {
   try {
-    console.log("add watermark route hit");
+    ensureOutputDir();
 
     if (!req.file) {
-      return res.status(400).send("Please upload a PDF file");
+      return res.status(400).send("Upload PDF");
     }
 
     const pdfBytes = fs.readFileSync(req.file.path);
@@ -408,51 +359,41 @@ exports.addWatermark = async (req, res) => {
 
     const pages = pdfDoc.getPages();
 
-    const watermark = req.body.text || "CONFIDENTIAL";
+    const watermark =
+      req.body.text || "CONFIDENTIAL";
 
     pages.forEach((page) => {
       const { width, height } = page.getSize();
 
-      const xStep = width / 4;
-      const yStep = height / 4;
-
-      for (let x = xStep / 2; x < width; x += xStep) {
-        for (let y = yStep / 2; y < height; y += yStep) {
-          page.drawText(watermark, {
-            x,
-            y,
-            size: 30,
-            opacity: 0.2,
-            rotate: degrees(45),
-          });
-        }
-      }
+      page.drawText(watermark, {
+        x: width / 3,
+        y: height / 2,
+        size: 40,
+        opacity: 0.2,
+        rotate: degrees(45),
+      });
     });
 
     const newPdf = await pdfDoc.save();
 
-    const outputPath = path.join(outputDir, `watermarked-${Date.now()}.pdf`);
+    const outputPath = path.join(
+      outputDir,
+      `watermarked-${Date.now()}.pdf`
+    );
 
     fs.writeFileSync(outputPath, newPdf);
 
-    res.download(outputPath, (err) => {
-      if (err) {
-        console.error("Download interrupted:", err.message);
-      }
-
+    res.download(outputPath, () => {
       try {
-        if (fs.existsSync(outputPath)) {
-          fs.unlinkSync(outputPath);
-        }
-      } catch (e) {
-        console.error("File cleanup error:", e.message);
-      }
+        fs.unlinkSync(outputPath);
+      } catch (_) {}
     });
   } catch (error) {
     console.log(error);
     res.status(500).send("Watermark failed");
   }
 };
+
 
 /* ---------------- SPLIT PDF ---------------- */
 
@@ -461,117 +402,13 @@ exports.splitPDF = async (req, res) => {
     console.log("split route hit");
 
     if (!req.file) {
-      return res.status(400).send("Please upload a PDF file");
-    }
-
-    const pdfPath = req.file.path;
-
-    const pdfBytes = fs.readFileSync(pdfPath);
-
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-
-    const totalPages = pdfDoc.getPageCount();
-
-    const splitFiles = [];
-
-    for (let i = 0; i < totalPages; i++) {
-      const newPdf = await PDFDocument.create();
-
-      const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
-
-      newPdf.addPage(copiedPage);
-
-      const pdfBytes = await newPdf.save();
-
-      const outputPath = path.join("uploads", `page-${i + 1}.pdf`);
-
-      fs.writeFileSync(outputPath, pdfBytes);
-
-      splitFiles.push(outputPath);
-    }
-
-    // res.json({
-    //     message: "PDF split successfully",
-    //     files: splitFiles
-    // });
-    // res.download(splitFiles[0]);
-    // res.download(path.resolve(splitFiles[0]))
-    const archive = archiver("zip");
-
-    res.attachment("split.zip");
-
-    archive.pipe(res);
-
-    splitFiles.forEach((file) => {
-      archive.file(file, { name: path.basename(file) });
-    });
-
-    archive.finalize();
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).json({ error: "Split failed" });
-  }
-};
-/* ---------------- COMPRESS PDF ---------------- */
-
-exports.compressPDF = async (req, res) => {
-  try {
-    console.log("compress route hit");
-
-    if (!req.file) {
-      return res.status(400).send("Please upload a PDF file");
-    }
-
-    const inputPath = path.resolve(req.file.path); // absolute path
-    ensureOutputDir();
-    const outputPath = path.join(outputDir, `compressed-${Date.now()}.pdf`);
-
-    const gsCmd = process.platform === "win32" ? "gswin64c" : "gs";
-    const command = `${gsCmd} -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${outputPath}" "${inputPath}"`;
-
-    exec(command, (error) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).send("Compression failed");
-      }
-
-      res.download(outputPath, (err) => {
-        if (err) {
-          console.error("Download interrupted:", err.message);
-        }
-
-        try {
-          if (fs.existsSync(outputPath)) {
-            fs.unlinkSync(outputPath);
-          }
-        } catch (e) {
-          console.error("Cleanup error:", e.message);
-        }
-      });
-    });
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).send("Compression error");
-  }
-};
-
-exports.splitPDF = async (req, res) => {
-  try {
-    if (!req.file) {
       return res.status(400).send("No PDF uploaded");
     }
 
+    ensureOutputDir();
+
     const pdfBytes = fs.readFileSync(req.file.path);
-
     const pdfDoc = await PDFDocument.load(pdfBytes);
-
-    const outputDir = path.resolve(__dirname, "../outputs");
-
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
 
     const zipPath = path.join(outputDir, `split-${Date.now()}.zip`);
 
@@ -592,16 +429,18 @@ exports.splitPDF = async (req, res) => {
 
       newPdf.addPage(copiedPage);
 
-      const pdfBytes = await newPdf.save();
+      const pageBytes = await newPdf.save();
 
       const tempPath = path.join(outputDir, `page-${i + 1}.pdf`);
 
-      fs.writeFileSync(tempPath, pdfBytes);
+      fs.writeFileSync(tempPath, pageBytes);
 
-      archive.file(tempPath, { name: `page-${i + 1}.pdf` });
+      archive.file(tempPath, {
+        name: `page-${i + 1}.pdf`,
+      });
     }
 
-    archive.finalize();
+    await archive.finalize();
 
     output.on("close", () => {
       res.download(zipPath, "split-pdf.zip", () => {
@@ -617,21 +456,33 @@ exports.splitPDF = async (req, res) => {
   }
 };
 
+
+/* ---------------- COMPRESS PDF ---------------- */
+
 exports.compressPDF = async (req, res) => {
   try {
+    console.log("compress route hit");
+
     if (!req.file) {
       return res.status(400).send("No PDF uploaded");
     }
 
-    const inputPath = req.file.path;
+    ensureOutputDir();
+
+    const inputPath = path.resolve(req.file.path);
 
     const outputPath = path.join(
-      "outputs",
+      outputDir,
       `compressed-${Date.now()}.pdf`
     );
 
+    const gsCommand =
+      process.platform === "win32"
+        ? "gswin64c"
+        : "gs";
+
     execFile(
-      "gs",
+      gsCommand,
       [
         "-sDEVICE=pdfwrite",
         "-dCompatibilityLevel=1.4",
@@ -644,20 +495,31 @@ exports.compressPDF = async (req, res) => {
       ],
       (error) => {
         if (error) {
-          console.log(error);
+          console.log("Ghostscript Error:", error);
           return res.status(500).send("Compression failed");
         }
 
-        res.download(outputPath, () => {
+        res.download(outputPath, "compressed.pdf", (err) => {
+          if (err) {
+            console.log(err);
+          }
+
           try {
-            fs.unlinkSync(outputPath);
-          } catch (_) {}
+            if (fs.existsSync(outputPath)) {
+              fs.unlinkSync(outputPath);
+            }
+
+            if (fs.existsSync(inputPath)) {
+              fs.unlinkSync(inputPath);
+            }
+          } catch (cleanupError) {
+            console.log(cleanupError);
+          }
         });
       }
     );
-
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error compressing PDF");
+    res.status(500).send("Compression error");
   }
 };

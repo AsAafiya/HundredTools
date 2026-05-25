@@ -4,7 +4,7 @@ const router = express.Router();
 const upload = require("../middleware/uploadMiddleware");
 
 const {
- mergePDF,
+  mergePDF,
   addPageNumbers,
   pdfToJpg,
   jpgToPdf,
@@ -15,32 +15,31 @@ const {
   compressPDF
 } = require("../controllers/pdfController");
 
+// Merge
 router.post("/merge", upload.array("files"), mergePDF);
 
-// const {compressPDF}=require("../controllers/compressController");
-
-// router.post("/compress", upload.single("file"),compressPDF);
-
-// router.post("/compress", upload.single("file"), compressPDF);
-
+// Compress
 router.post("/compress", upload.single("file"), compressPDF);
 
+// Split
+router.post("/split", upload.single("file"), splitPDF);
+
+// PDF to Word
 router.post("/pdf-to-word", upload.single("file"), pdfToWord);
 
+// Word to PDF
 router.post("/word-to-pdf", upload.single("file"), wordToPdf);
 
-router.post("/split", upload.single("file"), splitPDF);
-
+// Add Watermark
 router.post("/add-watermark", upload.single("file"), addWatermark);
 
+// PDF to JPG
 router.post("/pdf-to-jpg", upload.single("file"), pdfToJpg);
 
+// JPG to PDF
 router.post("/jpg-to-pdf", upload.array("files"), jpgToPdf);
 
-
+// Add Page Numbers
 router.post("/add-page-numbers", upload.single("file"), addPageNumbers);
-router.post("/split", upload.single("file"), splitPDF);
-
-router.post("/compress", upload.single("file"), compressPDF);
 
 module.exports = router;
