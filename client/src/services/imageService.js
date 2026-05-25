@@ -1,32 +1,47 @@
 import api from "./api";
 
-export const compressImageAPI = async (files, quality, onUploadProgress) => {
+// Compress Image
+export const compressImageAPI = async (
+  files,
+  quality,
+  onUploadProgress
+) => {
   const formData = new FormData();
 
-  const response = await fetch("https://hundredtools.onrender.com/api/image/compress", {
-    method: "POST",
-    body: formData
+  files.forEach((file) => {
+    formData.append("file", file);
   });
 
-  formData.append("level", quality); // IMPORTANT
+  formData.append("level", quality);
 
-  const response = await api.post(`/image/compress`, formData, {
-    responseType: "blob",
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (e) => {
-      if (onUploadProgress && e.lengthComputable) {
-        const percent = Math.round((e.loaded * 100) / e.total);
-        onUploadProgress(percent);
-      }
-    },
-  });
+  const response = await api.post(
+    "/image/compress",
+    formData,
+    {
+      responseType: "blob",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (e) => {
+        if (onUploadProgress && e.lengthComputable) {
+          const percent = Math.round(
+            (e.loaded * 100) / e.total
+          );
+          onUploadProgress(percent);
+        }
+      },
+    }
+  );
 
   return response.data;
 };
 
-//resize tool
-
-export const resizeImageAPI = async (files, width, height, onUploadProgress) => {
+// Resize Image
+export const resizeImageAPI = async (
+  files,
+  width,
+  height
+) => {
   const formData = new FormData();
 
   files.forEach((file) => {
@@ -36,50 +51,73 @@ export const resizeImageAPI = async (files, width, height, onUploadProgress) => 
   formData.append("width", width);
   formData.append("height", height);
 
-  const response = await fetch("https://hundredtools.onrender.com/api/image/resize", {
-    method: "POST",
-    body: formData
-  });
+  const response = await api.post(
+    "/image/resize",
+    formData,
+    {
+      responseType: "blob",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return response.data;
 };
 
-
-//crop tool
-export const cropImageAPI = async (files, cropData, onUploadProgress) => {
+// Crop Image
+export const cropImageAPI = async (
+  files,
+  cropData
+) => {
   const formData = new FormData();
 
-  for (let file of files) {
+  files.forEach((file) => {
     formData.append("file", file);
-  }
+  });
 
   formData.append("x", cropData.x);
   formData.append("y", cropData.y);
   formData.append("width", cropData.width);
   formData.append("height", cropData.height);
 
-  const response = await fetch("https://hundredtools.onrender.com/api/image/crop", {
-    method: "POST",
-    body: formData
-  });
+  const response = await api.post(
+    "/image/crop",
+    formData,
+    {
+      responseType: "blob",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return response.data;
 };
 
-//convert tool
-export const convertImageAPI = async (files, format, onUploadProgress) => {
+// Convert Image
+export const convertImageAPI = async (
+  files,
+  format
+) => {
   const formData = new FormData();
 
-  for (let file of files) {
+  files.forEach((file) => {
     formData.append("file", file);
-  }
+  });
 
   formData.append("format", format);
 
-  const response = await fetch("https://hundredtools.onrender.com/api/image/convert", {
-    method: "POST",
-    body: formData
-  });
+  const response = await api.post(
+    "/image/convert",
+    formData,
+    {
+      responseType: "blob",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return response.data;
 };
