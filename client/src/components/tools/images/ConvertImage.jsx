@@ -4,22 +4,26 @@ import FileUploadImage from "../../common/FileUploadImage";
 import Features from "../../common/Features";
 import { convertImageAPI } from "../../../services/imageService";
 import "../../../styles/tool.css";
+import { useError } from "../../../context/ErrorContext";
 
 function ConvertImage() {
+  const [svgAllowed, setSvgAllowed] = useState(true);
   const [files, setFiles] = useState([]);
   const [format, setFormat] = useState("png");
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [processComplete, setProcessComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
+    const { showError } = useError();
   const handleConvert = async () => {
     if (files.length === 0) {
-      alert("Upload at least one image");
+      showError("Upload at least one image");
       return;
     }
 
     try {
-      const blob = await convertImageAPI(files, format);
+      const blob = await convertImageAPI(files, format, (p) => setUploadProgress(p));
 
       const url = URL.createObjectURL(blob);
 
@@ -33,7 +37,7 @@ function ConvertImage() {
       );
     } catch (error) {
       console.error(error);
-      alert("Error converting image");
+     showError("Error converting image");
     }
   };
 
@@ -42,6 +46,16 @@ function ConvertImage() {
     setDownloadUrl(null);
     setProcessComplete(false);
     setFileName("");
+  };
+
+  const handleFilesChange = (uploadedFiles) => {
+    setFiles(uploadedFiles);
+
+    const allSVG = uploadedFiles.every((file) =>
+      file.name.toLowerCase().endsWith(".svg"),
+    );
+
+    setSvgAllowed(allSVG);
   };
 
   return (
@@ -53,7 +67,7 @@ function ConvertImage() {
       </div>
 
       <h1>Convert Image</h1>
-      <p className="subtitle">Convert images to JPG, PNG, or WEBP format</p>
+      <p className="subtitle">Convert images to JPG, PNG, SVG or WEBP format</p>
 
       {/* Format selector */}
 
@@ -84,14 +98,29 @@ function ConvertImage() {
             <span>WEBP</span>
             <p>Best for web performance</p>
           </button>
+
+          <button
+            disabled={!svgAllowed}
+            className={
+              format === "svg"
+                ? "format-card active"
+                : !svgAllowed
+                  ? "format-card disabled"
+                  : "format-card"
+            }
+            onClick={() => setFormat("svg")}
+          >
+            <span>SVG</span>
+            <p>Vector format</p>
+          </button>
         </div>
       </div>
 
       <FileUploadImage
-        accept="image/*"
+        accept="image/*,.svg"
         maxFiles={10}
         files={files}
-        setFiles={setFiles}
+        setFiles={handleFilesChange}
         onProcess={handleConvert}
         processComplete={processComplete}
         downloadUrl={downloadUrl}
@@ -99,6 +128,8 @@ function ConvertImage() {
         processLabel="Convert Images"
         successMessage="converted successfully!!!"
         onReset={resetTool}
+        processing={processComplete ? false : uploadProgress > 0}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

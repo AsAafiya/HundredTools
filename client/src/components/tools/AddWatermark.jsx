@@ -2,27 +2,49 @@ import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import FileUploadWatermark from "../common/FileUploadWatermark";
 import Features from "../common/Features";
-import { addWatermark } from "../../services/pdfService";
+import { addWatermarkWithProgress } from "../../services/pdfService";
 import "../../styles/tool.css";
+import { useError } from "../../context/ErrorContext";
 
 function AddWatermark() {
-
+  const { showError } = useError();
   const [file, setFile] = useState(null);
   const [text, setText] = useState("");
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [complete, setComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [resetKey, setResetKey] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const handleReset = () => {
+    setFile(null);
+    setText("");
+    setDownloadUrl(null);
+    setComplete(false);
+    setFileName("");
+    setLoading(false);
+    setResetKey((k) => k + 1);
+  };
 
   const handleWatermark = async () => {
 
     if (!file) {
-      alert("Upload a PDF first");
+      showError("Upload a PDF first");
       return;
     }
 
     try {
+      const startedAt = Date.now();
+      const minProgressMs = 900;
+      setLoading(true);
 
-      const result = await addWatermark(file, text);
+      const result = await addWatermarkWithProgress(file, text, (p) => setUploadProgress(p));
+
+      const elapsed = Date.now() - startedAt;
+      if (elapsed < minProgressMs) {
+        await new Promise((resolve) => setTimeout(resolve, minProgressMs - elapsed));
+      }
 
       const url = window.URL.createObjectURL(result);
 
@@ -30,18 +52,19 @@ function AddWatermark() {
       setComplete(true);
       setFileName("Nexora_watermarked.pdf");
 
-      // 🔥 auto download
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Nexora_watermarked.pdf";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
+      setUploadProgress(0);
     }
 
+  };
+
+  const handleDownload = () => {
+    setTimeout(() => {
+      handleReset();
+    }, 300);
   };
 
   return (
@@ -68,6 +91,7 @@ function AddWatermark() {
       /> */}
 
       <FileUploadWatermark
+        key={resetKey}
         onFileChange={setFile}
         onMerge={handleWatermark}
         downloadUrl={downloadUrl}
@@ -75,6 +99,11 @@ function AddWatermark() {
         mergedFileName={fileName}
         watermarkText={text}
         setWatermarkText={setText}
+        onDownload={handleDownload}
+        isProcessing={loading}
+        processingLabel="Applying watermark..."
+        processing={loading}
+        uploadProgress={uploadProgress}
       />
 
       <Features />

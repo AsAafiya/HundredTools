@@ -1,23 +1,32 @@
-export const compressImageAPI = async (files) => {
+import api from "./api";
+
+export const compressImageAPI = async (files, quality, onUploadProgress) => {
   const formData = new FormData();
-  for (let file of files) {
-  formData.append("file", file); // matches upload.array("file") on backend
-}
 
   const response = await fetch("https://hundredtools.onrender.com/api/image/compress", {
     method: "POST",
     body: formData
   });
 
-  if (!response.ok) throw new Error("Image compression failed");
+  formData.append("level", quality); // IMPORTANT
 
-  const blob = await response.blob();
-  return blob;
+  const response = await api.post(`/image/compress`, formData, {
+    responseType: "blob",
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (onUploadProgress && e.lengthComputable) {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        onUploadProgress(percent);
+      }
+    },
+  });
+
+  return response.data;
 };
 
 //resize tool
 
-export const resizeImageAPI = async (files, width, height) => {
+export const resizeImageAPI = async (files, width, height, onUploadProgress) => {
   const formData = new FormData();
 
   files.forEach((file) => {
@@ -32,15 +41,12 @@ export const resizeImageAPI = async (files, width, height) => {
     body: formData
   });
 
-  if (!response.ok) throw new Error("Resize failed");
-
-  return await response.blob();
+  return response.data;
 };
 
 
 //crop tool
-export const cropImageAPI = async (files, cropData) => {
-
+export const cropImageAPI = async (files, cropData, onUploadProgress) => {
   const formData = new FormData();
 
   for (let file of files) {
@@ -57,14 +63,11 @@ export const cropImageAPI = async (files, cropData) => {
     body: formData
   });
 
-  if (!response.ok) throw new Error("Crop failed");
-
-  return await response.blob();
+  return response.data;
 };
 
 //convert tool
-export const convertImageAPI = async (files, format) => {
-
+export const convertImageAPI = async (files, format, onUploadProgress) => {
   const formData = new FormData();
 
   for (let file of files) {
@@ -78,7 +81,5 @@ export const convertImageAPI = async (files, format) => {
     body: formData
   });
 
-  if (!response.ok) throw new Error("Image conversion failed");
-
-  return await response.blob();
+  return response.data;
 };
