@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import ResumeBuilder from "../components/tools/ResumeBuilder";
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -65,6 +65,7 @@ const AppRoutes = () => {
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
           <Route path="tools/word-to-pdf" element={<WordToPdf />} />
           <Route path="tools/add-watermark" element={<AddWatermark />} />
+          <Route path="resume-builder" element={<ResumeBuilder />} />
 
           {/* Category page */}
           <Route path="tools/:category" element={<ToolsPage />} />
@@ -90,6 +91,7 @@ const AppRoutes = () => {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      
     </>
   );
 };
