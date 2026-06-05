@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import { TbUpload } from "react-icons/tb";
 import { RxCross1 } from "react-icons/rx";
-import api from "../../services/api";
 import "../../styles/fileUpload.css";
 
 function FileUploadSingle({
   accept = ".pdf",
   maxSizeMB = 50,
-  endpoint,
-  downloadName = "converted-file"
+  endpoint = "",
+  downloadName = "converted-file",
+  onDownload
 }) {
   const inputRef = useRef(null);
 
@@ -23,6 +23,7 @@ function FileUploadSingle({
 
   const validateFile = (selectedFile) => {
     const errorList = [];
+
     const allowedTypes = accept.split(",");
 
     const isValidType = allowedTypes.some((type) =>
@@ -40,15 +41,21 @@ function FileUploadSingle({
     setErrors(errorList);
 
     if (errorList.length > 0) return null;
+
     return selectedFile;
   };
 
   const handleFile = (selectedFiles) => {
     const selectedFile = selectedFiles[0];
+
     if (!selectedFile) return;
 
     const validated = validateFile(selectedFile);
-    if (validated) setFile(validated);
+
+    if (validated) {
+      setFile(validated);
+      setErrors([]);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -57,6 +64,7 @@ function FileUploadSingle({
 
   const handleDrop = (e) => {
     e.preventDefault();
+
     if (loading) return;
 
     const droppedFiles = e.dataTransfer.files;
@@ -93,29 +101,43 @@ function FileUploadSingle({
       return;
     }
 
-    try {
-      const startedAt = Date.now();
-      const minProgressMs = 900;
+    if (!endpoint) {
+      setErrors(["API endpoint missing"]);
+      return;
+    }
 
+    try {
       setLoading(true);
-      setProgress(0);
+      setProgress(10);
 
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`https://hundredtools.onrender.com${endpoint}`, {
-        method: "POST",
-        body: formData
-      });
+      const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://hundredtools.onrender.com";
 
-      const blob = response.data;
+const response = await fetch(
+  `${API_URL}${endpoint}`,
+  {
+    method: "POST",
+    body: formData,
+  }
+);
 
-      const elapsed = Date.now() - startedAt;
-      if (elapsed < minProgressMs) {
-        await new Promise((resolve) => setTimeout(resolve, minProgressMs - elapsed));
+      if (!response.ok) {
+        throw new Error("Upload failed");
       }
 
+      setProgress(70);
+
+      const blob = await response.blob();
+
+      setProgress(100);
+
       const url = window.URL.createObjectURL(blob);
+
       setDownloadUrl(url);
       setConvertComplete(true);
     } catch (err) {
@@ -123,23 +145,24 @@ function FileUploadSingle({
       setErrors(["Upload or conversion failed"]);
     } finally {
       setLoading(false);
-      setProgress(0);
     }
   };
 
   return (
     <div className="upload-container">
       <div className="upload-card">
+
         <div
           className={`upload-box ${convertComplete ? "complete-state" : ""}`}
           onClick={() => {
-            if (!file && !convertComplete && !loading) {
+            if (!file && !loading && !convertComplete) {
               inputRef.current.click();
             }
           }}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
+
           {!file && !convertComplete && (
             <>
               <div className="upload-icon">
@@ -155,12 +178,16 @@ function FileUploadSingle({
           {file && !convertComplete && (
             <div className="upload-preview upload-preview-grid">
               <div className="upload-file-item">
-                <span className="file-card-icon" aria-hidden="true">
+
+                <span className="file-card-icon">
                   📄
                 </span>
 
                 <div className="file-card-meta">
-                  <p className="file-card-name">{file.name}</p>
+                  <p className="file-card-name">
+                    {file.name}
+                  </p>
+
                   <span className="file-card-size">
                     {(file.size / 1024).toFixed(2)} KB
                   </span>
@@ -176,27 +203,40 @@ function FileUploadSingle({
                 >
                   <RxCross1 />
                 </button>
+
               </div>
             </div>
           )}
 
-          {!file && !convertComplete && loading && (
-            <div className="upload-progress-wrap" role="status" aria-live="polite">
+          {loading && (
+            <div
+              className="upload-progress-wrap"
+              role="status"
+              aria-live="polite"
+            >
+
               <div className="upload-progress-bar">
                 <span
                   className="upload-progress-fill"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <p className="upload-progress-text">Converting PDF... {progress}%</p>
+
+              <p className="upload-progress-text">
+                Processing... {progress}%
+              </p>
+
             </div>
           )}
 
           {convertComplete && downloadUrl && (
             <div className="upload-preview">
-              <p className="merged-file-name">{downloadName}</p>
+              <p className="merged-file-name">
+                {downloadName}
+              </p>
             </div>
           )}
+
         </div>
 
         <input
@@ -218,14 +258,14 @@ function FileUploadSingle({
               onClick={() => inputRef.current.click()}
               disabled={loading}
             >
-              Add Files
+              Add File
             </button>
 
             {file && (
               <button
                 className="upload-btn convert-btn"
                 onClick={uploadFile}
-                disabled={!file || loading}
+                disabled={loading}
               >
                 {loading ? "Processing..." : "Convert File"}
               </button>
@@ -251,6 +291,7 @@ function FileUploadSingle({
             ))}
           </div>
         )}
+
       </div>
     </div>
   );

@@ -176,6 +176,12 @@ const toolsByCategory = {
         icon: "✂️",
         path: "/tools/image/crop-image",
       },
+      {
+  title: "AI Resume Builder",
+  description: "Create professional resumes using AI",
+  icon: "📄",
+  path: "/resume-builder",
+},
     ],
   },
 };

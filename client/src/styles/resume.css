@@ -1,0 +1,122 @@
+.resume-page{
+  display:flex;
+  gap:30px;
+  padding:40px;
+  background:#f2f4f8;
+  align-items:flex-start;
+}
+
+.resume-form{
+  width:35%;
+  background:#fff;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  position:sticky;
+  top:20px;
+}
+
+.resume-form h1{
+  margin-bottom:20px;
+  font-size:32px;
+}
+
+.resume-form input,
+.resume-form textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.resume-form button{
+  width:100%;
+  padding:14px;
+  background:#111;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+.classic-resume{
+  width:65%;
+  background:#fff;
+  padding:50px;
+  color:#000;
+  font-family:"Times New Roman", serif;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.resume-header{
+  text-align:center;
+}
+
+.resume-header h1{
+  font-size:42px;
+  margin-bottom:10px;
+  font-weight:bold;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.resume-header p{
+  margin:5px 0;
+  font-size:15px;
+}
+
+.classic-resume hr{
+  margin:25px 0;
+  border:none;
+  border-top:3px solid #000;
+}
+
+.resume-section{
+  margin-bottom:28px;
+}
+
+.resume-section h2{
+  font-size:22px;
+  margin-bottom:10px;
+  font-weight:bold;
+  border-bottom:2px solid #000;
+  padding-bottom:4px;
+}
+
+.resume-section p,
+.resume-section li{
+  font-size:17px;
+  line-height:1.8;
+}
+
+.resume-section ul{
+  padding-left:22px;
+}
+
+.profile-img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:15px;
+}
+
+.ai-result{
+  white-space:pre-line;
+  line-height:1.8;
+}
+
+.download-btn{
+  width:100%;
+  margin-top:30px;
+  padding:14px;
+  background:#111;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+}
