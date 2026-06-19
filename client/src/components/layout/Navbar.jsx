@@ -108,6 +108,25 @@ const Navbar = () => {
         { name: "Trim Video", path: "/tools/trim-video" },
       ],
     },
+    {
+  key: "text",
+  label: "Text Tools",
+  path: "/tools/text",
+  viewAllLabel: "View All Tools",
+  items: [
+    { name: "Speech to Text", path: "/tools/speech-to-text" },
+    { name: "Text to Speech", path: "/tools/text-to-speech" },
+    { name: "Text to Barcode", path: "/tools/text-to-barcode" },
+    { name: "Text to QR Code", path: "/tools/text-to-qr-code" },
+    { name: "Word Counter", path: "/tools/word-counter" },
+    { name: "Character Counter", path: "/tools/character-counter" },
+    { name: "Case Converter", path: "/tools/case-converter" },
+    { name: "Remove Duplicate Lines", path: "/tools/remove-duplicate-lines" },
+    { name: "Text Compare", path: "/tools/text-compare" },
+    { name: "Text Formatter", path: "/tools/text-formatter" },
+     { name: "Grammer and spell Checker", path: "/tools/Grammer and spell Checker" }
+  ],
+},
   ];
 
   return (
