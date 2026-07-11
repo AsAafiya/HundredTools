@@ -24,6 +24,7 @@ import ConvertImage from "../components/tools/images/ConvertImage";
 import CropImage from "../components/tools/images/CropImage";
 
 import ScrollToTop from "../components/common/ScrollToTop";
+import GoogleAnalytics from "../components/common/GoogleAnalytics";
 import PdfToWord from "../components/tools/PdfToWord";
 import WordToPdf from "../components/tools/WordToPdf";
 import AddWatermark from "../components/tools/AddWatermark";
@@ -41,6 +42,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
+      <GoogleAnalytics />
 
       <Routes>
         <Route path="/" element={<MainLayout />}>
