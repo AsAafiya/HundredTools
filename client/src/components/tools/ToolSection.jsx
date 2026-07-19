@@ -27,6 +27,7 @@ const ToolSection = ({ title, subtitle, tools, category, withDivider = false }) 
         <button
           type="button"
           className="primary-btn"
+          aria-label={`View all ${title} tools`}
           onClick={() => navigate(`/tools/${targetCategory}`)}
         >
           View All {title}

@@ -22,11 +22,13 @@ import CompressImage from "../components/tools/images/CompressImage";
 import ResizeImage from "../components/tools/images/ResizeImage";
 import ConvertImage from "../components/tools/images/ConvertImage";
 import CropImage from "../components/tools/images/CropImage";
+import SpeechToText from "../components/tools/Speechtotexttype";
 
 import ScrollToTop from "../components/common/ScrollToTop";
 import PdfToWord from "../components/tools/PdfToWord";
 import WordToPdf from "../components/tools/WordToPdf";
 import AddWatermark from "../components/tools/AddWatermark";
+import ToDoList from "../components/tools/To-do-List";
 
 import AdminLayout from "../admin/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
@@ -54,6 +56,7 @@ const AppRoutes = () => {
           <Route path="tools/pdf-to-jpg" element={<PdfToJpg />} />
           <Route path="tools/jpg-to-pdf" element={<JpgToPdf />} />
           <Route path="tools/add-page-numbers" element={<AddPageNumbers />} />
+          <Route path="tools/speech-to-text" element={<SpeechToText />} />
           <Route
             path="tools/image/compress-image"
             element={<CompressImage />}
@@ -65,6 +68,7 @@ const AppRoutes = () => {
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
           <Route path="tools/word-to-pdf" element={<WordToPdf />} />
           <Route path="tools/add-watermark" element={<AddWatermark />} />
+          <Route path="tools/to-do-list" element={<ToDoList />} />
           <Route path="resume-builder" element={<ResumeBuilder />} />
 
           {/* Category page */}

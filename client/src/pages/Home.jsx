@@ -4,6 +4,13 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
 
+  const scrollToTools = () => {
+    document.getElementById("tools-section")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   const pdfTools = [
     {
       title: "Merge PDF",
@@ -88,6 +95,21 @@ const Home = () => {
     }
   ];
 
+  const audioTools = [
+    {
+      title: "Speech to Text",
+      description: "Convert spoken words into editable text instantly",
+      icon: "🎙️",
+      path: "/tools/speech-to-text"
+    },
+    {
+      title: "To-Do List",
+      description: "Plan your day with daily, weekly, routine, productivity, and schedule planners",
+      icon: "📋",
+      path: "/tools/to-do-list"
+    }
+  ];
+
   const videoTools = [
     {
       title: "Compress Video",
@@ -136,16 +158,29 @@ const Home = () => {
               suite of tools. Fast, secure, and incredibly easy to use.
             </p>
 
-            <div className="hero-buttons">
-
-              <Link to="/#tools-section" className="primary-btn">
+            <div className="hero-buttons" role="group" aria-label="Primary landing page actions">
+              <button type="button" className="primary-btn" onClick={scrollToTools} aria-label="Jump to tools section">
                 Start Converting Now
-              </Link>
+              </button>
 
-              <Link to="/tools/all" className="secondary-btn">
+              <Link to="/tools/all" className="secondary-btn" aria-label="Browse all tools">
                 Explore All Tools
               </Link>
+            </div>
 
+            <div className="hero-highlights" aria-label="Platform highlights">
+              <div className="highlight-card">
+                <strong>⚡ Fast</strong>
+                <span>Instant file transformations with a clean workflow.</span>
+              </div>
+              <div className="highlight-card">
+                <strong>🛡️ Secure</strong>
+                <span>Reliable processing designed for everyday productivity.</span>
+              </div>
+              <div className="highlight-card">
+                <strong>🎯 Focused</strong>
+                <span>Stay organized with smart tools and a calm interface.</span>
+              </div>
             </div>
 
             <div className="stats">
@@ -167,40 +202,95 @@ const Home = () => {
 
             </div>
 
+            <div className="hero-steps" aria-label="How HundredTools works">
+              <div className="step-card">
+                <span>1</span>
+                <h3>Upload your file</h3>
+                <p>Drop in a PDF, image, or video and get started instantly.</p>
+              </div>
+              <div className="step-card">
+                <span>2</span>
+                <h3>Choose a tool</h3>
+                <p>Pick the conversion or edit you need from our curated toolbox.</p>
+              </div>
+              <div className="step-card">
+                <span>3</span>
+                <h3>Download and share</h3>
+                <p>Get a polished result in seconds and move on with your day.</p>
+              </div>
+            </div>
+
           </div>
 
         </div>
       </section>
 
-      <section id="tools-section">
-
-      {/* PDF TOOLS */}
-
-      <ToolSection
-        title="PDF Tools"
-        subtitle="Professional tools for all your PDF needs"
-        tools={pdfTools.slice(0, 4)}
-        category="pdf"
-      />
-
-      {/* IMAGE TOOLS */}
-
-      <ToolSection
-        title="Image Tools"
-        subtitle="Professional tools for all your image needs"
-        tools={imageTools.slice(0, 4)}
-        category="image"
-        withDivider
-      />
+      <section className="value-section" aria-label="Why choose HundredTools">
+        <div className="site-container">
+          <div className="value-grid">
+            <article className="value-card">
+              <h3>Fast by default</h3>
+              <p>Every workflow is designed to feel quick, clear, and frictionless.</p>
+            </article>
+            <article className="value-card">
+              <h3>One workspace</h3>
+              <p>Manage PDFs, images, speech, and video tools without leaving the page.</p>
+            </article>
+            <article className="value-card">
+              <h3>Built for daily work</h3>
+              <p>Ideal for students, creators, and professionals who need dependable tools.</p>
+            </article>
+          </div>
+        </div>
       </section>
 
-      <ToolSection
-        title="Video Tools"
-        subtitle="Professional tools for all your video needs"
-        tools={videoTools.slice(0, 4)}
-        category="video"
-        withDivider
-      />
+      <section id="tools-section" className="tools-showcase">
+        <div className="site-container">
+          <div className="tools-showcase-header">
+            <span className="section-eyebrow">Popular tools</span>
+            <h2>Everything you need to work faster with files</h2>
+            <p>
+              Pick a category and jump straight into the most useful conversions,
+              edits, and cleanup tools for your daily workflow.
+            </p>
+          </div>
+
+          {/* PDF TOOLS */}
+
+          <ToolSection
+            title="PDF Tools"
+            subtitle="Professional tools for all your PDF needs"
+            tools={pdfTools.slice(0, 4)}
+            category="pdf"
+          />
+
+          {/* IMAGE TOOLS */}
+
+          <ToolSection
+            title="Image Tools"
+            subtitle="Professional tools for all your image needs"
+            tools={imageTools.slice(0, 4)}
+            category="image"
+            withDivider
+          />
+
+          <ToolSection
+            title="Audio Tools"
+            subtitle="Convert speech and audio files quickly"
+            tools={audioTools}
+            category="audio"
+            withDivider
+          />
+
+          <ToolSection
+            title="Video Tools"
+            subtitle="Professional tools for all your video needs"
+            tools={videoTools.slice(0, 4)}
+            category="video"
+            withDivider
+          />
+        </div>
+      </section>
      
 
     </div>

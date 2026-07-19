@@ -63,6 +63,12 @@ const toolsByCategory = {
         path: "/tools/add-watermark",
       },
       {
+        title: "AI Productivity Assistant",
+        description: "Manage tasks through conversational interactions in a premium dashboard",
+        icon: "🤖",
+        path: "/tools/to-do-list",
+      },
+      {
         title: "Compress Image",
         description: "Reduce image file size without losing quality",
         icon: "↗",
@@ -177,11 +183,29 @@ const toolsByCategory = {
         path: "/tools/image/crop-image",
       },
       {
+        title: "Speech to Text",
+        description: "Convert spoken words into editable text instantly",
+        icon: "🎙️",
+        path: "/tools/speech-to-text",
+      },
+      {
   title: "AI Resume Builder",
   description: "Create professional resumes using AI",
   icon: "📄",
   path: "/resume-builder",
 },
+    ],
+  },
+  audio: {
+    title: "Audio Tools",
+    subtitle: "All available audio tools",
+    tools: [
+      {
+        title: "Speech to Text",
+        description: "Convert spoken words into editable text instantly",
+        icon: "🎙️",
+        path: "/tools/speech-to-text",
+      },
     ],
   },
 };
