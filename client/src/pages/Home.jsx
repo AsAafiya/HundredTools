@@ -84,7 +84,7 @@ const Home = () => {
       title: "Remove Background",
       description: "Automatically remove backgrounds from images",
       icon: "⌫",
-      path: "/tools/image/remove-bg"
+      path: "/tools/image/remove-background"
     }
   ];
 
@@ -112,6 +112,15 @@ const Home = () => {
       description: "Cut and trim videos easily",
       icon: "✂️",
       path: "/tools/trim-video"
+    }
+  ];
+
+  const utilityTools = [
+    {
+      title: "Hash Generator",
+      description: "Generate SHA hashes from any text instantly",
+      icon: "🔒",
+      path: "/tools/hash-generator"
     }
   ];
 
@@ -199,6 +208,14 @@ const Home = () => {
         subtitle="Professional tools for all your video needs"
         tools={videoTools.slice(0, 4)}
         category="video"
+        withDivider
+      />
+
+      <ToolSection
+        title="Utility Tools"
+        subtitle="Handy utility tools for quick tasks"
+        tools={utilityTools}
+        category="utility"
         withDivider
       />
      

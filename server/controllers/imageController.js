@@ -2,6 +2,7 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 const archiver = require("archiver");
+const removeBackground = require("../services/removeBgService");
 
 const outputDir = path.resolve(__dirname, "../outputs");
 
@@ -309,3 +310,29 @@ exports.convertImage = async (req, res) => {
     res.status(500).send("Error converting image");
   }
 };
+
+// Remove Image Background
+exports.removeBgController = async (req, res) => {
+  try {
+    console.log("remove background route hit");
+    ensureOutputDir();
+
+    if (!req.file) {
+      return res.status(400).send("No file uploaded");
+    }
+
+    const inputPath = req.file.path;
+    const outputPath = path.join(
+      outputDir,
+      `removebg-${Date.now()}.png`
+    );
+
+    await removeBackground(inputPath, outputPath);
+
+    return res.download(outputPath, "background-removed.png");
+  } catch (error) {
+    console.error("Error in removeBgController:", error);
+    res.status(500).send("Error removing background from image: " + error.toString());
+  }
+};
+

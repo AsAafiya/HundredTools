@@ -86,6 +86,18 @@ const toolsByCategory = {
         icon: "✂️",
         path: "/tools/image/crop-image",
       },
+      {
+        title: "Background Remove",
+        description: "Remove background from image",
+        icon: "✂️",
+        path: "/tools/image/remove-background",
+      },
+      {
+        title: "Hash Generator",
+        description: "Generate SHA hashes from any text instantly",
+        icon: "🔒",
+        path: "/tools/hash-generator",
+      },
     ],
   },
   pdf: {
@@ -175,6 +187,24 @@ const toolsByCategory = {
         description: "Crop images to custom dimensions",
         icon: "✂️",
         path: "/tools/image/crop-image",
+      },
+      {
+        title: "Background Remove",
+        description: "Remove background from image",
+        icon: "✂️",
+        path: "/tools/image/remove-background",
+      },
+    ],
+  },
+  utility: {
+    title: "Utility Tools",
+    subtitle: "All available utility tools",
+    tools: [
+      {
+        title: "Hash Generator",
+        description: "Generate SHA hashes from any text instantly",
+        icon: "🔒",
+        path: "/tools/hash-generator",
       },
     ],
   },

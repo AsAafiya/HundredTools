@@ -22,11 +22,13 @@ import CompressImage from "../components/tools/images/CompressImage";
 import ResizeImage from "../components/tools/images/ResizeImage";
 import ConvertImage from "../components/tools/images/ConvertImage";
 import CropImage from "../components/tools/images/CropImage";
+import RemoveBackground from "../components/tools/images/RemoveBackground";
 
 import ScrollToTop from "../components/common/ScrollToTop";
 import PdfToWord from "../components/tools/PdfToWord";
 import WordToPdf from "../components/tools/WordToPdf";
 import AddWatermark from "../components/tools/AddWatermark";
+import HashGenerator from "../components/tools/HashGenerator";
 
 import AdminLayout from "../admin/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
@@ -61,10 +63,11 @@ const AppRoutes = () => {
           <Route path="tools/image/resize-image" element={<ResizeImage />} />
           <Route path="tools/image/convert-image" element={<ConvertImage />} />
           <Route path="tools/image/crop-image" element={<CropImage />} />
-
+          <Route path="tools/image/remove-background" element={<RemoveBackground />} />
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
           <Route path="tools/word-to-pdf" element={<WordToPdf />} />
           <Route path="tools/add-watermark" element={<AddWatermark />} />
+          <Route path="tools/hash-generator" element={<HashGenerator />} />
 
           {/* Category page */}
           <Route path="tools/:category" element={<ToolsPage />} />

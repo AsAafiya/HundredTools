@@ -121,3 +121,31 @@ export const convertImageAPI = async (
 
   return response.data;
 };
+
+// Remove Background
+export const removeBackgroundAPI = async (
+  file,
+  onUploadProgress
+) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    "/image/remove-background",
+    formData,
+    {
+      responseType: "blob",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (e) => {
+        if (onUploadProgress && e.lengthComputable) {
+          const percent = Math.round((e.loaded * 100) / e.total);
+          onUploadProgress(percent);
+        }
+      },
+    }
+  );
+
+  return response.data;
+};

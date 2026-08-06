@@ -1,0 +1,8 @@
+{
+  "ignore": [
+    "uploads/",
+    "outputs/",
+    "node_modules/",
+    "python/"
+  ]
+}

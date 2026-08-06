@@ -6,6 +6,7 @@ const {
   resizeImage,
   cropImage,
   convertImage,
+  removeBgController,
 } = require("../controllers/imageController.js");
 
 const router = express.Router();
@@ -21,5 +22,8 @@ router.post("/crop", upload.array("file"), cropImage);
 
 // convert images
 router.post("/convert", upload.array("file"), convertImage);
+
+// remove background
+router.post("/remove-background", upload.single("file"), removeBgController);
 
 module.exports = router;
