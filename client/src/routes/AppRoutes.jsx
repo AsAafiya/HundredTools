@@ -37,6 +37,10 @@ import CropImage from "../components/tools/images/CropImage";
 import ScrollToTop from "../components/common/ScrollToTop";
 
 import LoanCalculator from "../components/tools/LoanCalculator";
+import GoogleAnalytics from "../components/common/GoogleAnalytics";
+import PdfToWord from "../components/tools/PdfToWord";
+import WordToPdf from "../components/tools/WordToPdf";
+import AddWatermark from "../components/tools/AddWatermark";
 
 import AdminLayout from "../admin/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
@@ -49,6 +53,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
+      <GoogleAnalytics />
 
       <Routes>
         {/* Main Layout Routes */}
