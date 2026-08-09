@@ -13,6 +13,8 @@ import Privacy from "../pages/Privacy";
 import Terms from "../pages/Terms";
 import Support from "../pages/Support";
 import GrammarChecker from "../components/tools/GrammerChecker";
+import PromptBuilder from "../components/tools/PromptBuilder";
+import InvoiceGenerator from "../components/tools/InvoiceGenerator";
 import NotFound from "../pages/NotFound";
 
 import ResumeBuilder from "../components/tools/ResumeBuilder";
@@ -33,6 +35,8 @@ import ConvertImage from "../components/tools/images/ConvertImage";
 import CropImage from "../components/tools/images/CropImage";
 
 import ScrollToTop from "../components/common/ScrollToTop";
+
+import LoanCalculator from "../components/tools/LoanCalculator";
 
 import AdminLayout from "../admin/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
@@ -57,10 +61,7 @@ const AppRoutes = () => {
           <Route path="tools/compress-pdf" element={<CompressPdf />} />
           <Route path="tools/pdf-to-jpg" element={<PdfToJpg />} />
           <Route path="tools/jpg-to-pdf" element={<JpgToPdf />} />
-          <Route
-            path="tools/add-page-numbers"
-            element={<AddPageNumbers />}
-          />
+          <Route path="tools/add-page-numbers" element={<AddPageNumbers />} />
           <Route path="tools/pdf-to-word" element={<PdfToWord />} />
           <Route path="tools/word-to-pdf" element={<WordToPdf />} />
           <Route path="tools/add-watermark" element={<AddWatermark />} />
@@ -70,18 +71,9 @@ const AppRoutes = () => {
             path="tools/image/compress-image"
             element={<CompressImage />}
           />
-          <Route
-            path="tools/image/resize-image"
-            element={<ResizeImage />}
-          />
-          <Route
-            path="tools/image/convert-image"
-            element={<ConvertImage />}
-          />
-          <Route
-            path="tools/image/crop-image"
-            element={<CropImage />}
-          />
+          <Route path="tools/image/resize-image" element={<ResizeImage />} />
+          <Route path="tools/image/convert-image" element={<ConvertImage />} />
+          <Route path="tools/image/crop-image" element={<CropImage />} />
 
           {/* Resume Builder */}
           <Route path="resume-builder" element={<ResumeBuilder />} />
@@ -91,14 +83,21 @@ const AppRoutes = () => {
             path="tools/text/grammar-checker"
             element={<GrammarChecker />}
           />
-          <Route
-            path="grammar-checker"
-            element={<GrammarChecker />}
-          />
-          
+          <Route path="grammar-checker" element={<GrammarChecker />} />
 
-    
+          <Route path="/prompt-builder" element={<PromptBuilder />} />
+          <Route path="/loan-calculator" element={<LoanCalculator />} />
 
+          {/* Finance Tools */}
+          <Route path="tools/loan-calculator" element={<LoanCalculator />} />
+<Route
+  path="tools/invoice-generator"
+  element={<InvoiceGenerator />}
+/>
+<Route
+  path="/invoice-generator"
+  element={<InvoiceGenerator />}
+/>
           {/* Category Page */}
           <Route path="tools/:category" element={<ToolsPage />} />
 

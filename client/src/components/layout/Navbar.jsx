@@ -127,6 +127,22 @@ const Navbar = () => {
      { name: "Grammer and spell Checker", path: "/tools/Grammer and spell Checker" }
   ],
 },
+{
+  key: "finance",
+  label: "Finance Tools",
+  path: "/tools/finance",
+  viewAllLabel: "View All Tools",
+  items: [
+    { name: "EMI Calculator", path: "/tools/loan-calculator" },
+    { name: "Invoice Generator", path: "/tools/invoice-generator" },
+    { name: "GST Calculator", path: "/tools/gst-calculator" },
+    { name: "Currency Converter", path: "/tools/currency-converter" },
+    { name: "Tax Calculator", path: "/tools/tax-calculator" },
+    { name: "SIP Calculator", path: "/tools/sip-calculator" },
+    { name: "Simple Interest Calculator", path: "/tools/simple-interest-calculator" },
+    { name: "Compound Interest Calculator", path: "/tools/compound-interest-calculator" }
+  ]
+}
   ];
 
   return (

@@ -1,0 +1,1312 @@
+/* =====================================
+   Global Styles
+===================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.invoice-container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* =====================================
+   Back Button
+===================================== */
+
+.back-btn-container {
+  margin-bottom: 15px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: transparent;
+  border: none;
+
+  color: #64748b;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.back-btn::before {
+  content: "←";
+  font-size: 20px;
+}
+
+.back-btn:hover {
+  color: #2563eb;
+}
+
+/* =====================================
+   Page Title
+===================================== */
+
+.invoice-container h1 {
+  text-align: center;
+
+  color: #1e293b;
+
+  font-size: 2.8rem;
+
+  margin-bottom: 30px;
+}
+
+/* =====================================
+   Main Layout
+===================================== */
+
+.invoice-wrapper {
+  max-width: 1400px;
+
+  margin: auto;
+
+  display: flex;
+
+  gap: 35px;
+
+  align-items: flex-start;
+}
+
+/* =====================================
+   Left Form Card
+===================================== */
+
+.invoice-form {
+  flex: 1.5;
+
+  background: #ffffff;
+
+  padding: 35px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.invoice-form h2 {
+  font-size: 2rem;
+
+  color: #1e293b;
+
+  margin-bottom: 25px;
+}
+
+.invoice-form h3 {
+  margin: 30px 0 20px;
+
+  color: #334155;
+
+  font-size: 20px;
+}
+
+/* =====================================
+   Input Groups
+===================================== */
+
+.input-group {
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #475569;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+
+  padding: 14px 16px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  transition: 0.3s;
+
+  resize: vertical;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+/* =====================================
+   Company Address - Smaller Box
+===================================== */
+
+.company-address-input {
+  width: 100%;
+
+  height: 70px !important;
+
+  min-height: 70px !important;
+
+  max-height: 100px !important;
+
+  padding: 10px 14px !important;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+  resize: vertical;
+
+  transition: 0.3s ease;
+}
+
+.company-address-input:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+/* =====================================
+   File Upload
+===================================== */
+
+.input-group input[type="file"] {
+  padding: 10px;
+
+  cursor: pointer;
+
+  background: #f8fafc;
+}
+
+/* =====================================
+   Input Help Text
+===================================== */
+
+.input-help {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+/* =====================================
+   More Company Details Box
+===================================== */
+
+.more-company-details {
+  padding: 20px;
+
+  margin-bottom: 25px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  animation: slideDown 0.3s ease;
+}
+
+.more-company-details h3 {
+  margin-top: 0;
+
+  margin-bottom: 20px;
+
+  color: #1e293b;
+
+  font-size: 18px;
+}
+
+/* =====================================
+   Invoice Items
+===================================== */
+
+.item-row {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr 1fr auto;
+
+  gap: 12px;
+
+  margin-bottom: 15px;
+}
+
+.item-row input {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  transition: 0.3s;
+}
+
+.item-row input:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 7px rgba(37, 99, 235, 0.15);
+}
+
+/* =====================================
+   Item Action Buttons
+   Add Item + More Company Details
+===================================== */
+
+.item-action-group {
+  display: flex;
+
+  gap: 12px;
+
+  width: 100%;
+
+  margin-top: 15px;
+
+  margin-bottom: 25px;
+}
+
+.item-action-group .add-btn,
+.item-action-group .item-more-btn {
+  flex: 1;
+
+  width: auto;
+
+  margin: 0;
+}
+
+/* =====================================
+   Add Item
+===================================== */
+
+.add-btn {
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #0ea5e9;
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  background: #0284c7;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   More Company Details Button
+===================================== */
+
+.item-more-btn {
+  height: 50px;
+
+  padding: 12px 18px;
+
+  border: 1px solid #0ea5e9;
+
+  border-radius: 10px;
+
+  background: #f0f9ff;
+
+  color: #0284c7;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.item-more-btn:hover {
+  background: #0ea5e9;
+
+  color: #ffffff;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   Remove Item
+===================================== */
+
+.remove-btn {
+  width: 48px;
+
+  height: 48px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #ef4444;
+
+  color: #ffffff;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+
+  transform: translateY(-1px);
+}
+
+/* =====================================
+   Main Buttons
+===================================== */
+
+.button-group {
+  display: flex;
+
+  gap: 15px;
+
+  margin-top: 30px;
+
+  width: 100%;
+}
+
+.generate-btn,
+.download-btn,
+.reset-btn {
+  flex: 1;
+
+  width: 100%;
+
+  min-height: 52px;
+
+  padding: 14px 20px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* =====================================
+   Generate Button
+===================================== */
+
+.generate-btn {
+  background: #2563eb;
+
+  color: #ffffff;
+}
+
+.generate-btn:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   Download Button
+===================================== */
+
+.download-btn {
+  background: #16a34a;
+
+  color: #ffffff;
+}
+
+.download-btn:hover {
+  background: #15803d;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   Reset Button
+===================================== */
+
+.reset-btn {
+  background: #ef4444;
+
+  color: #ffffff;
+}
+
+.reset-btn:hover {
+  background: #dc2626;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   Right Invoice Preview
+===================================== */
+
+.invoice-summary {
+  flex: 1;
+
+  background: #ffffff;
+
+  padding: 35px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+
+  position: sticky;
+
+  top: 20px;
+
+  min-height: 650px;
+}
+
+/* =====================================
+   Invoice Header
+===================================== */
+
+.invoice-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding-bottom: 20px;
+
+  margin-bottom: 25px;
+
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* =====================================
+   Company Logo
+===================================== */
+
+.company-logo {
+  width: 90px;
+
+  height: 90px;
+
+  object-fit: cover;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  border: 2px solid #d1d5db;
+
+  background: #ffffff;
+}
+
+/* =====================================
+   Logo Placeholder
+===================================== */
+
+.logo-placeholder {
+  width: 90px;
+
+  height: 90px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #e2e8f0;
+
+  border: 2px dashed #cbd5e1;
+
+  color: #64748b;
+
+  font-size: 18px;
+
+  font-weight: bold;
+}
+
+/* =====================================
+   Header Information
+===================================== */
+
+.invoice-header-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.invoice-header-info h2 {
+  color: #1e293b;
+
+  font-size: 2rem;
+
+  margin-bottom: 10px;
+
+  word-break: break-word;
+}
+
+.invoice-header-info p {
+  margin: 5px 0;
+
+  color: #475569;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+.invoice-header-info strong {
+  color: #1e293b;
+}
+
+/* =====================================
+   More Details Preview
+===================================== */
+
+.preview-more-details {
+  margin-top: 8px;
+
+  padding-top: 8px;
+
+  border-top: 1px dashed #cbd5e1;
+}
+
+.preview-more-details p {
+  margin: 4px 0;
+}
+
+/* =====================================
+   Invoice Items Heading
+===================================== */
+
+.items-title {
+  margin-bottom: 18px;
+
+  color: #1e293b;
+
+  font-size: 20px;
+}
+
+/* =====================================
+   Summary Items
+===================================== */
+
+.summary-item {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 15px 18px;
+
+  margin-bottom: 14px;
+
+  background: #f8fafc;
+
+  border-radius: 10px;
+
+  transition: all 0.3s ease;
+}
+
+.summary-item:hover {
+  background: #eff6ff;
+}
+
+.summary-item span {
+  color: #475569;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+}
+
+.summary-item strong {
+  color: #2563eb;
+
+  font-size: 16px;
+
+  text-align: right;
+
+  word-break: break-word;
+}
+
+.invoice-summary hr {
+  border: none;
+
+  border-top: 1px solid #e5e7eb;
+
+  margin: 22px 0;
+}
+
+/* =====================================
+   Total Section
+===================================== */
+
+.invoice-total-section {
+  margin-top: 5px;
+}
+
+/* =====================================
+   Subtotal & GST
+===================================== */
+
+.subtotal-item,
+.gst-item {
+  background: #f8fafc;
+}
+
+.subtotal-item span,
+.gst-item span {
+  color: #334155;
+}
+
+.subtotal-item strong,
+.gst-item strong {
+  color: #2563eb;
+}
+
+/* =====================================
+   Grand Total
+===================================== */
+
+.total {
+  background: #2563eb;
+
+  margin-top: 5px;
+
+  padding: 18px;
+}
+
+.total span,
+.total strong {
+  color: #ffffff;
+}
+
+.total strong {
+  font-size: 19px;
+}
+
+/* =====================================
+   Custom Total Font Styles
+===================================== */
+
+/* Normal */
+
+.total-font-normal .subtotal-item span,
+.total-font-normal .subtotal-item strong,
+.total-font-normal .gst-item span,
+.total-font-normal .gst-item strong,
+.total-font-normal .total span,
+.total-font-normal .total strong {
+  font-style: normal;
+
+  font-weight: 400;
+}
+
+/* Grand Total slightly stronger in Normal mode */
+
+.total-font-normal .total span,
+.total-font-normal .total strong {
+  font-weight: 600;
+}
+
+/* Bold */
+
+.total-font-bold .subtotal-item span,
+.total-font-bold .subtotal-item strong,
+.total-font-bold .gst-item span,
+.total-font-bold .gst-item strong,
+.total-font-bold .total span,
+.total-font-bold .total strong {
+  font-style: normal;
+
+  font-weight: 700;
+}
+
+/* Italic */
+
+.total-font-italic .subtotal-item span,
+.total-font-italic .subtotal-item strong,
+.total-font-italic .gst-item span,
+.total-font-italic .gst-item strong,
+.total-font-italic .total span,
+.total-font-italic .total strong {
+  font-style: italic;
+
+  font-weight: 400;
+}
+
+/* Bold Italic */
+
+.total-font-bold-italic .subtotal-item span,
+.total-font-bold-italic .subtotal-item strong,
+.total-font-bold-italic .gst-item span,
+.total-font-bold-italic .gst-item strong,
+.total-font-bold-italic .total span,
+.total-font-bold-italic .total strong {
+  font-style: italic;
+
+  font-weight: 700;
+}
+
+/* =====================================
+   Signature Section
+===================================== */
+
+.signature-area {
+  display: flex;
+
+  justify-content: flex-end;
+
+  width: 100%;
+
+  margin-top: 35px;
+
+  padding-top: 10px;
+}
+
+.signature-box {
+  width: 190px;
+
+  text-align: center;
+}
+
+.signature-image {
+  display: block;
+
+  width: 170px;
+
+  height: 70px;
+
+  object-fit: contain;
+
+  margin: 0 auto 5px;
+}
+
+.signature-placeholder {
+  width: 170px;
+
+  height: 70px;
+
+  margin: 0 auto 5px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #94a3b8;
+
+  font-size: 14px;
+
+  font-style: italic;
+
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.signature-line {
+  width: 170px;
+
+  margin: 5px auto 8px;
+
+  border-top: 1.5px solid #334155;
+}
+
+.signature-box p {
+  margin: 0;
+
+  color: #475569;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+/* =====================================
+   Empty Summary
+===================================== */
+
+.empty-summary {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  height: 450px;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+/* =====================================
+   PDF / Print Quality
+===================================== */
+
+.invoice-summary img {
+  max-width: 100%;
+}
+
+.invoice-summary * {
+  word-break: break-word;
+}
+
+/* =====================================
+   Smooth Animations
+===================================== */
+
+.invoice-form,
+.invoice-summary {
+  animation: fadeIn 0.5s ease;
+}
+
+.more-company-details {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* =====================================
+   Tablet
+===================================== */
+
+@media (max-width: 1100px) {
+
+  .invoice-wrapper {
+    gap: 25px;
+  }
+
+  .invoice-form,
+  .invoice-summary {
+    padding: 25px;
+  }
+
+  .item-row {
+    grid-template-columns: 2fr 1fr 1fr auto;
+
+    gap: 8px;
+  }
+
+  .invoice-header-info h2 {
+    font-size: 1.7rem;
+  }
+}
+
+/* =====================================
+   Tablet / Small Laptop
+===================================== */
+
+@media (max-width: 992px) {
+
+  .invoice-wrapper {
+    flex-direction: column;
+  }
+
+  .invoice-form,
+  .invoice-summary {
+    width: 100%;
+
+    max-width: 100%;
+  }
+
+  .invoice-summary {
+    position: static;
+
+    min-height: auto;
+  }
+
+  .invoice-header {
+    flex-direction: row;
+
+    text-align: left;
+  }
+
+  .invoice-header-info {
+    text-align: left;
+  }
+
+  .button-group {
+    flex-wrap: wrap;
+  }
+
+  .generate-btn,
+  .download-btn,
+  .reset-btn {
+    min-width: 180px;
+  }
+}
+
+/* =====================================
+   Mobile
+===================================== */
+
+@media (max-width: 768px) {
+
+  .invoice-container {
+    padding: 15px;
+  }
+
+  .invoice-container h1 {
+    font-size: 2rem;
+
+    margin-bottom: 20px;
+  }
+
+  .invoice-form,
+  .invoice-summary {
+    padding: 22px;
+  }
+
+  .invoice-form h2 {
+    font-size: 1.6rem;
+  }
+
+  .invoice-header {
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+  }
+
+  .invoice-header-info {
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .company-logo,
+  .logo-placeholder {
+    width: 70px;
+
+    height: 70px;
+  }
+
+  .invoice-header-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .invoice-header-info p {
+    font-size: 13px;
+  }
+
+  /* =====================================
+     Smaller Address on Mobile
+  ===================================== */
+
+  .company-address-input {
+    height: 65px !important;
+
+    min-height: 65px !important;
+
+    max-height: 90px !important;
+
+    padding: 10px 12px !important;
+  }
+
+  /* =====================================
+     Items
+  ===================================== */
+
+  .item-row {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .item-row input {
+    width: 100%;
+  }
+
+  .remove-btn {
+    width: 100%;
+
+    height: 45px;
+  }
+
+  /* =====================================
+     Add Item + More Company Details
+  ===================================== */
+
+  .item-action-group {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .item-action-group .add-btn,
+  .item-action-group .item-more-btn {
+    width: 100%;
+  }
+
+  /* =====================================
+     Main Buttons
+  ===================================== */
+
+  .button-group {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .generate-btn,
+  .download-btn,
+  .reset-btn {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  /* =====================================
+     Summary
+  ===================================== */
+
+  .summary-item {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+  }
+
+  .summary-item strong {
+    font-size: 15px;
+
+    text-align: left;
+  }
+
+  /* =====================================
+     Totals
+  ===================================== */
+
+  .subtotal-item,
+  .gst-item,
+  .total {
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: space-between;
+  }
+
+  .subtotal-item strong,
+  .gst-item strong,
+  .total strong {
+    text-align: right;
+  }
+
+  /* =====================================
+     Signature
+  ===================================== */
+
+  .signature-area {
+    justify-content: center;
+
+    margin-top: 25px;
+  }
+
+  .signature-box {
+    width: 190px;
+  }
+}
+
+/* =====================================
+   Small Mobile
+===================================== */
+
+@media (max-width: 480px) {
+
+  .invoice-container {
+    padding: 10px;
+  }
+
+  .invoice-form,
+  .invoice-summary {
+    padding: 18px;
+  }
+
+  .invoice-container h1 {
+    font-size: 1.7rem;
+  }
+
+  .invoice-form h2 {
+    font-size: 1.4rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 14px;
+
+    padding: 12px;
+  }
+
+  .company-address-input {
+    height: 60px !important;
+
+    min-height: 60px !important;
+
+    max-height: 80px !important;
+
+    padding: 9px 12px !important;
+
+    font-size: 13px;
+  }
+
+  .more-company-details {
+    padding: 15px;
+  }
+
+  .more-company-btn {
+    font-size: 14px;
+
+    padding: 11px;
+  }
+
+  .summary-item {
+    padding: 12px 14px;
+  }
+
+  .subtotal-item,
+  .gst-item,
+  .total {
+    flex-direction: row;
+  }
+
+  .total strong {
+    font-size: 17px;
+  }
+
+  .signature-image,
+  .signature-placeholder,
+  .signature-line {
+    width: 150px;
+  }
+}
+.company-address-group textarea {
+  height: 70px;
+  min-height: 70px;
+  max-height: 100px;
+  resize: vertical;
+}

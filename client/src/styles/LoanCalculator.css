@@ -1,0 +1,548 @@
+/* =====================================
+   Global Styles
+===================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.loan-container {
+  min-height: 100vh;
+
+  background: #f5f7fb;
+
+  padding: 25px 30px 40px;
+
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* =====================================
+   Back Button
+===================================== */
+
+.back-btn-container {
+  max-width: 1250px;
+
+  margin: 0 auto 15px;
+}
+
+.back-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  background: transparent;
+
+  border: none;
+
+  outline: none;
+
+  color: #5f6b7a;
+
+  font-size: 18px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.back-btn::before {
+  content: "←";
+
+  font-size: 22px;
+
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  color: #2563eb;
+}
+
+/* =====================================
+   Page Title
+===================================== */
+
+.loan-title {
+  text-align: center;
+
+  font-size: 2.5rem;
+
+  font-weight: 700;
+
+  color: #1e293b;
+
+  margin-bottom: 30px;
+}
+
+/* =====================================
+   Two Column Layout
+===================================== */
+
+.loan-wrapper {
+  max-width: 1250px;
+
+  margin: auto;
+
+  display: flex;
+
+  gap: 35px;
+
+  align-items: stretch;
+
+  justify-content: center;
+}
+
+/* =====================================
+   Cards
+===================================== */
+
+.loan-card,
+.result-card {
+  flex: 1;
+
+  max-width: 560px;
+
+  width: 100%;
+
+  background: #ffffff;
+
+  padding: 35px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+
+  min-height: 520px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.loan-card h2 {
+  color: #1e293b;
+
+  font-size: 2rem;
+
+  margin-bottom: 30px;
+}
+
+.result-card {
+  position: sticky;
+
+  top: 20px;
+}
+
+/* =====================================
+   Inputs
+===================================== */
+
+.input-group {
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.input-group input {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  background: #ffffff;
+
+  transition: 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+/* =====================================
+   Loan Tenure
+===================================== */
+
+.tenure-row {
+  display: flex;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.tenure-row input {
+  flex: 1;
+}
+
+.tenure-row select {
+  width: 130px;
+
+  padding: 15px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 16px;
+
+  color: #374151;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.tenure-row select:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+/* =====================================
+   Buttons
+===================================== */
+
+.button-group {
+  display: flex;
+
+  gap: 15px;
+
+  margin-top: auto;
+}
+
+.calculate-btn,
+.reset-btn {
+  flex: 1;
+
+  padding: 14px;
+
+  min-height: 50px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* Calculate Button */
+
+.calculate-btn {
+  background: #2563eb;
+
+  color: white;
+}
+
+.calculate-btn:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-2px);
+}
+
+/* Reset Button */
+
+.reset-btn {
+  background: #ef4444;
+
+  color: white;
+}
+
+.reset-btn:hover {
+  background: #dc2626;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   Error
+===================================== */
+
+.error-text {
+  margin-bottom: 18px;
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+  font-size: 15px;
+
+  font-weight: 500;
+}
+
+/* =====================================
+   Summary
+===================================== */
+
+.result-card h2 {
+  text-align: center;
+
+  color: #1e293b;
+
+  font-size: 2rem;
+
+  margin-bottom: 30px;
+}
+
+.result-item {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 18px;
+
+  margin-bottom: 18px;
+
+  background: #f8fafc;
+
+  border-radius: 12px;
+
+  transition: 0.3s ease;
+}
+
+.result-item:hover {
+  background: #eff6ff;
+}
+
+.result-item span {
+  color: #475569;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.result-item strong {
+  color: #2563eb;
+
+  font-size: 20px;
+}
+
+/* =====================================
+   Placeholder
+===================================== */
+
+.summary-placeholder {
+  flex: 1;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  font-size: 18px;
+
+  font-weight: 500;
+
+  line-height: 1.8;
+}
+
+.summary-placeholder strong {
+  color: #2563eb;
+}
+
+/* =====================================
+   Loan Chart
+===================================== */
+
+.chart-container {
+  margin-top: 30px;
+
+  width: 100%;
+
+  height: 320px;
+
+  padding: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+
+  height: 100% !important;
+}
+
+/* =====================================
+   Tablet
+===================================== */
+
+@media (max-width: 992px) {
+  .loan-container {
+    padding: 25px 20px 40px;
+  }
+
+  .loan-wrapper {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .loan-card,
+  .result-card {
+    max-width: 700px;
+
+    width: 100%;
+
+    min-height: auto;
+  }
+
+  .result-card {
+    position: static;
+  }
+}
+
+/* =====================================
+   Mobile
+===================================== */
+
+@media (max-width: 576px) {
+  .loan-container {
+    padding: 15px;
+  }
+
+  .back-btn-container {
+    margin-bottom: 10px;
+  }
+
+  .back-btn {
+    font-size: 16px;
+  }
+
+  .loan-title {
+    font-size: 2rem;
+
+    margin-bottom: 20px;
+  }
+
+  .loan-card,
+  .result-card {
+    padding: 20px;
+  }
+
+  /* Loan Tenure */
+
+  .tenure-row {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .tenure-row input {
+    width: 100%;
+  }
+
+  .tenure-row select {
+    width: 100%;
+  }
+
+  /* Buttons */
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .calculate-btn,
+  .reset-btn {
+    width: 100%;
+  }
+
+  /* Result Items */
+
+  .result-item {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+  }
+
+  .result-item strong {
+    font-size: 18px;
+  }
+
+  /* Chart */
+
+  .chart-container {
+    height: 280px;
+
+    padding: 12px;
+  }
+}
+
+/* =====================================
+   Small Mobile
+===================================== */
+
+@media (max-width: 380px) {
+  .loan-container {
+    padding: 12px;
+  }
+
+  .loan-title {
+    font-size: 1.7rem;
+  }
+
+  .loan-card,
+  .result-card {
+    padding: 16px;
+  }
+
+  .result-card h2,
+  .loan-card h2 {
+    font-size: 1.6rem;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+}

@@ -122,6 +122,12 @@ const Home = () => {
       icon: "📝",
       path: "/tools/text/grammar-checker",
     },
+    {
+  title: "Prompt Builder AI",
+  description:
+    "Generate optimized AI prompts with smart suggestions.",
+  path: "/prompt-builder",
+}
   ];
 
   return (
@@ -208,6 +214,7 @@ const Home = () => {
         category="text"
         withDivider
       />
+      
     </div>
   );
 };
