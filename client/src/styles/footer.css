@@ -56,9 +56,11 @@
 }
 
 .footer-links {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+	/*display:flex; */
 	flex-direction: column;
-	gap: 9px;
+	gap: 5px;
 }
 
 .footer-links a,
